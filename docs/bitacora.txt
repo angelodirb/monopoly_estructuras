@@ -1,0 +1,11 @@
+DIA 31 DE OCTUBRE DE 2025
+
+Para este dia nos reunimos para entender el problema completamente y sus reglas,
+desde como comprar una propiedad, hasta hipotecas, bancarrota y deudas,
+tambien definimos inicialmente las estructuras que pensamos utilizar en el codigo
+es decir los posibles TADs, para el correcto funcionamiento del juego, planteamos estrategias
+de como calcular precios y rentas de cada una de las propiedades
+
+Adicionalmente discutimos sobre el movimiento del jugador y definimos su posible TAD
+
+Quedamos en duda de como almacenar los estados del juego para poder devolverme
