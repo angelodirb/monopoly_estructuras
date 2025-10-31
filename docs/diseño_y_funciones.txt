@@ -1,0 +1,36 @@
+TAD Propiedad
+
+struct con: Nombre (string), Estado(String), Color(int), Propietario(Jugador), Precio (int), Renta(int), Nivel(int)
+
+// DESCRIPCION //
+Son las casillas principales del juego donde cada una tiene un color o grupo al que pertenece,
+que estara definido por un numero entero ej: Cafe = 0, Celeste = 1, Morado = 2....
+un valor y renta que puede ser unico o compartido, es decir la renta depende del valor original de la propiedad
+Definimos para cada precio de cada propiedad del mismo color una logica para sacar su precio de renta base. 
+Este se obtendra dividiendo el valor de la propiedad por un octavo por ejemplo, y esto para todas las casillas.
+
+
+Establecimos estos niveles de renta que dependeran de la cantidad de casas. este precio de renta se obtiene multiplicando el
+precio base de renta(0 casas) por un numero.
+- nivel 0 (0 casas): renta * 1
+- nivel 1 (1 casas): renta * 4
+- nivel 2 (2 casas): renta * 5
+- nivel 3 (3 casas): renta * 6
+- nivel 4 (4 casas): renta * 7
+- nivel 5 (hotel): renta * 8
+
+
+TAD Jugador
+struct con: Nombre(string), Saldo(int), Propiedades(Propiedad), Quiebra(bool), Ubicacion(int entre 1 (Salida) y 40(Ultima Casilla) 
+
+// DESCRIPCION
+Pensamos el movimiento del jugador con una funcion que va a generar un número aleatorio entre 2 y 12, y de acuerdo a ese numero
+el jugador va a moverse esa cantidad de casillas, almacenando esa movimiento total en los estados del juego, en caso de querer devolverse
+se regresara la cantidad de casillas que haya recorrido en ese turno. se guardara la informacion de las propiedades que tenga,
+para facilitar la visualizacion en el tablero, tambien si el jugador esta quebrado o no, junto con su ubicacion actual en el tablero
+que va ser representada de acuerdo al numero de casilla en el que está (0 si el jugador esta quebrado es decir si ya perdió).
+
+PENDIENTE
+- TADs (Tablero), logica para poder devolverme, logica para poder hipotecar y devolver propiedades al banco correciones etc.
+
+
