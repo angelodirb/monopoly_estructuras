@@ -17,8 +17,8 @@ struct Property{
 };
 
 // GRUPO CAFE
-Property Mediterráneo = {60, "Mediterraneo", 0, "NN", 2, false, "CAFE"};
-Property Báltico = {60, "Baltico", 0, "NN", 4, false, "CAFE"};
+Property Mediterraneo = {60, "Mediterraneo", 0, "NN", 2, false, "CAFE"};
+Property Baltico = {60, "Baltico", 0, "NN", 4, false, "CAFE"};
 
 // GRUPO AZUL CLARO
 Property Oriental = {100, "Oriental", 0, "NN", 6, false, "AZUL_CLARO"};
@@ -46,7 +46,7 @@ Property Ventnor = {260, "Ventnor", 0, "NN", 22, false, "AMARILLO"};
 Property Marvin_Gardens = {280, "Marvin Gardens", 0, "NN", 24, false, "AMARILLO"};
 
 // GRUPO VERDE
-Property Pacífico = {300, "Pacifico", 0, "NN", 26, false, "VERDE"};
+Property Pacifico = {300, "Pacifico", 0, "NN", 26, false, "VERDE"};
 Property Carolina_del_Norte = {300, "Carolina del Norte", 0, "NN", 26, false, "VERDE"};
 Property Pensilvania = {320, "Pensilvania", 0, "NN", 28, false, "VERDE"};
 

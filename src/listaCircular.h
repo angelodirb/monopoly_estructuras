@@ -12,6 +12,7 @@ struct Nodo {
     Nodo<T>* sig;
 };
 
+
 template<typename T>
 using Lista = Nodo<T>*;
 
@@ -22,7 +23,7 @@ Lista<T> crearLista() {
 
 template<typename T>
 Lista<T> anxLista(Lista<T> lst, T e) {
-    Lista<T> nuevo = (Lista<T>)malloc(sizeof(Nodo<T>));
+    Lista<T> nuevo = new Nodo<T>();
     nuevo->dato = e;
 
     if (lst == NULL) {
@@ -57,7 +58,7 @@ Lista<T> insLista(Lista<T> lst, int pos, T e) {
         throw out_of_range("FUERA DE RANGO");
     }
 
-    Lista<T> nuevo = (Lista<T>)malloc(sizeof(Nodo<T>));
+    Lista<T> nuevo = new Nodo<T>();
     nuevo->dato = e;
 
     if (lst == NULL) { // lista vacía
@@ -96,7 +97,7 @@ Lista<T> elimLista(Lista<T> lst, int pos) {
 
     if (pos == 0) {
         if (lst->sig == lst) { // solo un nodo
-            free(lst);
+            delete lst;
             return NULL;
         }
         Lista<T> ult = lst;
@@ -105,7 +106,7 @@ Lista<T> elimLista(Lista<T> lst, int pos) {
         }
         ult->sig = lst->sig;
         Lista<T> nuevoInicio = lst->sig;
-        free(lst);
+        delete lst;
         return nuevoInicio;
     }
 
@@ -119,19 +120,8 @@ Lista<T> elimLista(Lista<T> lst, int pos) {
     }
 
     prev->sig = tmp->sig;
-    free(tmp);
+    delete tmp;
     return lst;
-}
-
-template<typename T>
-void mostrarLista(Lista<T> lst) {
-    if (lst == NULL) return;
-    Lista<T> tmp = lst;
-    do {
-        cout << tmp->dato << " ";
-        tmp = tmp->sig;
-    } while (tmp != lst);
-    cout << "\n";
 }
 
 #endif
