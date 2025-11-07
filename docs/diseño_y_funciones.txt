@@ -33,4 +33,42 @@ que va ser representada de acuerdo al numero de casilla en el que está (0 si el
 PENDIENTE
 - TADs (Tablero), logica para poder devolverme, logica para poder hipotecar y devolver propiedades al banco correciones etc.
 
+========================================================== 02/11/2025 ======================================================
+
+TAD Carta
+struct con: Tipo(string), Texto(string), int(efecto)
+
+// ===========================
+// TAD Carta
+// ===========================
+//
+// Representa una carta de Monopoly, que puede pertenecer al mazo de "Suerte"
+// o "Arca Comunal". Cada carta tiene un texto descriptivo y un efecto numérico.
+//
+// Invariante de representación:
+//  tipo == "Suerte" o tipo == "Arca Comunal"
+
+TAD colaCartas
+struct con: tipoMazo(string), Cola<Carta> cartas (incluyo la cola base de cola.h)
+
+// ===========================
+// TAD ColaDeCartas
+// ===========================
+//
+// Representa un mazo de Monopoly (Suerte o Arca Comunal).
+// Las cartas se almacenan en una cola FIFO y todas son del mismo tipo.
+//
+// Invariante de representación:
+//  Para toda carta c en cartas, c.tipo == tipoMazo
+//
+// ===========================
+
+
+
+
+
+//
+// ===========================
+
+
 
