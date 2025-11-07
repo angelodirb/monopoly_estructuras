@@ -9,3 +9,10 @@ de como calcular precios y rentas de cada una de las propiedades
 Adicionalmente discutimos sobre el movimiento del jugador y definimos su posible TAD
 
 Quedamos en duda de como almacenar los estados del juego para poder devolverme
+
+DIA 02 DE NOVIEMBRE DE 2025
+
+Para este día se realizó el TAD Carta que incluye la estructura de una carta como arca comunal o suerte y por ende en esta versión se pensó dividir ese TAD carta de manera individual y incluirla en un TAD Cola que sirve para almacenar esas cartas, que a su vez parte de los TADS iniciales de lista y cola, 
+
+faltaria refinar y fusionar para que sea un unico TAD ColaCartas sin necesidad de incluir lista.h y cola.h
+
