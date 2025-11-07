@@ -1,127 +1,113 @@
-#ifndef LISTACIRCULAR_H_
-#define LISTACIRCULAR_H_
-
+#pragma once
+#include "Casilla.h"
 #include <iostream>
-#include <stdexcept>
-#include <cstdlib>
 using namespace std;
 
-template<typename T>
-struct Nodo {
-    T dato;
-    Nodo<T>* sig;
+struct ListaCircular {
+    Casilla* cabeza;
+    int cantidad;
 };
 
 
-template<typename T>
-using Lista = Nodo<T>*;
-
-template<typename T>
-Lista<T> crearLista() {
-    return NULL;
+ListaCircular crearLista() {
+    ListaCircular lista;
+    lista.cabeza = nullptr;
+    lista.cantidad = 0;
+    return lista;
 }
 
-template<typename T>
-Lista<T> anxLista(Lista<T> lst, T e) {
-    Lista<T> nuevo = new Nodo<T>();
-    nuevo->dato = e;
-
-    if (lst == NULL) {
-        nuevo->sig = nuevo;
-        return nuevo;
-    }
-
-    Lista<T> ptr = lst;
-    while (ptr->sig != lst) {
-        ptr = ptr->sig;
-    }
-    ptr->sig = nuevo;
-    nuevo->sig = lst;
-    return lst;
+bool vaciaLista(const ListaCircular& lista) {
+    return lista.cabeza == nullptr;
 }
 
-template<typename T>
-int size(Lista<T> lst) {
-    if (lst == NULL) return 0;
-    int n = 0;
-    Lista<T> ptr = lst;
+int size(const ListaCircular& lista) {
+    return lista.cantidad;
+}
+
+
+void anxLista(ListaCircular& lista, Casilla* nueva) {
+    if (!lista.cabeza) {
+        lista.cabeza = nueva;
+        lista.cabeza->siguiente = lista.cabeza;
+    } else {
+        Casilla* temp = lista.cabeza;
+        while (temp->siguiente != lista.cabeza)
+            temp = temp->siguiente;
+        temp->siguiente = nueva;
+        nueva->siguiente = lista.cabeza;
+    }
+    lista.cantidad++;
+}
+
+void insLista(ListaCircular& lista, Casilla* nueva, int pos) {
+    if (pos < 1 || pos > lista.cantidad + 1) {
+        cout << "Posición inválida." << endl;
+        return;
+    }
+
+    if (pos == 1) {
+        if (!lista.cabeza) {
+            lista.cabeza = nueva;
+            lista.cabeza->siguiente = lista.cabeza;
+        } else {
+            Casilla* ultimo = lista.cabeza;
+            while (ultimo->siguiente != lista.cabeza)
+                ultimo = ultimo->siguiente;
+            nueva->siguiente = lista.cabeza;
+            lista.cabeza = nueva;
+            ultimo->siguiente = lista.cabeza;
+        }
+    } else {
+        Casilla* temp = lista.cabeza;
+        for (int i = 1; i < pos - 1; i++)
+            temp = temp->siguiente;
+        nueva->siguiente = temp->siguiente;
+        temp->siguiente = nueva;
+    }
+    lista.cantidad++;
+}
+
+void elimLista(ListaCircular& lista, int pos) {
+    if (pos < 1 || pos > lista.cantidad) {
+        cout << "Posición inválida." << endl;
+        return;
+    }
+
+    if (pos == 1) {
+        Casilla* temp = lista.cabeza;
+        if (lista.cantidad == 1) {
+            lista.cabeza = nullptr;
+        } else {
+            Casilla* ultimo = lista.cabeza;
+            while (ultimo->siguiente != lista.cabeza)
+                ultimo = ultimo->siguiente;
+            lista.cabeza = lista.cabeza->siguiente;
+            ultimo->siguiente = lista.cabeza;
+        }
+        delete temp;
+    } else {
+        Casilla* temp = lista.cabeza;
+        for (int i = 1; i < pos - 1; i++)
+            temp = temp->siguiente;
+        Casilla* eliminar = temp->siguiente;
+        temp->siguiente = eliminar->siguiente;
+        delete eliminar;
+    }
+    lista.cantidad--;
+}
+
+void mostrarLista(const ListaCircular& lista) {
+    if (!lista.cabeza) {
+        cout << "(Lista vacía)" << endl;
+        return;
+    }
+    Casilla* temp = lista.cabeza;
     do {
-        n++;
-        ptr = ptr->sig;
-    } while (ptr != lst);
-    return n;
+        cout << "- " << temp->getNombre() << endl;
+        temp = temp->siguiente;
+    } while (temp != lista.cabeza);
 }
 
-template<typename T>
-Lista<T> insLista(Lista<T> lst, int pos, T e) {
-    if (pos < 0 || pos > size(lst)) {
-        throw out_of_range("FUERA DE RANGO");
-    }
-
-    Lista<T> nuevo = new Nodo<T>();
-    nuevo->dato = e;
-
-    if (lst == NULL) { // lista vacía
-        nuevo->sig = nuevo;
-        return nuevo;
-    }
-
-    if (pos == 0) {
-        Lista<T> ptr = lst;
-        while (ptr->sig != lst) {
-            ptr = ptr->sig;
-        }
-        ptr->sig = nuevo;
-        nuevo->sig = lst;
-        return nuevo; // nuevo pasa a ser la cabeza
-    }
-
-    Lista<T> tmp = lst;
-    int i = 0;
-    while (tmp->sig != lst && i < pos - 1) {
-        tmp = tmp->sig;
-        i++;
-    }
-
-    nuevo->sig = tmp->sig;
-    tmp->sig = nuevo;
-    return lst;
+Casilla* getCabeza(const ListaCircular& lista) {
+    return lista.cabeza;
 }
-
-template<typename T>
-Lista<T> elimLista(Lista<T> lst, int pos) {
-    if (lst == NULL) return lst;
-
-    if (pos < 0 || pos >= size(lst))
-        throw out_of_range("FUERA DE RANGO");
-
-    if (pos == 0) {
-        if (lst->sig == lst) { // solo un nodo
-            delete lst;
-            return NULL;
-        }
-        Lista<T> ult = lst;
-        while (ult->sig != lst) {
-            ult = ult->sig;
-        }
-        ult->sig = lst->sig;
-        Lista<T> nuevoInicio = lst->sig;
-        delete lst;
-        return nuevoInicio;
-    }
-
-    Lista<T> tmp = lst;
-    Lista<T> prev = NULL;
-    int i = 0;
-    while (tmp->sig != lst && i < pos) {
-        prev = tmp;
-        tmp = tmp->sig;
-        i++;
-    }
-
-    prev->sig = tmp->sig;
-    delete tmp;
-    return lst;
-}
-
-#endif
