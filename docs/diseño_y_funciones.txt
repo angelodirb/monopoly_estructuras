@@ -63,12 +63,44 @@ struct con: tipoMazo(string), Cola<Carta> cartas (incluyo la cola base de cola.h
 //
 // ===========================
 
+========================================================== 07/11/2025 ======================================================
 
+TAD Casilla (Clase base abstracta)
+- Atributos: nombre (string), siguiente (Casilla*)
+- Método virtual puro: activar()
+- Clases derivadas: Propiedad, Ferrocarril, Servicio, Esquina
 
+TAD Lista Circular
+struct con: Casilla* cabeza, int cantidad
+- Funciones: crearLista, vaciaLista, anxLista, insLista, elimLista, mostrarLista, size.
+- Representara el tablero del juego con las 40 casillas enlazadas circularmente
 
+TAD Tablero
+// DESCRIPCIÓN
+Se implementará un módulo tablero.cpp que:
+1. Leerá un archivo de texto (tablero.txt) con la configuración del juego
+2. Cada línea del archivo contendrá los datos de una casilla:
+   - Tipo de casilla (Propiedad, Ferrocarril, Servicio, Esquina, etc.)
+   - Nombre
+   - Precio (si aplica)
+   - Alquiler base (si aplica)
+   - Información adicional según el tipo
 
-//
-// ===========================
+Ejemplo del formato del archivo tablero.txt:
+ESQUINA;Salida;Salida
+PROPIEDAD;Avenida Mediterráneo;60;2
+ARCA;Arca Comunal
+PROPIEDAD;Avenida Báltica;60;4
+IMPUESTO;Impuesto sobre ingresos;200
+FERROCARRIL;Ferrocarril Reading;200;25
+...
 
+La función crearTablero() procesará este archivo y retornará una ListaCircular
+con todas las casillas del juego correctamente inicializadas y enlazadas.
+
+// PRE: El archivo tablero.txt existe y tiene formato válido
+// POST: Retorna una ListaCircular con 40 casillas representando el tablero completo
+
+================================================================================================================
 
 
