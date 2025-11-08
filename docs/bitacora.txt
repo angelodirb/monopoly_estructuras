@@ -16,3 +16,23 @@ Para este día se realizó el TAD Carta que incluye la estructura de una carta c
 
 faltaria refinar y fusionar para que sea un unico TAD ColaCartas sin necesidad de incluir lista.h y cola.h
 
+DIA 07 DE NOVIEMBRE DE 2025
+
+Se trabajó en paralelo en dos ramas diferentes:
+
+Rama principal (miguel/vasco):
+- Implementación del TAD Casilla como clase base abstracta con método virtual puro activar()
+- Creación de clases derivadas: Propiedad, Ferrocarril, Servicio y Esquina
+- Implementación del TAD Lista Circular para representar el tablero
+- Funciones básicas de lista circular: crear, insertar, eliminar, mostrar
+- Estructura inicial del main.cpp
+
+Rama del compañero(vasco):
+- Implementación del TAD Carta para representar cartas de Suerte y Arca Comunal
+- Implementación del TAD Cola genérico basado en el TAD Lista
+- Creación del TAD ColaDeCartas especializado para manejar los mazos del juego
+- Actualización de la documentación con especificaciones de TADs
+- Definición de pre y postcondiciones formales
+
+Pendiente: Realizar merge de ambas ramas para integrar todos los TADs implementados
+
