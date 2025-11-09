@@ -1,3 +1,6 @@
+#ifndef LISTACIRCULAR_H_
+#define LISTACIRCULAR_H_
+
 #pragma once
 #include "Casilla.h"
 #include <iostream>
@@ -111,3 +114,5 @@ void mostrarLista(const ListaCircular& lista) {
 Casilla* getCabeza(const ListaCircular& lista) {
     return lista.cabeza;
 }
+
+#endif

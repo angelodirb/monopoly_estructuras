@@ -1,3 +1,5 @@
+#ifndef SERVICIOS_H_
+#define SERVICIOS_H_
 #include "casilla.h"
 
 class Servicio : public Casilla {
@@ -20,7 +22,9 @@ public:
             cout << "Servicio sin dueño: " << nombre << " (Precio $" << precio << ")" << endl;
         } else {
             cout << "Has caído en el servicio de " << duenio << ": " << nombre << endl;
-            cout << "Debes pagar según el dado o tarifa." << endl;
+            cout << "Debes pagar según la tirada del dado." << endl;
         }
     }
 };
+
+#endif
