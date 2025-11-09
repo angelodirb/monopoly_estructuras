@@ -36,3 +36,34 @@ Rama del compañero(vasco):
 
 Pendiente: Realizar merge de ambas ramas para integrar todos los TADs implementados
 
+DIA 08/09 DE NOVIEMBRE DE 2025
+
+Rama miguel:
+- Creación del archivo Casillas.txt con la configuración completa del tablero de Monopoly (40 casillas)
+- Formato del archivo: nombre, tipo, y datos específicos según el tipo de casilla
+- Agregados guardias de inclusión (#ifndef, #define, #endif) a todos los archivos de casillas
+
+Mejoras en los TADs de casillas:
+- Modificación de casilla.h: método activar() ahora tiene implementación por defecto
+- Actualización de propiedad.h: 
+  * Agregado soporte para colores de propiedades
+  * Sistema completo de casas/hoteles (0-5 niveles)
+  * Array de 6 valores de renta según nivel de construcción
+  * Métodos construirCasa() y obtenerAlquiler()
+- Actualización de ferrocarril.h: array de 4 rentas según cantidad de ferrocarriles poseídos
+- Mantenimiento de servicios.h con estructura básica
+
+Implementación del módulo tablero:
+- tablero.cpp: función cargarTableroDesdeArchivo() que parsea el archivo de configuración
+- Parser robusto que identifica tipos de casilla y crea objetos apropiados
+- Función mostrarResumenTablero() para visualización del tablero cargado
+- tablero.h: definición de interfaces públicas con guardias de inclusión
+
+Programa principal de prueba:
+- main.cpp: carga el tablero desde archivo
+- Muestra resumen con las 40 casillas cargadas
+- Prueba de activación de casillas para verificar polimorfismo
+
+LOGROS: Sistema completo de carga del tablero desde archivo externo, permitiendo 
+configuración flexible del juego sin recompilación.
+
