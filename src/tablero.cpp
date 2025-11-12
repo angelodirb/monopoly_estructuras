@@ -1,10 +1,10 @@
 #include "tablero.h"
 #include <iostream>
 #include <fstream>
-#include "casilla.h"
-#include "propiedad.h"
-#include "ferrocarril.h"
-#include "servicios.h"
+#include "casilla/casilla.h"
+#include "casilla/propiedad.h"
+#include "casilla/ferrocarril.h"
+#include "casilla/servicios.h"
 using namespace std;
 
 // ───────────────────────────────────────────────
@@ -84,12 +84,14 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
             cerr << "⚠️ Tipo de casilla desconocido: " << tipo << endl;
         }
 
+        // Leer hasta el separador ===
         while (getline(archivo, linea)) {
             if (linea == "===") break;
         }
     }
 
     archivo.close();
+    cout << "✅ Tablero cargado exitosamente desde " << nombreArchivo << endl;
     return tablero;
 }
 
@@ -102,10 +104,56 @@ void mostrarResumenTablero(const ListaCircular& tablero) {
         return;
     }
 
+    cout << "=== TABLERO DEL MONOPOLY ===" << endl;
     Casilla* temp = tablero.cabeza;
-    int i = 1;
+    int i = 0;
     do {
-        cout << i++ << ". " << temp->getNombre() << endl;
+        cout << "Posición " << i << ": " << temp->getNombre() << endl;
+        temp = temp->siguiente;
+        i++;
+    } while (temp != tablero.cabeza);
+    cout << "==============================" << endl;
+}
+
+// ───────────────────────────────────────────────
+// Función adicional: mostrar estadísticas del tablero
+// ───────────────────────────────────────────────
+void mostrarEstadisticasTablero(const ListaCircular& tablero) {
+    if (vaciaLista(tablero)) {
+        cout << "El tablero está vacío." << endl;
+        return;
+    }
+
+    int propiedades = 0, ferrocarriles = 0, servicios = 0, especiales = 0;
+    
+    Casilla* temp = tablero.cabeza;
+    do {
+        string nombre = temp->getNombre();
+        if (nombre.find("RAILROAD") != string::npos || 
+            nombre.find("FERROCARRIL") != string::npos) {
+            ferrocarriles++;
+        }
+        else if (nombre == "ELECTRIC COMPANY" || nombre == "WATER WORKS" ||
+                 nombre.find("IMPUESTO") != string::npos) {
+            servicios++;
+        }
+        else if (nombre == "SALIDA" || nombre == "CARCEL" || nombre == "PARQUEADERO GRATUITO" ||
+                 nombre == "IR A LA CARCEL" || nombre.find("SUERTE") != string::npos ||
+                 nombre.find("COMUNIDAD") != string::npos || nombre.find("CHANCE") != string::npos) {
+            especiales++;
+        }
+        else {
+            propiedades++;
+        }
+        
         temp = temp->siguiente;
     } while (temp != tablero.cabeza);
+    
+    cout << "\n=== ESTADÍSTICAS DEL TABLERO ===" << endl;
+    cout << "Propiedades: " << propiedades << endl;
+    cout << "Ferrocarriles: " << ferrocarriles << endl;
+    cout << "Servicios: " << servicios << endl;
+    cout << "Casillas especiales: " << especiales << endl;
+    cout << "Total: " << size(tablero) << endl;
+    cout << "=================================" << endl;
 }

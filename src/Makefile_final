@@ -1,0 +1,35 @@
+# Makefile actualizado para incluir listaCircular.cpp
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall -Wextra -g
+TARGET = monopoly
+
+# ¡IMPORTANTE! Ahora incluyes listaCircular.cpp
+SOURCES = main.cpp tablero.cpp listaCircular.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
+
+# Directorios de include
+INCLUDES = -I. -Icasilla
+
+# Regla principal
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
+
+# Compilar archivos .cpp
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Limpiar
+clean:
+	rm -f $(OBJECTS) $(TARGET)
+
+# Ejecutar
+run: $(TARGET)
+	./$(TARGET)
+
+.PHONY: clean run
+
+# Dependencias
+main.o: main.cpp tablero.h listaCircular.h
+tablero.o: tablero.cpp tablero.h listaCircular.h casilla/casilla.h casilla/propiedad.h casilla/ferrocarril.h casilla/servicios.h
+listaCircular.o: listaCircular.cpp listaCircular.h casilla/casilla.h
+```

@@ -3,8 +3,8 @@
 using namespace std;
 
 int main() {
-    // Crear tablero
-    ListaCircular tablero = cargarTableroDesdeArchivo("archivo.txt");
+    // Crear tablero desde el archivo de casillas
+    ListaCircular tablero = cargarTableroDesdeArchivo("Casillas.txt");
 
     // Mostrar resumen
     cout << "\n=== TABLERO CREADO ===\n";
