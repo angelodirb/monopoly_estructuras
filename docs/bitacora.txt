@@ -9,12 +9,17 @@ de como calcular precios y rentas de cada una de las propiedades
 Adicionalmente discutimos sobre el movimiento del jugador y definimos su posible TAD
 
 Quedamos en duda de como almacenar los estados del juego para poder devolverme
+=========================================================================
+=========================================================================
 
 DIA 02 DE NOVIEMBRE DE 2025
 
 Para este día se realizó el TAD Carta que incluye la estructura de una carta como arca comunal o suerte y por ende en esta versión se pensó dividir ese TAD carta de manera individual y incluirla en un TAD Cola que sirve para almacenar esas cartas, que a su vez parte de los TADS iniciales de lista y cola, 
 
 faltaria refinar y fusionar para que sea un unico TAD ColaCartas sin necesidad de incluir lista.h y cola.h
+
+=========================================================================
+=========================================================================
 
 DIA 07 DE NOVIEMBRE DE 2025
 
@@ -35,6 +40,8 @@ Rama del compañero(vasco):
 - Definición de pre y postcondiciones formales
 
 Pendiente: Realizar merge de ambas ramas para integrar todos los TADs implementados
+=========================================================================
+=========================================================================
 
 DIA 08/09 DE NOVIEMBRE DE 2025
 
@@ -63,7 +70,124 @@ Programa principal de prueba:
 - main.cpp: carga el tablero desde archivo
 - Muestra resumen con las 40 casillas cargadas
 - Prueba de activación de casillas para verificar polimorfismo
+Observacion: no esta completo la logica de tableros(esta en desarrollo).
+=========================================================================
+=========================================================================
+DIA 12 DE NOVIEMBRE DE 2025
+================================================================================
+MODIFICACIONES Y CORRECCIONES - SESIÓN ACTUAL
+Complemento a la bitácora existente (post 8/9 noviembre)
+================================================================================
 
-LOGROS: Sistema completo de carga del tablero desde archivo externo, permitiendo 
-configuración flexible del juego sin recompilación.
+ Resolución de errores de compilación y simplificación del proyecto
+
+================================================================================
+PROBLEMAS IDENTIFICADOS Y RESUELTOS:
+================================================================================
+
+1. ERROR CRÍTICO DE LINKING - "ld returned 5 exit status"
+   CAUSA: Multiple definition errors en listaCircular.h
+   ANÁLISIS: Las funciones estaban implementadas directamente en el header,
+             causando que se definieran múltiples veces al incluirse en 
+             main.cpp y tablero.cpp
+   
+   SOLUCIÓN IMPLEMENTADA:
+   - Separación de listaCircular.h (solo declaraciones) y listaCircular.cpp (implementaciones)
+   - Eliminación de funciones implementadas en el header
+   - Mantenimiento de include guards apropiados
+
+================================================================================
+MODIFICACIONES EN ARCHIVOS EXISTENTES:
+================================================================================
+
+ARCHIVO: listaCircular.h
+CAMBIOS REALIZADOS:
+- Eliminación de todas las implementaciones de funciones
+- Mantenimiento únicamente de declaraciones de funciones
+- Conservación de estructura ListaCircular
+- Include guards mejorados
+
+ARCHIVO: listaCircular.cpp (CREADO NUEVO)
+CONTENIDO AÑADIDO:
+- Implementaciones completas de todas las funciones de lista circular
+- crearLista(), vaciaLista(), size(), anxLista(), insLista(), elimLista()
+- mostrarLista(), getCabeza()
+- Includes apropiados (#include "listaCircular.h")
+- Manejo de errores mejorado
+
+ARCHIVOS SIN MODIFICACIONES (ya correctos):
+- main.cpp:  Funcional
+- tablero.cpp:  Funcional  
+- tablero.h: Funcional
+- casilla/casilla.h:  Método virtual con implementación por defecto
+- casilla/propiedad.h:  Funcional
+- casilla/ferrocarril.h:  Funcional
+- casilla/servicios.h:  Funcional
+- Casillas.txt:  Datos completos del tablero
+
+================================================================================
+DECISIONES TÉCNICAS:
+================================================================================
+
+DECISIÓN: Simplificación de herramientas de build
+JUSTIFICACIÓN: 
+- Makefile y scripts .sh añaden complejidad innecesaria para proyecto de este tamaño
+- Compilación manual con una línea es más directa y comprensible
+- Enfoque en la lógica del programa, no en herramientas auxiliares
+
+IMPLEMENTACIÓN:
+- Eliminación de dependencia en Makefile/script complejos
+- Creación de README.txt con instrucciones simples de compilación
+- Comando único: g++ -std=c++11 main.cpp tablero.cpp listaCircular.cpp -I casilla -o monopoly
+
+DECISIÓN: Separación .h/.cpp como mejor práctica
+JUSTIFICACIÓN:
+- Evita errores de multiple definition
+- Compilación más eficiente 
+- Preparación para proyectos de mayor escala
+- Estándar profesional en C++
+
+================================================================================
+ARCHIVOS NUEVOS CREADOS:
+================================================================================
+
+1. README.txt
+   PROPÓSITO: Documentación de usuario simple y clara
+   CONTENIDO:
+   - Instrucciones de compilación (una línea)
+   - Descripción del proyecto
+   - Estructura de archivos
+   - Ejemplo de salida esperada
+   - Resolución de problemas comunes
+
+2. .gitignore
+   PROPÓSITO: Evitar subir archivos innecesarios a Git
+   CONTENIDO:
+   - Archivos compilados (*.o, ejecutables)
+   - Archivos temporales del editor
+   - Archivos del sistema operativo
+   - Archivos de debug
+
+================================================================================
+PRÓXIMOS PASOS (NO REALIZADOS AÚN):
+================================================================================
+
+1. Integración con trabajo del compañero de equipo (cartas y colas)
+2. Merge de ramas en GitHub
+3. Testing completo de funcionalidad integrada
+4. Implementación de lógica de juego completa
+5. Actualización final de bitácora con resultados de integración
+
+================================================================================
+COMANDO FINAL DE COMPILACIÓN:
+================================================================================
+
+g++ -std=c++11 main.cpp tablero.cpp listaCircular.cpp -I casilla -o monopoly
+
+EJECUCIÓN:
+./monopoly
+
+¡PROYECTO LISTO PARA SUBIR A GITHUB!
+================================================================================
+
 
