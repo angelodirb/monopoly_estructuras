@@ -147,30 +147,23 @@ JUSTIFICACIÓN:
 - Preparación para proyectos de mayor escala
 - Estándar profesional en C++
 
-================================================================================
+========================
 ARCHIVOS NUEVOS CREADOS:
-================================================================================
+========================
 
 1. README.txt
    PROPÓSITO: Documentación de usuario simple y clara
    CONTENIDO:
-   - Instrucciones de compilación (una línea)
-   - Descripción del proyecto
-   - Estructura de archivos
-   - Ejemplo de salida esperada
-   - Resolución de problemas comunes
+   - Instrucciones de compilación (en la medida que avance el proyecto)
+   - Descripción del proyecto (en la medida que avance el proyecto)
+   - Estructura de archivos (en la medida que avance el proyecto)
+   - Ejemplo de salida esperada (en la medida que avance el proyecto)
+   - Resolución de problemas comunes (en la medida que avance el proyecto)
 
-2. .gitignore
-   PROPÓSITO: Evitar subir archivos innecesarios a Git
-   CONTENIDO:
-   - Archivos compilados (*.o, ejecutables)
-   - Archivos temporales del editor
-   - Archivos del sistema operativo
-   - Archivos de debug
 
-================================================================================
+===================================
 PRÓXIMOS PASOS (NO REALIZADOS AÚN):
-================================================================================
+===================================
 
 1. Integración con trabajo del compañero de equipo (cartas y colas)
 2. Merge de ramas en GitHub
@@ -178,16 +171,29 @@ PRÓXIMOS PASOS (NO REALIZADOS AÚN):
 4. Implementación de lógica de juego completa
 5. Actualización final de bitácora con resultados de integración
 
-================================================================================
+=============================
 COMANDO FINAL DE COMPILACIÓN:
-================================================================================
+=============================
 
 g++ -std=c++11 main.cpp tablero.cpp listaCircular.cpp -I casilla -o monopoly
 
 EJECUCIÓN:
 ./monopoly
 
-¡PROYECTO LISTO PARA SUBIR A GITHUB!
 ================================================================================
+================================================================================
+(ACTUALIZACION) DIA 12 DE NOVIEMBRE DE 2025
+================================================================================
+PROBLEMA DE LINKING RESUELTO
+
+PROBLEMA: Error "ld returned 116 exit status" en Windows/MinGW64
+
+DESCRIPCIÓN DEL ERROR:
+- Compilación individual exitosa de todos los archivos .cpp a .o
+- Fallo durante la fase de linking (último paso de compilación)
+- Error específico: collect2.exe: error: ld returned 116 exit status
+- Sistema: Windows con MinGW64 (MSYS2)
 
 
+SOLUCIÓN IMPLEMENTADA:
+g++ -std=c++11 main.o tablero.o listaCircular.o -o monopoly -static-libgcc -static-libstdc++
