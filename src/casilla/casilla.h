@@ -1,3 +1,6 @@
+#ifndef CASILLA_H_
+#define CASILLA_H_
+
 #include <iostream>
 #include <string>
 using namespace std;
@@ -13,5 +16,10 @@ public:
 
     string getNombre() const { return nombre; }
 
-    virtual void activar() = 0;
+    // Método virtual para comportamientos polimórficos
+    virtual void activar() {
+        cout << "Has caído en " << nombre << "." << endl;
+    }
 };
+
+#endif
