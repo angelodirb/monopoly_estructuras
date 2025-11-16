@@ -9,7 +9,7 @@ struct ListaCircular {
     int cantidad;
 };
 
-
+// Solo declaraciones de funciones (implementaciones en listaCircular.cpp)
 ListaCircular crearLista();
 bool vaciaLista(const ListaCircular& lista);
 int size(const ListaCircular& lista);
@@ -19,4 +19,4 @@ void elimLista(ListaCircular& lista, int pos);
 void mostrarLista(const ListaCircular& lista);
 Casilla* getCabeza(const ListaCircular& lista);
 
-#endif 
+#endif // LISTACIRCULAR_H_

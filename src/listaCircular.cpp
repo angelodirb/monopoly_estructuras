@@ -2,10 +2,6 @@
 #include <iostream>
 using namespace std;
 
-// ═══════════════════════════════════════════════════════════════
-// IMPLEMENTACIONES (código real de las funciones)
-// ═══════════════════════════════════════════════════════════════
-
 ListaCircular crearLista() {
     ListaCircular lista;
     lista.cabeza = nullptr;
