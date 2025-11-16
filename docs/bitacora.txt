@@ -197,3 +197,179 @@ DESCRIPCIÓN DEL ERROR:
 
 SOLUCIÓN IMPLEMENTADA:
 g++ -std=c++11 main.o tablero.o listaCircular.o -o monopoly -static-libgcc -static-libstdc++
+
+=========================================================================
+DIA 16 DE NOVIEMBRE DE 2025
+=========================================================================
+
+INTEGRACIÓN DEL TAD TABLA HASH - CUMPLIMIENTO DE REQUERIMIENTOS
+================================================================================
+
+TRABAJO REALIZADO:
+Se integró exitosamente el TAD TablaHash al proyecto Monopoly para cumplir con el 
+requerimiento específico del documento: "El registro de las propiedades y su 
+información debe estar en una estructura de acceso directo o diccionario como 
+una Tabla Hash."
+
+================================================================================
+ANÁLISIS DEL TAD TABLA HASH ORIGINAL:
+================================================================================
+
+PROBLEMAS CRÍTICOS IDENTIFICADOS:
+1. NO manejaba colisiones - datos se sobreescribían al tener mismo hash
+2. Función hash no funcionaba con strings - solo con tipos numéricos
+3. No inicializaba la tabla - contenía basura al crearse
+4. No verificaba existencia de elementos
+5. Sin función de eliminación
+6. Sin control de factor de carga
+
+ESTRUCTURA ORIGINAL ANALIZADA:
+- Template genérico con tipos L (llave) y T (elemento)
+- Direccionamiento abierto con arreglo
+- Uso correcto de malloc (cumple requerimiento académico)
+- Interfaz limpia y bien definida
+
+================================================================================
+MEJORAS IMPLEMENTADAS:
+================================================================================
+
+1. MANEJO DE COLISIONES:
+   - Implementado sondeo lineal para resolver colisiones
+   - Flags ocupado/eliminado para cada slot
+   - Búsqueda segura con detección de ciclos
+
+2. FUNCIÓN HASH PARA STRINGS:
+   - Especialización de template para const char*
+   - Algoritmo de hash por multiplicación 
+   - Manejo de hash negativos
+
+3. INICIALIZACIÓN CORRECTA:
+   - Todos los slots marcados como no ocupados al crear
+   - Contador de elementos (tamaño)
+   - Control de factor de carga
+
+4. NUEVAS FUNCIONALIDADES:
+   - existeTablaHash(): verificar existencia de llave
+   - elimTablaHash(): eliminación con lazy deletion
+   - estadisticasTablaHash(): debugging y monitoring
+   - liberarTablaHash(): gestión de memoria
+   - tamañoTablaHash(): obtener número de elementos
+
+================================================================================
+TAD REGISTRO DE PROPIEDADES:
+================================================================================
+
+Se creó un TAD especializado que encapsula la tabla hash para el uso específico 
+requerido por el proyecto:
+
+FUNCIONALIDADES:
+- crearRegistroPropiedades(): inicializa registro con capacidad 101
+- registrarPropiedad(): añade casilla al registro por nombre
+- buscarPropiedad(): búsqueda O(1) por nombre
+- existePropiedad(): verificación rápida de existencia
+- mostrarEstadisticasRegistro(): información del registro
+
+DECISIÓN TÉCNICA:
+Usar const char* como llave y Casilla* como valor permite:
+- Acceso directo a cualquier propiedad/ferrocarril/servicio por nombre
+- Compatible con el sistema de casillas existente
+- Búsqueda O(1) vs O(n) de la lista circular
+
+================================================================================
+INTEGRACIÓN CON SISTEMA EXISTENTE:
+================================================================================
+
+MODIFICACIONES EN TABLERO:
+- Nueva función cargarTableroConRegistro() que retorna pair<ListaCircular, RegistroPropiedades>
+- Registro automático de propiedades al cargar desde archivo
+- Mantiene compatibilidad con función original para no romper el codigo que ya se tenia.
+
+ARCHIVOS CREADOS/MODIFICADOS:
+NUEVOS:
+- src/tablahash.h: TAD tabla hash corregido y mejorado
+- src/registroPropiedades.h: TAD especializado para el proyecto
+
+MODIFICADOS:
+- src/tablero.h: añadida función de carga con registro
+- src/tablero.cpp: integración automática del registro
+- src/main.cpp: demo de funcionalidad integrada
+
+================================================================================
+CUMPLIMIENTO DE REQUERIMIENTOS:
+================================================================================
+
+✅ REQUERIMIENTO CUMPLIDO:
+"El registro de las propiedades y su información debe estar en una estructura 
+de acceso directo o diccionario como una Tabla Hash."
+
+IMPLEMENTACION:
+- Tabla hash almacena TODAS las propiedades del tablero
+- Acceso directo O(1) por nombre de propiedad
+- Información completa de cada propiedad (precio, dueño, casas, etc.)
+- Integración con carga de tablero
+
+================================================================================
+TESTING Y VALIDACIÓN:
+================================================================================
+
+PRUEBAS IMPLEMENTADAS:
+1. Carga de 40 casillas del tablero estándar
+2. Registro automático de propiedades en tabla hash
+3. Búsqueda por nombre (exitosa y fallida)
+4. Verificación de estadísticas y factor de carga
+
+RESULTADOS:
+- 28 propiedades registradas exitosamente en tabla hash
+- Búsqueda instantánea por nombre vs recorrido secuencial
+- Sin colisiones reportadas en conjunto de datos real
+
+================================================================================
+DECISIONES TÉCNICAS IMPORTANTES:
+================================================================================
+
+ ESPECIALIZACIÓN DE TEMPLATES:
+   Se usó especialización de templates para manejar strings correctamente
+   manteniendo la genericidad del TAD original.
+
+ FACTOR DE CARGA:
+   Capacidad de 101 (número primo) para distribución óptima de hash con
+   warning al 70% de ocupación.
+
+ GESTIÓN DE MEMORIA:
+   La tabla hash almacena punteros a casillas, no copia las casillas,
+   manteniendo eficiencia de memoria y evitando duplicación.
+
+================================================================================
+PRÓXIMOS PASOS PARA INTEGRACIÓN COMPLETA:
+================================================================================
+
+PENDIENTE PARA TAD JUEGO:
+1. Integrar tabla hash con lógica de compra de propiedades
+2. Usar búsqueda rápida para cálculo de monopolios
+3. Actualización de información de propiedades (dueño, casas) en tabla hash
+4. Consultas rápidas para determinar rentas y construcción
+
+ARQUITECTURA RESULTANTE:
+- ListaCircular: navegación secuencial del tablero
+- TablaHash: acceso directo a propiedades por nombre  
+- Colas: cartas de Suerte y Arca Comunal
+- Pila: historial de estados (marcha atrás)
+
+================================================================================
+COMPILACIÓN Y TESTING:
+================================================================================
+
+COMANDO DE COMPILACIÓN:
+g++ -std=c++11 main.cpp tablero.cpp listaCircular.cpp -I casilla -o monopoly
+
+SALIDA ESPERADA:
+Tablero cargado exitosamente desde Casillas.txt
+   Casillas en tablero: 40
+   Propiedades en registro: 28
+
+El sistema tabla hash está completamente integrado y listo para ser utilizado
+por los TADs de nivel superior (Jugador y Juego).
+
+=========================================================================
+=========================================================================
+
