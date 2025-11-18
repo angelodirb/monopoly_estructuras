@@ -71,6 +71,52 @@ public:
      string getColor() const {
         return color;
     }
+
+    /**
+     * Precondición: Ninguna
+     * Postcondición: Retorna el precio base de la propiedad
+     */
+    int getPrecio() const {
+        return precio;
+    }
+    
+    /**
+     * Precondición: Ninguna
+     * Postcondición: Retorna el dueño de la propiedad
+     */
+    string getDuenio() const {
+        return duenio;
+    }
+    
+    /**
+     * Precondición: Ninguna
+     * Postcondición: Retorna el número de casas construidas
+     */
+    int getNumCasas() const {
+        return numCasas;
+    }
+    
+    /**
+     * Precondición: Ninguna
+     * Postcondición: Retorna el valor de las mejoras (casas/hoteles)
+     */
+    int getValorMejoras() const {
+        // Aproximación: cada casa vale 50% del costo de construcción
+        // Hotel vale el doble
+        if (numCasas < 5) {
+            return numCasas * 50;  // $50 por casa
+        } else {
+            return 500;  // Hotel completo
+        }
+    }
+    
+    /**
+     * Precondición: nombre de jugador válido
+     * Postcondición: Establece el dueño de la propiedad
+     */
+    void setDuenio(const string& nuevoDuenio) {
+        duenio = nuevoDuenio;
+    }
 };
 
 #endif

@@ -25,6 +25,17 @@ public:
             cout << "Debes pagar según la tirada del dado." << endl;
         }
     }
+    int getPrecio() const {
+        return precio;
+    }
+    
+    string getDuenio() const {
+        return duenio;
+    }
+    
+    void setDuenio(const string& nuevoDuenio) {
+        duenio = nuevoDuenio;
+    }
 };
 
 #endif

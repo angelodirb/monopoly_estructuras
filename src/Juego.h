@@ -14,6 +14,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -214,39 +215,222 @@ private:
         }
     }
     
-    /**
-     * Precondición: Jugador válido
-     * Postcondición: Procesa una carta de Suerte
-     */
-    void procesarCartaSuerte(Jugador& jugador) {
-        cout << "🎴 ¡Sacaste una carta de SUERTE!" << endl;
+/**
+ * Precondición: Jugador válido
+ * Postcondición: Procesa completamente una carta de Suerte
+ */
+void procesarCartaSuerte(Jugador& jugador) {
+    cout << "\n🎴 ¡Sacaste una carta de SUERTE!" << endl;
+    
+    Carta carta = sistemaCartas.sacarCartaSuerte();
+    mostrarCarta(carta);
+    
+    cout << "\nPresiona Enter para continuar...";
+    cin.ignore();
+    cin.get();
+    
+    // Procesar según el tipo de acción
+    if (carta.accion == "COBRAR") {
+        bancoOtorgarDinero(banco, jugador, carta.valor, carta.descripcion);
+    }
+    else if (carta.accion == "PAGAR") {
+        if (!bancoCobrarDinero(banco, jugador, carta.valor, carta.descripcion)) {
+            cout << "⚠️ No tienes suficiente dinero. Debes vender propiedades o declararte en quiebra." << endl;
+        }
+    }
+    else if (carta.accion == "MOVER") {
+        int posicionAnterior = jugador.posicion;
+        jugador.posicion = carta.valor;
         
-        Carta carta = sistemaCartas.sacarCartaSuerte();
-        mostrarCarta(carta);
+        cout << "🚶 Te mueves a la casilla " << carta.valor << endl;
         
-        // Ejecutar la carta con el estado actual del jugador
-        ejecutarCarta(carta, jugador.dinero, jugador.posicion, 
-                     jugador.tieneCartaSalirCarcel, 0, 0);
+        // Verificar si pasó por SALIDA
+        if (carta.valor == 0 || posicionAnterior > carta.valor) {
+            cout << "🎯 Pasaste por SALIDA!" << endl;
+            bancoPagarSalida(banco, jugador);
+        }
         
-        cout << "💰 Dinero actual: $" << jugador.dinero << endl;
+        cout << "\nProcesando nueva casilla..." << endl;
+        procesarCasilla(jugador);
+    }
+    else if (carta.accion == "RETROCEDER") {
+        int posicionAnterior = jugador.posicion;
+        jugador.posicion = (jugador.posicion - carta.valor + 40) % 40;
+        
+        cout << "↩️ Retrocedes " << carta.valor << " casillas (de " 
+             << posicionAnterior << " a " << jugador.posicion << ")" << endl;
+        
+        procesarCasilla(jugador);
+    }
+    else if (carta.accion == "SALIR_CARCEL") {
+        darCartaSalirCarcel(jugador);
+        cout << "🎴 ¡Guardaste la carta! Podrás usarla cuando estés en la cárcel." << endl;
+        // Esta carta NO se devuelve a la cola
+    }
+    else if (carta.accion == "IR_CARCEL") {
+        cout << "🚨 ¡Vas directamente a la CÁRCEL!" << endl;
+        enviarACarcel(jugador);
+    }
+    else if (carta.accion == "REPARACIONES") {
+        int totalCasas = 0;
+        int totalHoteles = 0;
+        
+        // Contar casas y hoteles del jugador
+        for (const string& nombreProp : jugador.propiedades) {
+            Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+            if (casilla != nullptr) {
+                Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                if (prop != nullptr) {
+                    int numCasas = prop->getNumCasas();
+                    if (numCasas < 5) {
+                        totalCasas += numCasas;
+                    } else {
+                        totalHoteles++;
+                    }
+                }
+            }
+        }
+        
+        bancoReparaciones(banco, jugador, carta.valor, carta.valorExtra, 
+                         totalCasas, totalHoteles);
+    }
+    else if (carta.accion == "PAGAR_JUGADORES") {
+        cout << "💸 Debes pagar $" << carta.valor << " a CADA jugador" << endl;
+        bancoPagarATodos(banco, jugador, jugadores, carta.valor);
+    }
+    else if (carta.accion == "MOVER_FERROCARRIL") {
+        cout << "🚂 Avanzas al ferrocarril más cercano..." << endl;
+        int ferrocarriles[] = {5, 15, 25, 35};  // Posiciones de ferrocarriles
+        
+        int distanciaMin = 40;
+        int casillaDestino = ferrocarriles[0];
+        
+        for (int ferro : ferrocarriles) {
+            int distancia = (ferro - jugador.posicion + 40) % 40;
+            if (distancia < distanciaMin) {
+                distanciaMin = distancia;
+                casillaDestino = ferro;
+            }
+        }
+        
+        int posicionAnterior = jugador.posicion;
+        jugador.posicion = casillaDestino;
+        
+        cout << "Te mueves de " << posicionAnterior << " a " << casillaDestino << endl;
+        
+        if (posicionAnterior > casillaDestino) {
+            bancoPagarSalida(banco, jugador);
+        }
+        
+        procesarCasilla(jugador);
+    }
+    else if (carta.accion == "MOVER_SERVICIO") {
+        cout << "⚡ Avanzas al servicio más cercano..." << endl;
+        int servicios[] = {12, 28};  // Electric Company y Water Works
+        
+        int distanciaMin = 40;
+        int casillaDestino = servicios[0];
+        
+        for (int serv : servicios) {
+            int distancia = (serv - jugador.posicion + 40) % 40;
+            if (distancia < distanciaMin) {
+                distanciaMin = distancia;
+                casillaDestino = serv;
+            }
+        }
+        
+        int posicionAnterior = jugador.posicion;
+        jugador.posicion = casillaDestino;
+        
+        cout << "Te mueves de " << posicionAnterior << " a " << casillaDestino << endl;
+        
+        if (posicionAnterior > casillaDestino) {
+            bancoPagarSalida(banco, jugador);
+        }
+        
+        procesarCasilla(jugador);
+    }
+    else {
+        cout << "⚠️ Acción de carta no implementada: " << carta.accion << endl;
     }
     
-    /**
-     * Precondición: Jugador válido
-     * Postcondición: Procesa una carta de Cofre Comunitario
-     */
+    cout << "\n💰 Dinero actual: $" << jugador.dinero << endl;
+}
+
+    
+/**
+ * Precondición: Jugador válido
+ * Postcondición: Procesa completamente una carta de Cofre Comunitario
+ */
     void procesarCartaCofre(Jugador& jugador) {
-        cout << "🎴 ¡Sacaste una carta de COFRE COMUNITARIO!" << endl;
-        
-        Carta carta = sistemaCartas.sacarCartaCofre();
-        mostrarCarta(carta);
-        
-        // Ejecutar la carta con el estado actual del jugador
-        ejecutarCarta(carta, jugador.dinero, jugador.posicion, 
-                     jugador.tieneCartaSalirCarcel, 0, 0);
-        
-        cout << "💰 Dinero actual: $" << jugador.dinero << endl;
+    cout << "\n🎴 ¡Sacaste una carta de COFRE COMUNITARIO!" << endl;
+    
+    Carta carta = sistemaCartas.sacarCartaCofre();
+    mostrarCarta(carta);
+    
+    cout << "\nPresiona Enter para continuar...";
+    cin.ignore();
+    cin.get();
+    
+    // Procesar según el tipo de acción
+    if (carta.accion == "COBRAR") {
+        bancoOtorgarDinero(banco, jugador, carta.valor, carta.descripcion);
     }
+    else if (carta.accion == "PAGAR") {
+        if (!bancoCobrarDinero(banco, jugador, carta.valor, carta.descripcion)) {
+            cout << "⚠️ No tienes suficiente dinero. Debes vender propiedades o declararte en quiebra." << endl;
+        }
+    }
+    else if (carta.accion == "MOVER") {
+        int posicionAnterior = jugador.posicion;
+        jugador.posicion = carta.valor;
+        
+        cout << "🚶 Te mueves a la casilla " << carta.valor << " (SALIDA)" << endl;
+        
+        // Si es SALIDA (casilla 0), siempre cobra $200
+        bancoPagarSalida(banco, jugador);
+    }
+    else if (carta.accion == "SALIR_CARCEL") {
+        darCartaSalirCarcel(jugador);
+        cout << "🎴 ¡Guardaste la carta! Podrás usarla cuando estés en la cárcel." << endl;
+    }
+    else if (carta.accion == "IR_CARCEL") {
+        cout << "🚨 ¡Vas directamente a la CÁRCEL!" << endl;
+        enviarACarcel(jugador);
+    }
+    else if (carta.accion == "COBRAR_JUGADORES") {
+        cout << "💰 Cada jugador te paga $" << carta.valor << endl;
+        bancoCobrarDeTodos(banco, jugador, jugadores, carta.valor);
+    }
+    else if (carta.accion == "REPARACIONES") {
+        int totalCasas = 0;
+        int totalHoteles = 0;
+        
+        // Contar casas y hoteles del jugador
+        for (const string& nombreProp : jugador.propiedades) {
+            Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+            if (casilla != nullptr) {
+                Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                if (prop != nullptr) {
+                    int numCasas = prop->getNumCasas();
+                    if (numCasas < 5) {
+                        totalCasas += numCasas;
+                    } else {
+                        totalHoteles++;
+                    }
+                }
+            }
+        }
+        
+        bancoReparaciones(banco, jugador, carta.valor, carta.valorExtra, 
+                         totalCasas, totalHoteles);
+    }
+    else {
+        cout << "⚠️ Acción de carta no implementada: " << carta.accion << endl;
+    }
+    
+    cout << "\n💰 Dinero actual: $" << jugador.dinero << endl;
+}
     
     /**
      * Precondición: Jugador válido, está en cárcel
@@ -345,6 +529,7 @@ private:
         turnoActual++;
     }
     
+
     /**
      * Precondición: Ninguna
      * Postcondición: Retorna true si el juego debe terminar
@@ -356,40 +541,98 @@ private:
                 activos++;
             }
         }
-        return activos <= 1;
+        
+        // Fin si solo queda 1 jugador O si se alcanzaron 50 rondas
+        if (activos <= 1) {
+            cout << "\n🏆 Solo queda un jugador en pie!" << endl;
+            return true;
+        }
+        
+        if (rondaActual > 50) {
+            cout << "\n⏰ Se alcanzó el límite de 50 rondas!" << endl;
+            return true;
+        }
+        
+        return false;
     }
     
     /**
-     * Precondición: Juego finalizado
-     * Postcondición: Muestra ganador y estadísticas finales
-     */
-    void finalizarJuego() {
-        cout << "\n" << string(60, '=') << endl;
-        cout << "🏆 ¡JUEGO TERMINADO!" << endl;
-        cout << string(60, '=') << endl;
-        
-        // Encontrar ganador
-        Jugador* ganador = nullptr;
-        int dineroMax = 0;
-        
-        for (Jugador& j : jugadores) {
-            if (!j.estaQuebrado && j.dinero > dineroMax) {
-                dineroMax = j.dinero;
-                ganador = &j;
+ * Precondición: Juego finalizado
+ * Postcondición: Muestra ganador y estadísticas finales
+ */
+void finalizarJuego() {
+    cout << "\n" << string(60, '=') << endl;
+    cout << "🏆 ¡JUEGO TERMINADO!" << endl;
+    cout << string(60, '=') << endl;
+    
+    // Calcular patrimonio de todos los jugadores activos
+    vector<pair<string, int>> ranking;  // (nombre, patrimonio)
+    
+    for (const Jugador& j : jugadores) {
+        if (!j.estaQuebrado) {
+            int patrimonio = calcularPatrimonio(j);
+            ranking.push_back(make_pair(j.nombre, patrimonio));
+            
+            cout << "\n💰 " << j.nombre << ":" << endl;
+            cout << "   Dinero en efectivo: $" << j.dinero << endl;
+            cout << "   Propiedades: " << j.propiedades.size() << endl;
+            
+            // Mostrar lista de propiedades
+            if (j.propiedades.size() > 0) {
+                cout << "   Lista de propiedades:" << endl;
+                for (const string& prop : j.propiedades) {
+                    Casilla* casilla = buscarPropiedadEnTablero(prop);
+                    if (casilla != nullptr) {
+                        Propiedad* p = dynamic_cast<Propiedad*>(casilla);
+                        if (p != nullptr) {
+                            cout << "     - " << prop << " ($" << p->getPrecio() 
+                                 << ", " << p->getNumCasas() << " casas)" << endl;
+                        } else {
+                            cout << "     - " << prop << endl;
+                        }
+                    }
+                }
             }
+            
+            cout << "   PATRIMONIO TOTAL: $" << patrimonio << endl;
         }
-        
-        if (ganador != nullptr) {
-            cout << "\n🎉 ¡GANADOR: " << ganador->nombre << "!" << endl;
-            cout << "💰 Dinero final: $" << ganador->dinero << endl;
-            cout << "🏠 Propiedades: " << ganador->propiedades.size() << endl;
-        }
-        
-        // Mostrar resumen financiero
-        bancoResumenFinanciero(banco, jugadores);
-        
     }
     
+    // Ordenar ranking por patrimonio (mayor a menor)
+    sort(ranking.begin(), ranking.end(), 
+         [](const pair<string, int>& a, const pair<string, int>& b) {
+             return a.second > b.second;
+         });
+    
+    // Mostrar ranking
+    cout << "\n" << string(60, '=') << endl;
+    cout << "🏆 RANKING FINAL" << endl;
+    cout << string(60, '=') << endl;
+    
+    for (size_t i = 0; i < ranking.size(); i++) {
+        string medalla = (i == 0) ? "🥇" : (i == 1) ? "🥈" : (i == 2) ? "🥉" : "  ";
+        cout << medalla << " " << (i + 1) << ". " << ranking[i].first 
+             << " - $" << ranking[i].second << endl;
+    }
+    
+    // Anunciar ganador
+    if (ranking.size() > 0) {
+        cout << "\n" << string(60, '=') << endl;
+        cout << "🎉 ¡GANADOR: " << ranking[0].first << "!" << endl;
+        cout << "💰 Patrimonio final: $" << ranking[0].second << endl;
+        cout << string(60, '=') << endl;
+    }
+    
+    // Mostrar resumen financiero del banco
+    cout << endl;
+    bancoResumenFinanciero(banco, jugadores);
+    
+    // Estadísticas del juego
+    cout << "\n📊 ESTADÍSTICAS DEL JUEGO:" << endl;
+    cout << "Rondas jugadas: " << rondaActual << endl;
+    cout << "Jugadores quebrados: " << (jugadores.size() - ranking.size()) << endl;
+    cout << string(60, '=') << endl;
+}
     /**
      * Precondición: Ninguna
      * Postcondición: Muestra el estado actual del juego
@@ -533,6 +776,61 @@ public:
     vector<Jugador>& obtenerJugadores() {
         return jugadores;
     }
+
+    /**
+     * Precondición: nombrePropiedad no vacío
+     * Postcondición: Retorna puntero a casilla o nullptr
+     */
+    Casilla* buscarPropiedadEnTablero(const string& nombrePropiedad) const {
+        if (vaciaLista(tablero)) {
+            return nullptr;
+        }
+        
+        Casilla* actual = getCabeza(tablero);
+        
+        do {
+            if (actual->getNombre() == nombrePropiedad) {
+                return actual;
+            }
+            actual = actual->siguiente;
+        } while (actual != getCabeza(tablero));
+        
+        return nullptr;
+    }
+
+    /**
+     * Precondición: jugador válido
+     * Postcondición: Retorna el patrimonio total (dinero + valor de propiedades)
+     */
+    int calcularPatrimonio(const Jugador& jugador) const {
+        int patrimonio = jugador.dinero;
+        
+        // Sumar el valor de todas las propiedades del jugador
+        for (const string& nombreProp : jugador.propiedades) {
+            Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+            
+            if (casilla != nullptr) {
+                // Intentar cast a diferentes tipos de propiedades
+                Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                Ferrocarril* ferro = dynamic_cast<Ferrocarril*>(casilla);
+                Servicio* serv = dynamic_cast<Servicio*>(casilla);
+                
+                if (prop != nullptr) {
+                    patrimonio += prop->getPrecio();
+                    // Bonus por casas/hoteles construidos
+                    patrimonio += prop->getValorMejoras();
+                }
+                else if (ferro != nullptr) {
+                    patrimonio += ferro->getPrecio();
+                }
+                else if (serv != nullptr) {
+                    patrimonio += serv->getPrecio();
+                }
+            }
+        }
+        
+        return patrimonio;
+    }
     
     
     /**
@@ -547,6 +845,9 @@ public:
         cout << "Jugadores: " << jugadores.size() << endl;
         cout << "==============================" << endl;
     }
+
+
+    
 };
 
 #endif // JUEGO_H_

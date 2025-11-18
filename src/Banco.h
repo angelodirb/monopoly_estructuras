@@ -210,42 +210,39 @@ bool bancoReparaciones(Banco& banco, Jugador& jugador,
  * Postcondición: El jugador paga a todos los demás
  */
 bool bancoPagarATodos(Banco& banco, Jugador& pagador, 
-                      const vector<Jugador>& jugadores, int cantidadPorJugador) {
+                      vector<Jugador>& jugadores, int cantidadPorJugador) {
     int totalAPagar = cantidadPorJugador * (jugadores.size() - 1);
     
     if (pagador.dinero < totalAPagar) {
         cout << "🏦 " << pagador.nombre << " no puede pagar $" << cantidadPorJugador 
-             << " a cada jugador" << endl;
+             << " a cada jugador (necesita $" << totalAPagar << ")" << endl;
         return false;
     }
     
     cout << "🏦 " << pagador.nombre << " paga $" << cantidadPorJugador << " a todos:" << endl;
     
-    for (const Jugador& j : jugadores) {
+    for (Jugador& j : jugadores) {
         if (j.nombre != pagador.nombre && !j.estaQuebrado) {
-            Jugador& receptor = const_cast<Jugador&>(j);
-            bancoTransferencia(banco, pagador, receptor, cantidadPorJugador, "Pago grupal");
+            bancoTransferencia(banco, pagador, j, cantidadPorJugador, "Pago grupal");
         }
     }
     
     return true;
 }
-
 /**
  * Precondición: Jugador válido, lista de jugadores válida
  * Postcondición: Todos pagan al jugador especificado
  */
 void bancoCobrarDeTodos(Banco& banco, Jugador& receptor, 
-                        const vector<Jugador>& jugadores, int cantidadPorJugador) {
+                        vector<Jugador>& jugadores, int cantidadPorJugador) {
     cout << "🏦 " << receptor.nombre << " cobra $" << cantidadPorJugador << " de todos:" << endl;
     
-    for (const Jugador& j : jugadores) {
+    for (Jugador& j : jugadores) {
         if (j.nombre != receptor.nombre && !j.estaQuebrado) {
-            Jugador& pagador = const_cast<Jugador&>(j);
-            if (pagador.dinero >= cantidadPorJugador) {
-                bancoTransferencia(banco, pagador, receptor, cantidadPorJugador, "Cobro grupal");
+            if (j.dinero >= cantidadPorJugador) {
+                bancoTransferencia(banco, j, receptor, cantidadPorJugador, "Cobro grupal");
             } else {
-                cout << "  ⚠️ " << pagador.nombre << " no tiene fondos suficientes" << endl;
+                cout << "  ⚠️ " << j.nombre << " no tiene fondos suficientes" << endl;
             }
         }
     }

@@ -31,5 +31,16 @@ public:
                  << ". Debes pagar $" << alquiler[0] << endl;
         }
     }
+    int getPrecio() const {
+        return precio;
+    }
+    
+    string getDuenio() const {
+        return duenio;
+    }
+    
+    void setDuenio(const string& nuevoDuenio) {
+        duenio = nuevoDuenio;
+    }
 };
 #endif
