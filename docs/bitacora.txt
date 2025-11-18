@@ -1,0 +1,729 @@
+DIA 31 DE OCTUBRE DE 2025
+
+Para este dia nos reunimos para entender el problema completamente y sus reglas,
+desde como comprar una propiedad, hasta hipotecas, bancarrota y deudas,
+tambien definimos inicialmente las estructuras que pensamos utilizar en el codigo
+es decir los posibles TADs, para el correcto funcionamiento del juego, planteamos estrategias
+de como calcular precios y rentas de cada una de las propiedades
+
+Adicionalmente discutimos sobre el movimiento del jugador y definimos su posible TAD
+
+Quedamos en duda de como almacenar los estados del juego para poder devolverme
+=========================================================================
+=========================================================================
+
+DIA 02 DE NOVIEMBRE DE 2025
+
+Para este día se realizó el TAD Carta que incluye la estructura de una carta como arca comunal o suerte y por ende en esta versión se pensó dividir ese TAD carta de manera individual y incluirla en un TAD Cola que sirve para almacenar esas cartas, que a su vez parte de los TADS iniciales de lista y cola, 
+
+faltaria refinar y fusionar para que sea un unico TAD ColaCartas sin necesidad de incluir lista.h y cola.h
+
+=========================================================================
+=========================================================================
+
+DIA 07 DE NOVIEMBRE DE 2025
+
+Se trabajó en paralelo en dos ramas diferentes:
+
+Rama principal (miguel/vasco):
+- Implementación del TAD Casilla como clase base abstracta con método virtual puro activar()
+- Creación de clases derivadas: Propiedad, Ferrocarril, Servicio y Esquina
+- Implementación del TAD Lista Circular para representar el tablero
+- Funciones básicas de lista circular: crear, insertar, eliminar, mostrar
+- Estructura inicial del main.cpp
+
+Rama del compañero(vasco):
+- Implementación del TAD Carta para representar cartas de Suerte y Arca Comunal
+- Implementación del TAD Cola genérico basado en el TAD Lista
+- Creación del TAD ColaDeCartas especializado para manejar los mazos del juego
+- Actualización de la documentación con especificaciones de TADs
+- Definición de pre y postcondiciones formales
+
+Pendiente: Realizar merge de ambas ramas para integrar todos los TADs implementados
+=========================================================================
+=========================================================================
+
+DIA 08/09 DE NOVIEMBRE DE 2025
+
+Rama miguel:
+- Creación del archivo Casillas.txt con la configuración completa del tablero de Monopoly (40 casillas)
+- Formato del archivo: nombre, tipo, y datos específicos según el tipo de casilla
+- Agregados guardias de inclusión (#ifndef, #define, #endif) a todos los archivos de casillas
+
+Mejoras en los TADs de casillas:
+- Modificación de casilla.h: método activar() ahora tiene implementación por defecto
+- Actualización de propiedad.h: 
+  * Agregado soporte para colores de propiedades
+  * Sistema completo de casas/hoteles (0-5 niveles)
+  * Array de 6 valores de renta según nivel de construcción
+  * Métodos construirCasa() y obtenerAlquiler()
+- Actualización de ferrocarril.h: array de 4 rentas según cantidad de ferrocarriles poseídos
+- Mantenimiento de servicios.h con estructura básica
+
+Implementación del módulo tablero:
+- tablero.cpp: función cargarTableroDesdeArchivo() que parsea el archivo de configuración
+- Parser robusto que identifica tipos de casilla y crea objetos apropiados
+- Función mostrarResumenTablero() para visualización del tablero cargado
+- tablero.h: definición de interfaces públicas con guardias de inclusión
+
+Programa principal de prueba:
+- main.cpp: carga el tablero desde archivo
+- Muestra resumen con las 40 casillas cargadas
+- Prueba de activación de casillas para verificar polimorfismo
+Observacion: no esta completo la logica de tableros(esta en desarrollo).
+=========================================================================
+=========================================================================
+DIA 12 DE NOVIEMBRE DE 2025
+================================================================================
+MODIFICACIONES Y CORRECCIONES - SESIÓN ACTUAL
+Complemento a la bitácora existente (post 8/9 noviembre)
+================================================================================
+
+ Resolución de errores de compilación y simplificación del proyecto
+
+================================================================================
+PROBLEMAS IDENTIFICADOS Y RESUELTOS:
+================================================================================
+
+1. ERROR CRÍTICO DE LINKING - "ld returned 5 exit status"
+   CAUSA: Multiple definition errors en listaCircular.h
+   ANÁLISIS: Las funciones estaban implementadas directamente en el header,
+             causando que se definieran múltiples veces al incluirse en 
+             main.cpp y tablero.cpp
+   
+   SOLUCIÓN IMPLEMENTADA:
+   - Separación de listaCircular.h (solo declaraciones) y listaCircular.cpp (implementaciones)
+   - Eliminación de funciones implementadas en el header
+   - Mantenimiento de include guards apropiados
+
+================================================================================
+MODIFICACIONES EN ARCHIVOS EXISTENTES:
+================================================================================
+
+ARCHIVO: listaCircular.h
+CAMBIOS REALIZADOS:
+- Eliminación de todas las implementaciones de funciones
+- Mantenimiento únicamente de declaraciones de funciones
+- Conservación de estructura ListaCircular
+- Include guards mejorados
+
+ARCHIVO: listaCircular.cpp (CREADO NUEVO)
+CONTENIDO AÑADIDO:
+- Implementaciones completas de todas las funciones de lista circular
+- crearLista(), vaciaLista(), size(), anxLista(), insLista(), elimLista()
+- mostrarLista(), getCabeza()
+- Includes apropiados (#include "listaCircular.h")
+- Manejo de errores mejorado
+
+ARCHIVOS SIN MODIFICACIONES (ya correctos):
+- main.cpp:  Funcional
+- tablero.cpp:  Funcional  
+- tablero.h: Funcional
+- casilla/casilla.h:  Método virtual con implementación por defecto
+- casilla/propiedad.h:  Funcional
+- casilla/ferrocarril.h:  Funcional
+- casilla/servicios.h:  Funcional
+- Casillas.txt:  Datos completos del tablero
+
+================================================================================
+DECISIONES TÉCNICAS:
+================================================================================
+
+DECISIÓN: Simplificación de herramientas de build
+JUSTIFICACIÓN: 
+- Makefile y scripts .sh añaden complejidad innecesaria para proyecto de este tamaño
+- Compilación manual con una línea es más directa y comprensible
+- Enfoque en la lógica del programa, no en herramientas auxiliares
+
+IMPLEMENTACIÓN:
+- Eliminación de dependencia en Makefile/script complejos
+- Creación de README.txt con instrucciones simples de compilación
+- Comando único: g++ -std=c++11 main.cpp tablero.cpp listaCircular.cpp -I casilla -o monopoly
+
+DECISIÓN: Separación .h/.cpp como mejor práctica
+JUSTIFICACIÓN:
+- Evita errores de multiple definition
+- Compilación más eficiente 
+- Preparación para proyectos de mayor escala
+- Estándar profesional en C++
+
+========================
+ARCHIVOS NUEVOS CREADOS:
+========================
+
+1. README.txt
+   PROPÓSITO: Documentación de usuario simple y clara
+   CONTENIDO:
+   - Instrucciones de compilación (en la medida que avance el proyecto)
+   - Descripción del proyecto (en la medida que avance el proyecto)
+   - Estructura de archivos (en la medida que avance el proyecto)
+   - Ejemplo de salida esperada (en la medida que avance el proyecto)
+   - Resolución de problemas comunes (en la medida que avance el proyecto)
+
+
+===================================
+PRÓXIMOS PASOS (NO REALIZADOS AÚN):
+===================================
+
+1. Integración con trabajo del compañero de equipo (cartas y colas)
+2. Merge de ramas en GitHub
+3. Testing completo de funcionalidad integrada
+4. Implementación de lógica de juego completa
+5. Actualización final de bitácora con resultados de integración
+
+=============================
+COMANDO FINAL DE COMPILACIÓN:
+=============================
+
+g++ -std=c++11 main.cpp tablero.cpp listaCircular.cpp -I casilla -o monopoly
+
+EJECUCIÓN:
+./monopoly
+
+================================================================================
+================================================================================
+(ACTUALIZACION) DIA 12 DE NOVIEMBRE DE 2025
+================================================================================
+PROBLEMA DE LINKING RESUELTO
+
+PROBLEMA: Error "ld returned 116 exit status" en Windows/MinGW64
+
+DESCRIPCIÓN DEL ERROR:
+- Compilación individual exitosa de todos los archivos .cpp a .o
+- Fallo durante la fase de linking (último paso de compilación)
+- Error específico: collect2.exe: error: ld returned 116 exit status
+- Sistema: Windows con MinGW64 (MSYS2)
+
+
+SOLUCIÓN IMPLEMENTADA:
+g++ -std=c++11 main.o tablero.o listaCircular.o -o monopoly -static-libgcc -static-libstdc++
+
+=========================================================================
+DIA 16 DE NOVIEMBRE DE 2025
+=========================================================================
+
+INTEGRACIÓN DEL TAD TABLA HASH - CUMPLIMIENTO DE REQUERIMIENTOS
+================================================================================
+
+TRABAJO REALIZADO:
+Se integró exitosamente el TAD TablaHash al proyecto Monopoly para cumplir con el 
+requerimiento específico del documento: "El registro de las propiedades y su 
+información debe estar en una estructura de acceso directo o diccionario como 
+una Tabla Hash."
+
+================================================================================
+ANÁLISIS DEL TAD TABLA HASH ORIGINAL:
+================================================================================
+
+PROBLEMAS CRÍTICOS IDENTIFICADOS:
+1. NO manejaba colisiones - datos se sobreescribían al tener mismo hash
+2. Función hash no funcionaba con strings - solo con tipos numéricos
+3. No inicializaba la tabla - contenía basura al crearse
+4. No verificaba existencia de elementos
+5. Sin función de eliminación
+6. Sin control de factor de carga
+
+ESTRUCTURA ORIGINAL ANALIZADA:
+- Template genérico con tipos L (llave) y T (elemento)
+- Direccionamiento abierto con arreglo
+- Uso correcto de malloc (cumple requerimiento académico)
+- Interfaz limpia y bien definida
+
+================================================================================
+MEJORAS IMPLEMENTADAS:
+================================================================================
+
+1. MANEJO DE COLISIONES:
+   - Implementado sondeo lineal para resolver colisiones
+   - Flags ocupado/eliminado para cada slot
+   - Búsqueda segura con detección de ciclos
+
+2. FUNCIÓN HASH PARA STRINGS:
+   - Especialización de template para const char*
+   - Algoritmo de hash por multiplicación 
+   - Manejo de hash negativos
+
+3. INICIALIZACIÓN CORRECTA:
+   - Todos los slots marcados como no ocupados al crear
+   - Contador de elementos (tamaño)
+   - Control de factor de carga
+
+4. NUEVAS FUNCIONALIDADES:
+   - existeTablaHash(): verificar existencia de llave
+   - elimTablaHash(): eliminación con lazy deletion
+   - estadisticasTablaHash(): debugging y monitoring
+   - liberarTablaHash(): gestión de memoria
+   - tamañoTablaHash(): obtener número de elementos
+
+================================================================================
+TAD REGISTRO DE PROPIEDADES:
+================================================================================
+
+Se creó un TAD especializado que encapsula la tabla hash para el uso específico 
+requerido por el proyecto:
+
+FUNCIONALIDADES:
+- crearRegistroPropiedades(): inicializa registro con capacidad 101
+- registrarPropiedad(): añade casilla al registro por nombre
+- buscarPropiedad(): búsqueda O(1) por nombre
+- existePropiedad(): verificación rápida de existencia
+- mostrarEstadisticasRegistro(): información del registro
+
+DECISIÓN TÉCNICA:
+Usar const char* como llave y Casilla* como valor permite:
+- Acceso directo a cualquier propiedad/ferrocarril/servicio por nombre
+- Compatible con el sistema de casillas existente
+- Búsqueda O(1) vs O(n) de la lista circular
+
+================================================================================
+INTEGRACIÓN CON SISTEMA EXISTENTE:
+================================================================================
+
+MODIFICACIONES EN TABLERO:
+- Nueva función cargarTableroConRegistro() que retorna pair<ListaCircular, RegistroPropiedades>
+- Registro automático de propiedades al cargar desde archivo
+- Mantiene compatibilidad con función original para no romper el codigo que ya se tenia.
+
+ARCHIVOS CREADOS/MODIFICADOS:
+NUEVOS:
+- src/tablahash.h: TAD tabla hash corregido y mejorado
+- src/registroPropiedades.h: TAD especializado para el proyecto
+
+MODIFICADOS:
+- src/tablero.h: añadida función de carga con registro
+- src/tablero.cpp: integración automática del registro
+- src/main.cpp: demo de funcionalidad integrada
+
+================================================================================
+CUMPLIMIENTO DE REQUERIMIENTOS:
+================================================================================
+
+✅ REQUERIMIENTO CUMPLIDO:
+"El registro de las propiedades y su información debe estar en una estructura 
+de acceso directo o diccionario como una Tabla Hash."
+
+IMPLEMENTACION:
+- Tabla hash almacena TODAS las propiedades del tablero
+- Acceso directo O(1) por nombre de propiedad
+- Información completa de cada propiedad (precio, dueño, casas, etc.)
+- Integración con carga de tablero
+
+================================================================================
+TESTING Y VALIDACIÓN:
+================================================================================
+
+PRUEBAS IMPLEMENTADAS:
+1. Carga de 40 casillas del tablero estándar
+2. Registro automático de propiedades en tabla hash
+3. Búsqueda por nombre (exitosa y fallida)
+4. Verificación de estadísticas y factor de carga
+
+RESULTADOS:
+- 28 propiedades registradas exitosamente en tabla hash
+- Búsqueda instantánea por nombre vs recorrido secuencial
+- Sin colisiones reportadas en conjunto de datos real
+
+================================================================================
+DECISIONES TÉCNICAS IMPORTANTES:
+================================================================================
+
+ ESPECIALIZACIÓN DE TEMPLATES:
+   Se usó especialización de templates para manejar strings correctamente
+   manteniendo la genericidad del TAD original.
+
+ FACTOR DE CARGA:
+   Capacidad de 101 (número primo) para distribución óptima de hash con
+   warning al 70% de ocupación.
+
+ GESTIÓN DE MEMORIA:
+   La tabla hash almacena punteros a casillas, no copia las casillas,
+   manteniendo eficiencia de memoria y evitando duplicación.
+
+================================================================================
+PRÓXIMOS PASOS PARA INTEGRACIÓN COMPLETA:
+================================================================================
+
+PENDIENTE PARA TAD JUEGO:
+1. Integrar tabla hash con lógica de compra de propiedades
+2. Usar búsqueda rápida para cálculo de monopolios
+3. Actualización de información de propiedades (dueño, casas) en tabla hash
+4. Consultas rápidas para determinar rentas y construcción
+
+ARQUITECTURA RESULTANTE:
+- ListaCircular: navegación secuencial del tablero
+- TablaHash: acceso directo a propiedades por nombre  
+- Colas: cartas de Suerte y Arca Comunal
+- Pila: historial de estados (marcha atrás)
+
+================================================================================
+COMPILACIÓN Y TESTING:
+================================================================================
+
+COMANDO DE COMPILACIÓN:
+g++ -std=c++11 main.cpp tablero.cpp listaCircular.cpp -I casilla -o monopoly
+
+SALIDA ESPERADA:
+Tablero cargado exitosamente desde Casillas.txt
+   Casillas en tablero: 40
+   Propiedades en registro: 28
+
+El sistema tabla hash está completamente integrado y listo para ser utilizado
+por los TADs de nivel superior (Jugador y Juego).
+
+=========================================================================
+=========================================================================
+
+DIA 10/11/2025 VASCO
+
+IMPLEMENTACIÓN DEL TAD CARTAS DE MONOPOLY
+OBJETIVO:
+Crear el Tipo Abstracto de Datos (TAD) para las cartas del juego Monopoly,
+incluyendo cartas de Suerte y Cofre Comunitario, siguiendo el patrón de
+diseño establecido en el TAD Propiedades.
+=========================================================================
+ARCHIVOS CREADOS:
+
+cartas.h
+
+Definición de la estructura cart (typedef Carta)
+Guardias de inclusión (#ifndef __CARTAS_H)
+Atributos implementados:
+
+descripcion: texto de la carta
+tipo: SUERTE o COFRE
+accion: tipo de efecto (COBRAR, PAGAR, MOVER, etc.)
+valor: cantidad principal (dinero o casilla)
+valorExtra: valor secundario (para reparaciones)
+
+
+Funciones implementadas:
+
+crearCarta(): Constructor de cartas
+mostrarCarta(): Visualización formateada
+obtenerDescripcion(), obtenerTipo(), obtenerAccion()
+obtenerValor(), obtenerValorExtra(): Getters
+ejecutarCarta(): Ejecuta la acción de la carta automáticamente
+
+
+
+
+cartas.txt
+
+Base de datos completa de cartas del Monopoly oficial
+16 cartas de SUERTE
+17 cartas de COFRE COMUNITARIO
+Total: 33 cartas implementadas
+
+Formato del archivo:
+Línea 1: Descripción de la carta
+Línea 2: Tipo (SUERTE o COFRE)
+Línea 3: Acción
+Línea 4: Valor
+Línea 5: Valor Extra (opcional, solo para reparaciones)
+
+pruebacartas.cc
+
+Programa de prueba completo
+Lectura y parseo del archivo cartas.txt
+Separación automática en vectores (cartasSuerte y cartasCofre)
+Sistema de menú interactivo
+Simulación de estado del jugador (dinero, posición, propiedades)
+Funcionalidad de sacar cartas aleatorias
+Ejecución automática de efectos de cartas
+
+
+
+=========================================================================
+TIPOS DE ACCIONES IMPLEMENTADAS:
+ACCIONES BÁSICAS:
+
+COBRAR: Recibir dinero del banco
+PAGAR: Pagar dinero al banco
+MOVER: Ir a una casilla específica del tablero
+RETROCEDER: Retroceder N casillas
+AVANZAR: Avanzar N casillas
+
+ACCIONES ESPECIALES:
+
+IR_CARCEL: Ir directamente a la cárcel sin pasar por Salida
+SALIR_CARCEL: Carta para salir gratis de la cárcel (se guarda)
+REPARACIONES: Pagar por casas ($25-40) y hoteles ($100-115)
+COBRAR_JUGADORES: Cada jugador debe pagarte
+PAGAR_JUGADORES: Debes pagar a cada jugador
+
+ACCIONES FUTURAS (PENDIENTES):
+
+MOVER_FERROCARRIL: Ir al ferrocarril más cercano
+MOVER_SERVICIO: Ir al servicio más cercano
+
+=========================================================================
+CARACTERÍSTICAS TÉCNICAS:
+DISEÑO ORIENTADO A OBJETOS:
+
+TAD completo con encapsulamiento de datos
+Estructura coherente con el TAD Propiedades existente
+Funciones de acceso controladas (getters)
+Función ejecutora que modifica estado del jugador
+
+MANEJO DE DATOS:
+
+Lectura de archivo de texto estructurado
+Uso de vectors para almacenamiento dinámico
+Separación lógica por tipo de carta
+Sistema de separadores (===) para delimitación
+
+FUNCIONALIDAD DEL PROGRAMA DE PRUEBA:
+
+Generación de números aleatorios para sacar cartas
+Simulación completa del estado del jugador
+Menú interactivo con 6 opciones
+Visualización del estado antes de cada acción
+Modificación manual de propiedades para pruebas
+
+=========================================================================
+PATRONES DE DISEÑO UTILIZADOS:
+
+Separación de Responsabilidades:
+
+cartas.h: Definiciones y operaciones básicas
+cartas.txt: Datos de configuración
+pruebacartas.cc: Lógica de aplicación
+
+
+Consistencia con TAD Propiedades:
+
+Estructura similar de datos
+Mismo formato de archivo de texto
+Funciones de creación y visualización análogas
+
+
+Extensibilidad:
+
+Fácil agregar nuevas cartas al archivo .txt
+Nuevas acciones se añaden al switch en ejecutarCarta()
+Sin recompilación para cambios en datos
+
+
+
+=========================================================================
+INSTRUCCIONES DE COMPILACIÓN:
+g++ -std=c++11 pruebacartas.cc -o pruebacartas
+./pruebacartas
+DEPENDENCIAS:
+
+cartas.h (debe estar en el mismo directorio)
+cartas.txt (debe estar en el mismo directorio)
+Compilador C++11 o superior
+
+=========================================================================
+ESTADO ACTUAL DEL PROYECTO:
+COMPLETADO:
+✓ Estructura de datos para cartas
+✓ Base de datos completa de 33 cartas
+✓ Sistema de lectura desde archivo
+✓ Ejecución automática de efectos
+✓ Programa de prueba funcional
+✓ Documentación inline en código
+PENDIENTE PARA INTEGRACIÓN:
+
+Integración con sistema de tablero (casillas.h)
+Integración con sistema de jugadores
+Manejo de múltiples jugadores para acciones grupales
+Implementación de acciones especiales (ferrocarril, servicio)
+Sistema de baraja con remezcla automática
+Conexión con el flujo principal del juego
+
+=========================================================================
+PRÓXIMOS PASOS SUGERIDOS:
+
+Merge con rama principal del proyecto
+Integración con TAD Tablero (casillas)
+Integración con TAD Jugadores
+Implementación de cola/pila para baraja de cartas
+Testing de casos especiales (sin dinero, bancarrota, etc.)
+Refinamiento de acciones MOVER_FERROCARRIL y MOVER_SERVICIO
+
+=========================================================================
+OBSERVACIONES:
+
+El sistema de cartas está diseñado para ser modular e independiente
+Todas las cartas oficiales del Monopoly están implementadas
+El código sigue el estilo y convenciones del proyecto existente
+La función ejecutarCarta() puede requerir ajustes según la
+implementación final del motor de juego
+Se mantiene consistencia con el patrón de archivos .txt para datos
+
+=========================================================================
+
+================================================================================
+================================================================================
+
+DIA 16/11/2025
+================================================================================
+TAD JUGADOR - MONOPOLY
+================================================================================
+
+Se implementó un TAD completo para representar y manipular jugadores del juego
+Monopoly con todas las operaciones necesarias para el funcionamiento del juego.
+
+FUNCIONALIDADES PRINCIPALES:
+- crearJugador(): inicializa jugador con estado por defecto ($1500, casilla 0)
+- Operaciones de movimiento (moverJugador, irACasilla, enviarACarcel)
+- Operaciones financieras (agregar/retirar dinero, transferencias)
+- Gestión de propiedades (comprar, transferir)
+- Manejo de cárcel (pagar multa, turnos en cárcel)
+- Operaciones con múltiples jugadores (pagar a todos, cobrar de todos)
+- Sistema de quiebra y transferencia de activos
+
+DECISIÓN TÉCNICA:
+Usar struct con campos públicos permite:
+- Acceso directo a datos del jugador para consultas simples
+- Separación de responsabilidades (Jugador vs Juego vs Dado)
+- Funciones que encapsulan lógica compleja y validaciones
+- Fácil integración con otros TADs del proyecto
+
+================================================================================
+ESTRUCTURA DE DATOS:
+================================================================================
+
+CAMPOS DEL TAD JUGADOR:
+```cpp
+struct player {
+    std::string nombre;                     // Identificador del jugador
+    int dinero;                             // Saldo actual ($1500 inicial)
+    int posicion;                           // Casilla actual (0-39)
+    std::vector propiedades;   // Propiedades en posesión
+    int turnosCarcel;                       // Turnos acumulados en cárcel
+    bool enCarcel;                          // Estado de encarcelamiento
+    bool estaQuebrado;                      // Indicador de bancarrota
+    bool tieneCarta;                        // Carta "Sal de la cárcel"
+};
+```
+
+JUSTIFICACIÓN DE CAMPOS:
+- nombre: permite identificación única del jugador en el juego
+- dinero: rastrea solvencia y permite validar transacciones
+- posicion: sincroniza con la lista circular del tablero
+- propiedades: vector dinámico para cantidad variable de propiedades
+- turnosCarcel: implementa regla de 3 turnos máximo
+- enCarcel: diferencia entre estar en casilla de cárcel vs encarcelado
+- estaQuebrado: marca jugadores eliminados del juego
+- tieneCarta: implementa carta especial de libertad
+
+================================================================================
+TESTING Y VALIDACIÓN:
+================================================================================
+
+ARCHIVO: prueba_jugador.cpp
+PRUEBAS IMPLEMENTADAS:
+
+1. Creación de jugadores (3 instancias)
+   - Validación de estado inicial correcto
+   - Verificación de valores por defecto
+
+2. Operaciones de movimiento
+   - Movimiento básico (+7 casillas)
+   - Vuelta completa con paso por salida (+35 casillas)
+   - Movimiento directo a casilla específica
+   - Envío a cárcel
+
+3. Operaciones financieras básicas
+   - Agregar dinero exitosamente
+   - Retirar dinero con fondos suficientes
+   - Intentar retirar sin fondos (debe fallar)
+   - Validación de retornos booleanos
+
+4. Compra de propiedades
+   - Compras múltiples exitosas (3 propiedades)
+   - Intento de compra sin fondos (debe fallar)
+   - Verificación de vector de propiedades
+
+5. Transferencias entre jugadores
+   - Pago directo jugador a jugador
+   - Cobro de alquiler
+   - Validación de saldos post-transacción
+
+6. Operaciones con el banco
+   - Pago de impuestos
+   - Cobro de premios
+   - Verificación de flujo de dinero
+
+7. Sistema de cárcel
+   - Envío a cárcel
+   - Pago de multa para salir
+   - Verificación de estado post-liberación
+
+8. Operaciones con múltiples jugadores
+   - Pagar a todos (jugador paga $50 a cada uno)
+   - Cobrar de todos (jugador cobra $25 de cada uno)
+   - Validación de exclusión del pagador/receptor
+
+9. Sistema de quiebra
+   - Forzar situación de insolvencia
+   - Intento de pago que desencadena quiebra
+   - Transferencia de activos al acreedor
+   - Validación de estado final
+
+RESULTADOS DE PRUEBAS:
+✅ Todas las operaciones ejecutan correctamente
+✅ Validaciones previenen estados inválidos
+✅ Mensajes informativos claros en consola
+✅ Retornos booleanos permiten manejo de errores
+✅ Estado de jugadores consistente tras operaciones
+
+FUNCIÓN AUXILIAR mostrarEstadoJugador():
+Despliega información completa:
+- Nombre, dinero, posición
+- Lista de propiedades
+- Estado de cárcel y turnos
+- Carta de libertad
+- Estado de quiebra
+
+================================================================================
+DECISIONES TÉCNICAS IMPORTANTES:
+================================================================================
+
+1. RETORNO DE BOOLEANOS:
+   Operaciones que pueden fallar retornan bool:
+   - retirarDinero()
+   - pagarA()
+   - comprarPropiedad()
+   - cobrarAlquiler()
+   
+   VENTAJA: Permite al código llamador manejar fallos apropiadamente
+
+2. VALIDACIÓN PREVENTIVA:
+   Todas las operaciones validan precondiciones antes de modificar estado:
+```cpp
+   if (j.dinero < cantidad) {
+       // Error y retorno temprano
+       return false;
+   }
+   // Operación segura aquí
+```
+
+3. MENSAJES INFORMATIVOS:
+   Cada operación imprime resultado en consola:
+   - Facilita debugging
+   - Proporciona feedback al usuario
+   - Rastrea flujo de dinero y propiedades
+
+4. CONST CORRECTNESS:
+   Operaciones de consulta usan const:
+```cpp
+   bool puedeComprar(const Jugador& j, int precio)
+```
+
+5. PASS BY REFERENCE:
+   Operaciones que modifican reciben Jugador&:
+```cpp
+   void moverJugador(Jugador& j, int casillas)
+```
+
+6. MANEJO DE VECTORES:
+   std::vector para propiedades:
+   - Tamaño dinámico
+   - Fácil iteración
+   - Compatible con STL
+
+==================================================================================
