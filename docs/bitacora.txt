@@ -773,6 +773,130 @@ Función auxiliar para verificar disponibilidad
 ================================================================================
 ================================================================================
 
+================================================================================
+
+DIA 18/11/2025
+================================================================================
+
+
+El TAD Banco modela todas las operaciones financieras del juego.
+Controla el dinero en circulación, administra
+pagos, cobros, transferencias y mantiene un historial de todas las transacciones
+que ocurren durante la partida.
+===========================================
+1. Estructura principal: Banco
+
+El banco almacena:
+
+dineroEnCirculacion → total de dinero activo entre jugadores.
+
+dineroRetenido → dinero relacionado con propiedades hipotecadas.
+
+historial → lista de transacciones realizadas en el juego.
+==========================================
+2. Estructura auxiliar: Transaccion
+
+Cada movimiento de dinero se registra con:
+
+tipo: "PAGO", "COBRO", "TRANSFERENCIA", etc.
+
+deJugador / aJugador
+
+monto
+
+concepto (motivo)
+
+turno
+=========================================
+3. Funciones principales del Banco
+Distribución inicial
+
+bancoDistribuirDineroInicial()
+Reparte el dinero inicial ($1500 por jugador) al comenzar la partida.
+====================
+Operaciones básicas
+====================
+bancoOtorgarDinero()
+El banco entrega dinero a un jugador.
+
+bancoCobrarDinero()
+El banco cobra a un jugador (rentas, multas, impuestos).
+
+bancoTransferencia()
+Transfiere dinero entre jugadores.
+
+===============================
+Acciones de reglas especiales
+==============================
+bancoPagarSalida() → paga $200 al jugador al pasar por SALIDA.
+
+bancoMultaCarcel() → cobra $50 para salir de la cárcel.
+
+bancoReparaciones() → cobra reparaciones (por casas y hoteles).
+
+==================
+Pagos grupales
+==================
+bancoPagarATodos()
+Un jugador paga una cantidad a todos los demás.
+
+bancoCobrarDeTodos()
+Todos los jugadores pagan a uno.
+=================
+Reportes
+=================
+bancoResumenFinanciero()
+Muestra estadísticas: dinero, propiedades, jugadores activos, promedio, etc.
+
+bancoMostrarHistorial()
+Muestra las últimas transacciones almacenadas.
+
+==================================
+CAMBIOS NECESARIOS EN Juego.h
+==================================
+
+Como se realizo Banco como una estructura a parte se podifico juego.h para que solamente de 
+incluya en el archivo listo para usarse aunque falta completarlo
+
+================================================================================
+TAD DADO
+================================================================================
+
+✅ CAMBIO REALIZADO
+════════════════════════════════════════════════════════════════════════════
+
+El TAD Dado ha sido separado de Juego.h en un archivo independiente.
+
+ANTES:
+  Juego.h contenía:
+  - struct Dado { ... }
+  - Métodos: lanzar(), obtenerSuma(), esDoble() (dentro de la estructura)
+
+DESPUÉS:
+  Dado.h contiene:
+  - struct Dado { ... }  (solo datos)
+  - Funciones externas: lanzarDado(), obtenerSuma(), esDoble()
+  
+  Juego.h simplemente:
+  - #include "Dado.h"
+  - Usa las funciones externas
+
+════════════════════════════════════════════════════════════════════════════
+
+Dado.h
+   Ubicación: src/Dado.h (o outputs/Dado.h)
+   Tamaño: ~110 líneas
+   Contenido:
+     - struct Dado con valor1, valor2
+     - 8 funciones externas:
+       1. lanzarDado()
+       2. obtenerSuma()
+       3. esDoble()
+       4. obtenerValor1()
+       5. obtenerValor2()
+       6. mostrarDado()
+       7. reiniciarDado()
+       8. obtenerDescripcionLanzamiento()
 
 ================================================================================
 
