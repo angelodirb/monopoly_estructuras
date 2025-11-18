@@ -727,3 +727,48 @@ DECISIONES TÉCNICAS IMPORTANTES:
    - Compatible con STL
 
 ==================================================================================
+
+================================================================================
+
+DIA 17/11/2025
+================================================================================
+MONOPOLY
+================================================================================
+El dia de hoy se hizo el merged de las ramas master y la rama vasco.
+Con esto ya se tiene las estructuras basicas para la logica del juego.
+
+================================================================================
+MODIFICACIONES EN EL TAD DE JUGADOR
+================================================================================
+Cambios implementados en CartaJugador/jugador.h:
+* Cambio principal:
+
+int cartasSalirCarcel → bool tieneCartaSalirCarcel
+
+* Funciones nuevas agregadas:
+
+darCartaSalirCarcel(jugador)
+
+Se ejecuta cuando el jugador saca una carta de Suerte/Comunidad
+Cambia tieneCartaSalirCarcel a TRUE
+
+
+usarCartaSalirCarcel(jugador)
+
+Se ejecuta cuando el jugador está en cárcel y decide usar la carta
+Libera al jugador automáticamente
+Cambia tieneCartaSalirCarcel a FALSE (se consume)
+
+
+intentarSalirDeCarcel(jugador)
+
+Función inteligente que verifica automáticamente si tiene carta
+Si tieneCartaSalirCarcel == TRUE, ofrece usarla gratis
+Si no, maneja los turnos normales (3 turnos o pagar $50)
+
+
+puedeUsarCartaSalirCarcel(jugador)
+
+Función auxiliar para verificar disponibilidad
+
+
