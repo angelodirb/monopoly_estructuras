@@ -5,19 +5,21 @@
 #include "casilla/propiedad.h"
 #include "casilla/ferrocarril.h"
 #include "casilla/servicios.h"
+#include "registroPropiedades.h"  // NUEVO
 using namespace std;
 
 // ───────────────────────────────────────────────
-// Cargar tablero desde archivo .txt
+// Cargar tablero y crear registro
 // ───────────────────────────────────────────────
-ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
+pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& nombreArchivo) {
     ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
         cerr << "Error: no se pudo abrir el archivo " << nombreArchivo << endl;
-        return crearLista();
+        return make_pair(crearLista(), crearRegistroPropiedades());
     }
 
     ListaCircular tablero = crearLista();
+    RegistroPropiedades registro = crearRegistroPropiedades();  // NUEVO
     string linea;
 
     while (getline(archivo, linea)) {
@@ -45,6 +47,7 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
 
             Propiedad* p = new Propiedad(nombreCasilla, precio, color, rentas);
             anxLista(tablero, p);
+            registro = registrarPropiedad(registro, p);  // NUEVO: Registrar en hash
         }
 
         // === FERROCARRIL ===
@@ -58,6 +61,7 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
 
             Ferrocarril* f = new Ferrocarril(nombreCasilla, precio, rentas);
             anxLista(tablero, f);
+            registro = registrarPropiedad(registro, f);  // NUEVO: Registrar en hash
         }
 
         // === SERVICIO ===
@@ -68,6 +72,7 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
 
             Servicio* s = new Servicio(nombreCasilla, precio);
             anxLista(tablero, s);
+            registro = registrarPropiedad(registro, s);  // NUEVO: Registrar en hash
         }
 
         // === CASILLAS SIMPLES ===
@@ -77,6 +82,7 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
 
             Casilla* c = new Casilla(nombreCasilla);
             anxLista(tablero, c);
+            // No se registran casillas especiales en el hash
         }
 
         // === DESCONOCIDO ===
@@ -92,12 +98,18 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
 
     archivo.close();
     cout << "✅ Tablero cargado exitosamente desde " << nombreArchivo << endl;
-    return tablero;
+    cout << "   Casillas en tablero: " << size(tablero) << endl;
+    cout << "   Propiedades en registro: " << tamañoTablaHash(registro) << endl;
+    
+    return make_pair(tablero, registro);
 }
 
-// ───────────────────────────────────────────────
-// Mostrar el tablero con tipo de cada casilla
-// ───────────────────────────────────────────────
+// Mantener función original para compatibilidad
+ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
+    return cargarTableroConRegistro(nombreArchivo).first;
+}
+
+// ─── Resto de funciones sin cambios ───
 void mostrarResumenTablero(const ListaCircular& tablero) {
     if (vaciaLista(tablero)) {
         cout << "El tablero está vacío." << endl;
@@ -115,9 +127,6 @@ void mostrarResumenTablero(const ListaCircular& tablero) {
     cout << "==============================" << endl;
 }
 
-// ───────────────────────────────────────────────
-// Función adicional: mostrar estadísticas del tablero
-// ───────────────────────────────────────────────
 void mostrarEstadisticasTablero(const ListaCircular& tablero) {
     if (vaciaLista(tablero)) {
         cout << "El tablero está vacío." << endl;
