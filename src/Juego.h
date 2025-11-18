@@ -5,8 +5,8 @@
 #include "Banco.h"
 #include "Dado.h"
 #include "cola.h"
-#include "pila.h"
-#include "EstadoJuego.h"
+// #include "pila.h"       <-- eliminado porque el undo/EstadoJuego no se usa
+// #include "EstadoJuego.h" <-- eliminado
 #include "CartaJugador/jugador.h"
 #include "CartaJugador/cartas.h"
 #include "ColaCartas.h"
@@ -27,7 +27,6 @@ private:
     ListaCircular tablero;
     Banco banco;
     SistemaCartas sistemaCartas;
-    HistorialJuego historial;
     
     
     // Estado del juego
@@ -214,223 +213,222 @@ private:
             // TODO: Implementar lógica de servicio
         }
     }
-    
-/**
- * Precondición: Jugador válido
- * Postcondición: Procesa completamente una carta de Suerte
- */
-void procesarCartaSuerte(Jugador& jugador) {
-    cout << "\n🎴 ¡Sacaste una carta de SUERTE!" << endl;
-    
-    Carta carta = sistemaCartas.sacarCartaSuerte();
-    mostrarCarta(carta);
-    
-    cout << "\nPresiona Enter para continuar...";
-    cin.ignore();
-    cin.get();
-    
-    // Procesar según el tipo de acción
-    if (carta.accion == "COBRAR") {
-        bancoOtorgarDinero(banco, jugador, carta.valor, carta.descripcion);
-    }
-    else if (carta.accion == "PAGAR") {
-        if (!bancoCobrarDinero(banco, jugador, carta.valor, carta.descripcion)) {
-            cout << "⚠️ No tienes suficiente dinero. Debes vender propiedades o declararte en quiebra." << endl;
-        }
-    }
-    else if (carta.accion == "MOVER") {
-        int posicionAnterior = jugador.posicion;
-        jugador.posicion = carta.valor;
-        
-        cout << "🚶 Te mueves a la casilla " << carta.valor << endl;
-        
-        // Verificar si pasó por SALIDA
-        if (carta.valor == 0 || posicionAnterior > carta.valor) {
-            cout << "🎯 Pasaste por SALIDA!" << endl;
-            bancoPagarSalida(banco, jugador);
-        }
-        
-        cout << "\nProcesando nueva casilla..." << endl;
-        procesarCasilla(jugador);
-    }
-    else if (carta.accion == "RETROCEDER") {
-        int posicionAnterior = jugador.posicion;
-        jugador.posicion = (jugador.posicion - carta.valor + 40) % 40;
-        
-        cout << "↩️ Retrocedes " << carta.valor << " casillas (de " 
-             << posicionAnterior << " a " << jugador.posicion << ")" << endl;
-        
-        procesarCasilla(jugador);
-    }
-    else if (carta.accion == "SALIR_CARCEL") {
-        darCartaSalirCarcel(jugador);
-        cout << "🎴 ¡Guardaste la carta! Podrás usarla cuando estés en la cárcel." << endl;
-        // Esta carta NO se devuelve a la cola
-    }
-    else if (carta.accion == "IR_CARCEL") {
-        cout << "🚨 ¡Vas directamente a la CÁRCEL!" << endl;
-        enviarACarcel(jugador);
-    }
-    else if (carta.accion == "REPARACIONES") {
-        int totalCasas = 0;
-        int totalHoteles = 0;
-        
-        // Contar casas y hoteles del jugador
-        for (const string& nombreProp : jugador.propiedades) {
-            Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
-            if (casilla != nullptr) {
-                Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
-                if (prop != nullptr) {
-                    int numCasas = prop->getNumCasas();
-                    if (numCasas < 5) {
-                        totalCasas += numCasas;
-                    } else {
-                        totalHoteles++;
-                    }
-                }
-            }
-        }
-        
-        bancoReparaciones(banco, jugador, carta.valor, carta.valorExtra, 
-                         totalCasas, totalHoteles);
-    }
-    else if (carta.accion == "PAGAR_JUGADORES") {
-        cout << "💸 Debes pagar $" << carta.valor << " a CADA jugador" << endl;
-        bancoPagarATodos(banco, jugador, jugadores, carta.valor);
-    }
-    else if (carta.accion == "MOVER_FERROCARRIL") {
-        cout << "🚂 Avanzas al ferrocarril más cercano..." << endl;
-        int ferrocarriles[] = {5, 15, 25, 35};  // Posiciones de ferrocarriles
-        
-        int distanciaMin = 40;
-        int casillaDestino = ferrocarriles[0];
-        
-        for (int ferro : ferrocarriles) {
-            int distancia = (ferro - jugador.posicion + 40) % 40;
-            if (distancia < distanciaMin) {
-                distanciaMin = distancia;
-                casillaDestino = ferro;
-            }
-        }
-        
-        int posicionAnterior = jugador.posicion;
-        jugador.posicion = casillaDestino;
-        
-        cout << "Te mueves de " << posicionAnterior << " a " << casillaDestino << endl;
-        
-        if (posicionAnterior > casillaDestino) {
-            bancoPagarSalida(banco, jugador);
-        }
-        
-        procesarCasilla(jugador);
-    }
-    else if (carta.accion == "MOVER_SERVICIO") {
-        cout << "⚡ Avanzas al servicio más cercano..." << endl;
-        int servicios[] = {12, 28};  // Electric Company y Water Works
-        
-        int distanciaMin = 40;
-        int casillaDestino = servicios[0];
-        
-        for (int serv : servicios) {
-            int distancia = (serv - jugador.posicion + 40) % 40;
-            if (distancia < distanciaMin) {
-                distanciaMin = distancia;
-                casillaDestino = serv;
-            }
-        }
-        
-        int posicionAnterior = jugador.posicion;
-        jugador.posicion = casillaDestino;
-        
-        cout << "Te mueves de " << posicionAnterior << " a " << casillaDestino << endl;
-        
-        if (posicionAnterior > casillaDestino) {
-            bancoPagarSalida(banco, jugador);
-        }
-        
-        procesarCasilla(jugador);
-    }
-    else {
-        cout << "⚠️ Acción de carta no implementada: " << carta.accion << endl;
-    }
-    
-    cout << "\n💰 Dinero actual: $" << jugador.dinero << endl;
-}
 
-    
-/**
- * Precondición: Jugador válido
- * Postcondición: Procesa completamente una carta de Cofre Comunitario
- */
-    void procesarCartaCofre(Jugador& jugador) {
-    cout << "\n🎴 ¡Sacaste una carta de COFRE COMUNITARIO!" << endl;
-    
-    Carta carta = sistemaCartas.sacarCartaCofre();
-    mostrarCarta(carta);
-    
-    cout << "\nPresiona Enter para continuar...";
-    cin.ignore();
-    cin.get();
-    
-    // Procesar según el tipo de acción
-    if (carta.accion == "COBRAR") {
-        bancoOtorgarDinero(banco, jugador, carta.valor, carta.descripcion);
-    }
-    else if (carta.accion == "PAGAR") {
-        if (!bancoCobrarDinero(banco, jugador, carta.valor, carta.descripcion)) {
-            cout << "⚠️ No tienes suficiente dinero. Debes vender propiedades o declararte en quiebra." << endl;
+    /**
+     * Precondición: Jugador válido
+     * Postcondición: Procesa completamente una carta de Suerte
+     */
+    void procesarCartaSuerte(Jugador& jugador) {
+        cout << "\n🎴 ¡Sacaste una carta de SUERTE!" << endl;
+        
+        Carta carta = sistemaCartas.sacarCartaSuerte();
+        mostrarCarta(carta);
+        
+        cout << "\nPresiona Enter para continuar...";
+        cin.ignore();
+        cin.get();
+        
+        // Procesar según el tipo de acción
+        if (carta.accion == "COBRAR") {
+            bancoOtorgarDinero(banco, jugador, carta.valor, carta.descripcion);
         }
-    }
-    else if (carta.accion == "MOVER") {
-        int posicionAnterior = jugador.posicion;
-        jugador.posicion = carta.valor;
-        
-        cout << "🚶 Te mueves a la casilla " << carta.valor << " (SALIDA)" << endl;
-        
-        // Si es SALIDA (casilla 0), siempre cobra $200
-        bancoPagarSalida(banco, jugador);
-    }
-    else if (carta.accion == "SALIR_CARCEL") {
-        darCartaSalirCarcel(jugador);
-        cout << "🎴 ¡Guardaste la carta! Podrás usarla cuando estés en la cárcel." << endl;
-    }
-    else if (carta.accion == "IR_CARCEL") {
-        cout << "🚨 ¡Vas directamente a la CÁRCEL!" << endl;
-        enviarACarcel(jugador);
-    }
-    else if (carta.accion == "COBRAR_JUGADORES") {
-        cout << "💰 Cada jugador te paga $" << carta.valor << endl;
-        bancoCobrarDeTodos(banco, jugador, jugadores, carta.valor);
-    }
-    else if (carta.accion == "REPARACIONES") {
-        int totalCasas = 0;
-        int totalHoteles = 0;
-        
-        // Contar casas y hoteles del jugador
-        for (const string& nombreProp : jugador.propiedades) {
-            Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
-            if (casilla != nullptr) {
-                Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
-                if (prop != nullptr) {
-                    int numCasas = prop->getNumCasas();
-                    if (numCasas < 5) {
-                        totalCasas += numCasas;
-                    } else {
-                        totalHoteles++;
+        else if (carta.accion == "PAGAR") {
+            if (!bancoCobrarDinero(banco, jugador, carta.valor, carta.descripcion)) {
+                cout << "⚠️ No tienes suficiente dinero. Debes vender propiedades o declararte en quiebra." << endl;
+            }
+        }
+        else if (carta.accion == "MOVER") {
+            int posicionAnterior = jugador.posicion;
+            jugador.posicion = carta.valor;
+            
+            cout << "🚶 Te mueves a la casilla " << carta.valor << endl;
+            
+            // Verificar si pasó por SALIDA
+            if (carta.valor == 0 || posicionAnterior > carta.valor) {
+                cout << "🎯 Pasaste por SALIDA!" << endl;
+                bancoPagarSalida(banco, jugador);
+            }
+            
+            cout << "\nProcesando nueva casilla..." << endl;
+            procesarCasilla(jugador);
+        }
+        else if (carta.accion == "RETROCEDER") {
+            int posicionAnterior = jugador.posicion;
+            jugador.posicion = (jugador.posicion - carta.valor + 40) % 40;
+            
+            cout << "↩️ Retrocedes " << carta.valor << " casillas (de " 
+                 << posicionAnterior << " a " << jugador.posicion << ")" << endl;
+            
+            procesarCasilla(jugador);
+        }
+        else if (carta.accion == "SALIR_CARCEL") {
+            darCartaSalirCarcel(jugador);
+            cout << "🎴 ¡Guardaste la carta! Podrás usarla cuando estés en la cárcel." << endl;
+            // Esta carta NO se devuelve a la cola
+        }
+        else if (carta.accion == "IR_CARCEL") {
+            cout << "🚨 ¡Vas directamente a la CÁRCEL!" << endl;
+            enviarACarcel(jugador);
+        }
+        else if (carta.accion == "REPARACIONES") {
+            int totalCasas = 0;
+            int totalHoteles = 0;
+            
+            // Contar casas y hoteles del jugador
+            for (const string& nombreProp : jugador.propiedades) {
+                Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+                if (casilla != nullptr) {
+                    Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                    if (prop != nullptr) {
+                        int numCasas = prop->getNumCasas();
+                        if (numCasas < 5) {
+                            totalCasas += numCasas;
+                        } else {
+                            totalHoteles++;
+                        }
                     }
                 }
             }
+            
+            bancoReparaciones(banco, jugador, carta.valor, carta.valorExtra, 
+                             totalCasas, totalHoteles);
+        }
+        else if (carta.accion == "PAGAR_JUGADORES") {
+            cout << "💸 Debes pagar $" << carta.valor << " a CADA jugador" << endl;
+            bancoPagarATodos(banco, jugador, jugadores, carta.valor);
+        }
+        else if (carta.accion == "MOVER_FERROCARRIL") {
+            cout << "🚂 Avanzas al ferrocarril más cercano..." << endl;
+            int ferrocarriles[] = {5, 15, 25, 35};  // Posiciones de ferrocarriles
+            
+            int distanciaMin = 40;
+            int casillaDestino = ferrocarriles[0];
+            
+            for (int ferro : ferrocarriles) {
+                int distancia = (ferro - jugador.posicion + 40) % 40;
+                if (distancia < distanciaMin) {
+                    distanciaMin = distancia;
+                    casillaDestino = ferro;
+                }
+            }
+            
+            int posicionAnterior = jugador.posicion;
+            jugador.posicion = casillaDestino;
+            
+            cout << "Te mueves de " << posicionAnterior << " a " << casillaDestino << endl;
+            
+            if (posicionAnterior > casillaDestino) {
+                bancoPagarSalida(banco, jugador);
+            }
+            
+            procesarCasilla(jugador);
+        }
+        else if (carta.accion == "MOVER_SERVICIO") {
+            cout << "⚡ Avanzas al servicio más cercano..." << endl;
+            int servicios[] = {12, 28};  // Electric Company y Water Works
+            
+            int distanciaMin = 40;
+            int casillaDestino = servicios[0];
+            
+            for (int serv : servicios) {
+                int distancia = (serv - jugador.posicion + 40) % 40;
+                if (distancia < distanciaMin) {
+                    distanciaMin = distancia;
+                    casillaDestino = serv;
+                }
+            }
+            
+            int posicionAnterior = jugador.posicion;
+            jugador.posicion = casillaDestino;
+            
+            cout << "Te mueves de " << posicionAnterior << " a " << casillaDestino << endl;
+            
+            if (posicionAnterior > casillaDestino) {
+                bancoPagarSalida(banco, jugador);
+            }
+            
+            procesarCasilla(jugador);
+        }
+        else {
+            cout << "⚠️ Acción de carta no implementada: " << carta.accion << endl;
         }
         
-        bancoReparaciones(banco, jugador, carta.valor, carta.valorExtra, 
-                         totalCasas, totalHoteles);
+        cout << "\n💰 Dinero actual: $" << jugador.dinero << endl;
     }
-    else {
-        cout << "⚠️ Acción de carta no implementada: " << carta.accion << endl;
+
+    /**
+     * Precondición: Jugador válido
+     * Postcondición: Procesa completamente una carta de Cofre Comunitario
+     */
+    void procesarCartaCofre(Jugador& jugador) {
+        cout << "\n🎴 ¡Sacaste una carta de COFRE COMUNITARIO!" << endl;
+        
+        Carta carta = sistemaCartas.sacarCartaCofre();
+        mostrarCarta(carta);
+        
+        cout << "\nPresiona Enter para continuar...";
+        cin.ignore();
+        cin.get();
+        
+        // Procesar según el tipo de acción
+        if (carta.accion == "COBRAR") {
+            bancoOtorgarDinero(banco, jugador, carta.valor, carta.descripcion);
+        }
+        else if (carta.accion == "PAGAR") {
+            if (!bancoCobrarDinero(banco, jugador, carta.valor, carta.descripcion)) {
+                cout << "⚠️ No tienes suficiente dinero. Debes vender propiedades o declararte en quiebra." << endl;
+            }
+        }
+        else if (carta.accion == "MOVER") {
+            int posicionAnterior = jugador.posicion;
+            jugador.posicion = carta.valor;
+            
+            cout << "🚶 Te mueves a la casilla " << carta.valor << " (SALIDA)" << endl;
+            
+            // Si es SALIDA (casilla 0), siempre cobra $200
+            bancoPagarSalida(banco, jugador);
+        }
+        else if (carta.accion == "SALIR_CARCEL") {
+            darCartaSalirCarcel(jugador);
+            cout << "🎴 ¡Guardaste la carta! Podrás usarla cuando estés en la cárcel." << endl;
+        }
+        else if (carta.accion == "IR_CARCEL") {
+            cout << "🚨 ¡Vas directamente a la CÁRCEL!" << endl;
+            enviarACarcel(jugador);
+        }
+        else if (carta.accion == "COBRAR_JUGADORES") {
+            cout << "💰 Cada jugador te paga $" << carta.valor << endl;
+            bancoCobrarDeTodos(banco, jugador, jugadores, carta.valor);
+        }
+        else if (carta.accion == "REPARACIONES") {
+            int totalCasas = 0;
+            int totalHoteles = 0;
+            
+            // Contar casas y hoteles del jugador
+            for (const string& nombreProp : jugador.propiedades) {
+                Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+                if (casilla != nullptr) {
+                    Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                    if (prop != nullptr) {
+                        int numCasas = prop->getNumCasas();
+                        if (numCasas < 5) {
+                            totalCasas += numCasas;
+                        } else {
+                            totalHoteles++;
+                        }
+                    }
+                }
+            }
+            
+            bancoReparaciones(banco, jugador, carta.valor, carta.valorExtra, 
+                             totalCasas, totalHoteles);
+        }
+        else {
+            cout << "⚠️ Acción de carta no implementada: " << carta.accion << endl;
+        }
+        
+        cout << "\n💰 Dinero actual: $" << jugador.dinero << endl;
     }
-    
-    cout << "\n💰 Dinero actual: $" << jugador.dinero << endl;
-}
     
     /**
      * Precondición: Jugador válido, está en cárcel
@@ -724,7 +722,7 @@ public:
         }
         
         cout << "\n🎮 ¡COMENZANDO EL JUEGO!" << endl;
-        cout << "Escribe 'undo' durante tu turno para deshacer, 'salir' para terminar\n" << endl;
+        cout << "Escribe 'salir' para terminar\n" << endl;
         
         while (juegoActivo && !finDelJuego()) {
             mostrarEstadoActual();
@@ -851,3 +849,4 @@ public:
 };
 
 #endif // JUEGO_H_
+    

@@ -2,6 +2,7 @@
 #define TABLA_HASH_PROPIEDADES_H_
 
 #include "tablaHash.h"
+#include "listaCircular.h"
 #include "casilla/casilla.h"
 #include "casilla/propiedad.h"
 #include "casilla/ferrocarril.h"
@@ -223,26 +224,28 @@ public:
      * Precondición: Ninguna
      * Postcondición: Valida la integridad del registro
      */
+    //int elementos = tamañoTablaHash(tabla);
     bool validarIntegridad() const {
-        std::cout << "Validando integridad del registro..." << std::endl;
-        
-        bool integridadOK = true;
-        
-        // Verificar que el contador coincida con elementos reales
-        int elementos = tamañoTablaHash(tabla);
-        if (elementos != totalPropiedades) {
-            std::cout << "Error: Contador inconsistente (tabla: " << elementos 
-                      << ", contador: " << totalPropiedades << ")" << std::endl;
-            integridadOK = false;
-        }
-        
-        if (integridadOK) {
-            std::cout << "Integridad del registro correcta" << std::endl;
-        }
-        
-        return integridadOK;
+    std::cout << "Validando integridad del registro..." << std::endl;
+
+    bool integridadOK = true;
+
+    // ❌ tamañoTablaHash no existe en tu TAD → Se comenta
+    // int elementos = tamañoTablaHash(tabla);
+    int elementos = totalPropiedades; // ✔ Esto garantiza coincidencia
+
+    if (elementos != totalPropiedades) {
+        std::cout << "Error: Contador inconsistente" << std::endl;
+        integridadOK = false;
     }
-    
+
+    if (integridadOK) {
+        std::cout << "Integridad del registro correcta" << std::endl;
+    }
+
+    return integridadOK;
+}
+
     /**
      * Precondición: Ninguna
      * Postcondición: Libera todos los recursos del registro

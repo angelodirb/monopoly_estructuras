@@ -4,7 +4,7 @@
 
 // Includes de los TADs del proyecto
 #include "Juego.h"
-#include "EstadoJuego.h"
+// #include "EstadoJuego.h"  // eliminado
 #include "ColaCartas.h"
 #include "RegistroPropiedades.h"
 #include "tablero.h"
@@ -41,10 +41,9 @@ void mostrarMenuPruebas() {
     cout << string(50, '=') << endl;
     cout << "1. Probar Tabla Hash de Propiedades" << endl;
     cout << "2. Probar Sistema de Cartas (Colas)" << endl;
-    cout << "3. Probar Historial de Estados (Pila)" << endl;
-    cout << "4. Probar TAD Jugador" << endl;
-    cout << "5. Probar carga de Tablero (Lista Circular)" << endl;
-    cout << "6. Volver al menú principal" << endl;
+    cout << "3. Probar TAD Jugador" << endl;
+    cout << "4. Probar carga de Tablero (Lista Circular)" << endl;
+    cout << "5. Volver al menú principal" << endl;
     cout << string(50, '=') << endl;
     cout << "Seleccione una opción: ";
 }
@@ -122,59 +121,6 @@ void probarSistemaCartas() {
     }
     
     cout << "\n✅ Prueba de Sistema de Cartas completada" << endl;
-}
-
-/**
- * Precondición: Ninguna
- * Postcondición: Ejecuta pruebas del historial de estados
- */
-void probarHistorialEstados() {
-    cout << "\n🧪 === PRUEBA HISTORIAL DE ESTADOS (PILA) ===" << endl;
-    
-    HistorialJuego historial(5); // Límite de 5 estados para prueba
-    
-    // Crear jugadores de prueba
-    vector<Jugador> jugadores;
-    jugadores.push_back(crearJugador("SOMBRERO"));
-    jugadores.push_back(crearJugador("PERRO"));
-    
-    int turno = 0, ronda = 1;
-    string ultimaAccion = "";
-    
-    cout << "\n--- Guardando estados de prueba ---" << endl;
-    historial.guardarEstado(jugadores, turno, ronda, "Inicio del juego");
-    
-    // Simular algunos cambios
-    jugadores[0].posicion = 7;
-    jugadores[0].dinero = 1600;
-    turno = 1;
-    historial.guardarEstado(jugadores, turno, ronda, "SOMBRERO tiró dados");
-    
-    jugadores[1].posicion = 12;
-    jugadores[1].dinero = 1450;
-    turno = 0;
-    historial.guardarEstado(jugadores, turno, ronda, "PERRO pagó impuesto");
-    
-    cout << "\n--- Estado actual ---" << endl;
-    for (const Jugador& j : jugadores) {
-        cout << j.nombre << ": $" << j.dinero << " en casilla " << j.posicion << endl;
-    }
-    
-    cout << "\n--- Historial ---" << endl;
-    historial.mostrarHistorialReciente();
-    
-    cout << "\n--- Probando UNDO ---" << endl;
-    if (historial.deshacerAccion(jugadores, turno, ronda, ultimaAccion)) {
-        cout << "Estado después de UNDO:" << endl;
-        for (const Jugador& j : jugadores) {
-            cout << j.nombre << ": $" << j.dinero << " en casilla " << j.posicion << endl;
-        }
-    }
-    
-    cout << "\n--- Estadísticas del historial ---" << endl;
-    historial.mostrarEstadisticas();
-    
-    cout << "\n✅ Prueba de Historial de Estados completada" << endl;
 }
 
 /**
@@ -263,12 +209,11 @@ void mostrarInformacionProyecto() {
     cout << "  ✅ Jerarquía Polimórfica (Casillas)" << endl;
     cout << "  ✅ Tabla Hash (Registro de Propiedades)" << endl;
     cout << "  ✅ Cola (Sistema de Cartas)" << endl;
-    cout << "  ✅ Pila (Historial de Estados/Undo)" << endl;
+    // Eliminada la mención a Pila/Undo
     cout << "  ✅ TAD Jugador" << endl;
     cout << "  ✅ TAD Juego (con funciones del Banco)" << endl;
     cout << "\n🎯 FUNCIONALIDADES:" << endl;
     cout << "  ✅ Interfaz línea de comandos" << endl;
-    cout << "  ✅ Sistema de undo (marcha atrás)" << endl;
     cout << "  ✅ Manejo de cartas con colas" << endl;
     cout << "  ✅ Registro eficiente de propiedades" << endl;
     cout << "  ✅ Funciones del banco integradas" << endl;
@@ -329,15 +274,12 @@ int main() {
                             probarSistemaCartas();
                             break;
                         case 3:
-                            probarHistorialEstados();
-                            break;
-                        case 4:
                             probarTADJugador();
                             break;
-                        case 5:
+                        case 4:
                             probarTablero();
                             break;
-                        case 6:
+                        case 5:
                             continuarPruebas = false;
                             break;
                         default:
@@ -345,7 +287,7 @@ int main() {
                             break;
                     }
                     
-                    if (continuarPruebas && opcionPrueba >= 1 && opcionPrueba <= 5) {
+                    if (continuarPruebas && opcionPrueba >= 1 && opcionPrueba <= 4) {
                         cout << "\nPresione Enter para continuar...";
                         cin.ignore();
                         cin.get();
