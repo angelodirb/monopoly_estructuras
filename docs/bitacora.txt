@@ -770,5 +770,91 @@ Si no, maneja los turnos normales (3 turnos o pagar $50)
 puedeUsarCartaSalirCarcel(jugador)
 
 Función auxiliar para verificar disponibilidad
+================================================================================
+================================================================================
 
 
+================================================================================
+
+DIA 18/11/2025
+================================================================================
+
+
+El TAD Banco modela todas las operaciones financieras del juego.
+Controla el dinero en circulación, administra
+pagos, cobros, transferencias y mantiene un historial de todas las transacciones
+que ocurren durante la partida.
+===========================================
+1. Estructura principal: Banco
+
+El banco almacena:
+
+dineroEnCirculacion → total de dinero activo entre jugadores.
+
+dineroRetenido → dinero relacionado con propiedades hipotecadas.
+
+historial → lista de transacciones realizadas en el juego.
+==========================================
+2. Estructura auxiliar: Transaccion
+
+Cada movimiento de dinero se registra con:
+
+tipo: "PAGO", "COBRO", "TRANSFERENCIA", etc.
+
+deJugador / aJugador
+
+monto
+
+concepto (motivo)
+
+turno
+=========================================
+3. Funciones principales del Banco
+Distribución inicial
+
+bancoDistribuirDineroInicial()
+Reparte el dinero inicial ($1500 por jugador) al comenzar la partida.
+====================
+Operaciones básicas
+====================
+bancoOtorgarDinero()
+El banco entrega dinero a un jugador.
+
+bancoCobrarDinero()
+El banco cobra a un jugador (rentas, multas, impuestos).
+
+bancoTransferencia()
+Transfiere dinero entre jugadores.
+
+===============================
+Acciones de reglas especiales
+==============================
+bancoPagarSalida() → paga $200 al jugador al pasar por SALIDA.
+
+bancoMultaCarcel() → cobra $50 para salir de la cárcel.
+
+bancoReparaciones() → cobra reparaciones (por casas y hoteles).
+
+==================
+Pagos grupales
+==================
+bancoPagarATodos()
+Un jugador paga una cantidad a todos los demás.
+
+bancoCobrarDeTodos()
+Todos los jugadores pagan a uno.
+=================
+Reportes
+=================
+bancoResumenFinanciero()
+Muestra estadísticas: dinero, propiedades, jugadores activos, promedio, etc.
+
+bancoMostrarHistorial()
+Muestra las últimas transacciones almacenadas.
+
+==================================
+CAMBIOS NECESARIOS EN Juego.h
+==================================
+
+Como se realizo Banco como una estructura a parte se podifico juego.h para que solamente de 
+incluya en el archivo listo para usarse aunque falta completarlo
