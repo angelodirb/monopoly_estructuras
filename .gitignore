@@ -12,6 +12,11 @@ monopoly.exe
 test_*.txt
 test_*.sh
 
+# Core dumps y debugging
+vgcore.*
+core
+core.*
+
 # Editor
 .vscode/
 .idea/
