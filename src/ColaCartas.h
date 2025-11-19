@@ -83,11 +83,17 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
         return false;
     }
 
-    // SOLUCIÓN SIMPLE: No cargar en cola,  solo reportar cuántas hay
-    // La funcionalidad de cartas está presente pero desactivada por problemas de rendimiento
+    // Mezclar las cartas antes de cargarlas
+    std::mt19937 g(static_cast<unsigned int>(std::time(nullptr)));
+    std::shuffle(cartasTemp.begin(), cartasTemp.end(), g);
+
+    // Cargar cartas en la cola
+    for (const Carta& carta : cartasTemp) {
+        cola = anxCola(cola, carta);
+    }
+
     cartasOriginales = cartasTemp.size();
-    std::cout << "✅ Sistema detectó " << cartasOriginales << " cartas de " << tipo << std::endl;
-    std::cout << "   (Sistema de cartas simplificado - las cartas están disponibles pero no en cola)" << std::endl;
+    std::cout << "✅ Sistema cargó " << cartasOriginales << " cartas de " << tipo << " en la cola" << std::endl;
     return true;
 }   
     /**

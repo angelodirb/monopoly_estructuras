@@ -182,33 +182,347 @@ private:
         Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
         Ferrocarril* ferro = dynamic_cast<Ferrocarril*>(casilla);
         Servicio* serv = dynamic_cast<Servicio*>(casilla);
-        
+
         // ===== PROPIEDAD NORMAL =====
         if (prop != nullptr) {
-            string duenio = prop->getNombre();  // Placeholder - sería mejor método
-            
             cout << "🏠 PROPIEDAD: " << casilla->getNombre() << endl;
             prop->mostrarInfo();
-            
-            // TODO: Implementar lógica de compra/alquiler
-            // if (dueño == "") -> Permitir compra
-            // else -> Pagar alquiler
+
+            string duenio = prop->getDuenio();
+
+            // Sin dueño - Opción de compra
+            if (duenio.empty()) {
+                cout << "\n💰 Esta propiedad está disponible por $" << prop->getPrecio() << endl;
+                cout << "¿Deseas comprarla? (s/n): ";
+                char respuesta;
+                cin >> respuesta;
+
+                if (respuesta == 's' || respuesta == 'S') {
+                    if (bancoCobrarDinero(banco, jugador, prop->getPrecio(), "Compra de " + casilla->getNombre())) {
+                        prop->setDuenio(jugador.nombre);
+                        jugador.propiedades.push_back(casilla->getNombre());
+                        cout << "✅ " << jugador.nombre << " compró " << casilla->getNombre() << endl;
+                    } else {
+                        cout << "❌ No tienes suficiente dinero para comprar esta propiedad" << endl;
+                    }
+                } else {
+                    cout << "❌ " << jugador.nombre << " decidió no comprar" << endl;
+                }
+            }
+            // Tiene dueño - Cobrar alquiler
+            else if (duenio != jugador.nombre) {
+                int alquiler = prop->obtenerAlquiler();
+                cout << "\n💸 Esta propiedad pertenece a " << duenio << endl;
+                cout << "💰 Debes pagar alquiler: $" << alquiler << endl;
+
+                // Buscar al dueño en la lista de jugadores
+                Jugador* duenioPtr = nullptr;
+                for (Jugador& j : jugadores) {
+                    if (j.nombre == duenio) {
+                        duenioPtr = &j;
+                        break;
+                    }
+                }
+
+                if (duenioPtr != nullptr) {
+                    if (!bancoTransferencia(banco, jugador, *duenioPtr, alquiler, "Alquiler de " + casilla->getNombre())) {
+                        cout << "⚠️ No tienes suficiente dinero para pagar el alquiler" << endl;
+                    }
+                } else {
+                    // Si no se encuentra el dueño, solo cobrar al banco
+                    if (!bancoCobrarDinero(banco, jugador, alquiler, "Alquiler de " + casilla->getNombre())) {
+                        cout << "⚠️ No tienes suficiente dinero para pagar el alquiler" << endl;
+                    }
+                }
+            }
+            // Es del jugador actual
+            else {
+                cout << "\n✅ Esta es TU propiedad" << endl;
+            }
         }
-        
+
         // ===== FERROCARRIL =====
         else if (ferro != nullptr) {
             cout << "🚂 FERROCARRIL: " << casilla->getNombre() << endl;
             ferro->activar();
-            
-            // TODO: Implementar lógica de ferrocarril
+
+            string duenio = ferro->getDuenio();
+
+            // Sin dueño - Opción de compra
+            if (duenio.empty()) {
+                cout << "\n💰 Este ferrocarril está disponible por $" << ferro->getPrecio() << endl;
+                cout << "¿Deseas comprarlo? (s/n): ";
+                char respuesta;
+                cin >> respuesta;
+
+                if (respuesta == 's' || respuesta == 'S') {
+                    if (bancoCobrarDinero(banco, jugador, ferro->getPrecio(), "Compra de " + casilla->getNombre())) {
+                        ferro->setDuenio(jugador.nombre);
+                        jugador.propiedades.push_back(casilla->getNombre());
+                        cout << "✅ " << jugador.nombre << " compró " << casilla->getNombre() << endl;
+                    } else {
+                        cout << "❌ No tienes suficiente dinero para comprar este ferrocarril" << endl;
+                    }
+                } else {
+                    cout << "❌ " << jugador.nombre << " decidió no comprar" << endl;
+                }
+            }
+            // Tiene dueño - Cobrar alquiler (básico por ahora)
+            else if (duenio != jugador.nombre) {
+                int alquiler = 25;  // Alquiler base de ferrocarril
+                cout << "\n💸 Este ferrocarril pertenece a " << duenio << endl;
+                cout << "💰 Debes pagar alquiler: $" << alquiler << endl;
+
+                // Buscar al dueño
+                Jugador* duenioPtr = nullptr;
+                for (Jugador& j : jugadores) {
+                    if (j.nombre == duenio) {
+                        duenioPtr = &j;
+                        break;
+                    }
+                }
+
+                if (duenioPtr != nullptr) {
+                    if (!bancoTransferencia(banco, jugador, *duenioPtr, alquiler, "Alquiler de " + casilla->getNombre())) {
+                        cout << "⚠️ No tienes suficiente dinero para pagar el alquiler" << endl;
+                    }
+                } else {
+                    if (!bancoCobrarDinero(banco, jugador, alquiler, "Alquiler de " + casilla->getNombre())) {
+                        cout << "⚠️ No tienes suficiente dinero para pagar el alquiler" << endl;
+                    }
+                }
+            }
+            // Es del jugador actual
+            else {
+                cout << "\n✅ Este es TU ferrocarril" << endl;
+            }
         }
-        
+
         // ===== SERVICIO =====
         else if (serv != nullptr) {
             cout << "⚡ SERVICIO: " << casilla->getNombre() << endl;
             serv->activar();
-            
-            // TODO: Implementar lógica de servicio
+
+            string duenio = serv->getDuenio();
+
+            // Sin dueño - Opción de compra
+            if (duenio.empty()) {
+                cout << "\n💰 Este servicio está disponible por $" << serv->getPrecio() << endl;
+                cout << "¿Deseas comprarlo? (s/n): ";
+                char respuesta;
+                cin >> respuesta;
+
+                if (respuesta == 's' || respuesta == 'S') {
+                    if (bancoCobrarDinero(banco, jugador, serv->getPrecio(), "Compra de " + casilla->getNombre())) {
+                        serv->setDuenio(jugador.nombre);
+                        jugador.propiedades.push_back(casilla->getNombre());
+                        cout << "✅ " << jugador.nombre << " compró " << casilla->getNombre() << endl;
+                    } else {
+                        cout << "❌ No tienes suficiente dinero para comprar este servicio" << endl;
+                    }
+                } else {
+                    cout << "❌ " << jugador.nombre << " decidió no comprar" << endl;
+                }
+            }
+            // Tiene dueño - Cobrar alquiler basado en los dados
+            else if (duenio != jugador.nombre) {
+                int multiplicador = 4;  // 4x el valor de los dados (simplificado)
+                int alquiler = obtenerSuma(dado) * multiplicador;
+                cout << "\n💸 Este servicio pertenece a " << duenio << endl;
+                cout << "💰 Debes pagar alquiler: $" << alquiler << " (dados × " << multiplicador << ")" << endl;
+
+                // Buscar al dueño
+                Jugador* duenioPtr = nullptr;
+                for (Jugador& j : jugadores) {
+                    if (j.nombre == duenio) {
+                        duenioPtr = &j;
+                        break;
+                    }
+                }
+
+                if (duenioPtr != nullptr) {
+                    if (!bancoTransferencia(banco, jugador, *duenioPtr, alquiler, "Alquiler de " + casilla->getNombre())) {
+                        cout << "⚠️ No tienes suficiente dinero para pagar el alquiler" << endl;
+                    }
+                } else {
+                    if (!bancoCobrarDinero(banco, jugador, alquiler, "Alquiler de " + casilla->getNombre())) {
+                        cout << "⚠️ No tienes suficiente dinero para pagar el alquiler" << endl;
+                    }
+                }
+            }
+            // Es del jugador actual
+            else {
+                cout << "\n✅ Este es TU servicio" << endl;
+            }
+        }
+    }
+
+    /**
+     * Precondición: color no vacío
+     * Postcondición: Retorna el número total de propiedades de ese color en el tablero
+     */
+    int contarPropiedadesPorColor(const string& color) const {
+        if (color.empty()) return 0;
+
+        int total = 0;
+        Casilla* actual = getCabeza(tablero);
+
+        do {
+            Propiedad* prop = dynamic_cast<Propiedad*>(actual);
+            if (prop != nullptr && prop->getColor() == color) {
+                total++;
+            }
+            actual = actual->siguiente;
+        } while (actual != getCabeza(tablero));
+
+        return total;
+    }
+
+    /**
+     * Precondición: jugador válido, color no vacío
+     * Postcondición: Retorna true si el jugador tiene monopolio de ese color
+     */
+    bool tieneMonopolio(const Jugador& jugador, const string& color) const {
+        if (color.empty()) return false;
+
+        int totalColor = contarPropiedadesPorColor(color);
+        if (totalColor == 0) return false;
+
+        int jugadorTiene = 0;
+        for (const string& nombreProp : jugador.propiedades) {
+            Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+            if (casilla != nullptr) {
+                Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                if (prop != nullptr && prop->getColor() == color) {
+                    jugadorTiene++;
+                }
+            }
+        }
+
+        return jugadorTiene == totalColor && totalColor > 0;
+    }
+
+    /**
+     * Precondición: jugador válido
+     * Postcondición: Retorna lista de colores donde el jugador tiene monopolio
+     */
+    vector<string> obtenerMonopolios(const Jugador& jugador) const {
+        vector<string> monopolios;
+        vector<string> coloresRevisados;
+
+        for (const string& nombreProp : jugador.propiedades) {
+            Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+            if (casilla != nullptr) {
+                Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                if (prop != nullptr) {
+                    string color = prop->getColor();
+
+                    // Solo revisar cada color una vez
+                    if (find(coloresRevisados.begin(), coloresRevisados.end(), color) == coloresRevisados.end()) {
+                        coloresRevisados.push_back(color);
+
+                        if (tieneMonopolio(jugador, color)) {
+                            monopolios.push_back(color);
+                        }
+                    }
+                }
+            }
+        }
+
+        return monopolios;
+    }
+
+    /**
+     * Precondición: jugador válido
+     * Postcondición: Permite al jugador construir casas en sus propiedades con monopolio
+     */
+    void menuConstruccion(Jugador& jugador) {
+        vector<string> monopolios = obtenerMonopolios(jugador);
+
+        if (monopolios.empty()) {
+            cout << "\n❌ No tienes monopolios completos. Necesitas todas las propiedades de un color para construir." << endl;
+            return;
+        }
+
+        cout << "\n🏗️ === MENÚ DE CONSTRUCCIÓN ===" << endl;
+        cout << "💰 Dinero disponible: $" << jugador.dinero << endl;
+        cout << "\n🎨 Monopolios disponibles:" << endl;
+
+        // Mostrar propiedades con monopolio
+        vector<Propiedad*> propiedadesConstruibles;
+        int contador = 1;
+
+        for (const string& color : monopolios) {
+            cout << "\n📍 Color " << color << ":" << endl;
+
+            for (const string& nombreProp : jugador.propiedades) {
+                Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+                if (casilla != nullptr) {
+                    Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                    if (prop != nullptr && prop->getColor() == color) {
+                        cout << "  " << contador << ". " << prop->getNombre()
+                             << " | Casas: " << prop->getNumCasas()
+                             << " | Costo construcción: $50" << endl;
+                        propiedadesConstruibles.push_back(prop);
+                        contador++;
+                    }
+                }
+            }
+        }
+
+        if (propiedadesConstruibles.empty()) {
+            cout << "\n❌ No hay propiedades disponibles para construcción." << endl;
+            return;
+        }
+
+        cout << "\n0. Volver sin construir" << endl;
+        cout << "\n¿En qué propiedad quieres construir? (0-" << propiedadesConstruibles.size() << "): ";
+
+        int opcion;
+        cin >> opcion;
+
+        if (opcion == 0) {
+            cout << "✅ Volviendo al turno..." << endl;
+            return;
+        }
+
+        if (opcion < 1 || opcion > (int)propiedadesConstruibles.size()) {
+            cout << "❌ Opción inválida" << endl;
+            return;
+        }
+
+        Propiedad* propSeleccionada = propiedadesConstruibles[opcion - 1];
+
+        // Verificar si ya tiene hotel
+        if (propSeleccionada->getNumCasas() >= 5) {
+            cout << "❌ Esta propiedad ya tiene un HOTEL (máximo)" << endl;
+            return;
+        }
+
+        // Costo de construcción
+        const int COSTO_CASA = 50;  // Simplificado
+
+        if (jugador.dinero < COSTO_CASA) {
+            cout << "❌ No tienes suficiente dinero. Necesitas $" << COSTO_CASA << endl;
+            return;
+        }
+
+        // Confirmar construcción
+        cout << "\n¿Confirmas construir una casa en " << propSeleccionada->getNombre()
+             << " por $" << COSTO_CASA << "? (s/n): ";
+        char confirmar;
+        cin >> confirmar;
+
+        if (confirmar == 's' || confirmar == 'S') {
+            if (bancoCobrarDinero(banco, jugador, COSTO_CASA, "Construcción en " + propSeleccionada->getNombre())) {
+                propSeleccionada->construirCasa();
+                cout << "✅ ¡Construcción exitosa!" << endl;
+                cout << "💰 Dinero restante: $" << jugador.dinero << endl;
+            } else {
+                cout << "❌ Error al procesar el pago" << endl;
+            }
+        } else {
+            cout << "❌ Construcción cancelada" << endl;
         }
     }
 
@@ -218,14 +532,21 @@ private:
      */
     void procesarCartaSuerte(Jugador& jugador) {
         cout << "\n🎴 ¡Sacaste una carta de SUERTE!" << endl;
-        
+
         Carta carta = sistemaCartas.sacarCartaSuerte();
+
+        // Verificar si la carta es válida
+        if (carta.accion.empty()) {
+            cout << "⚠️ No hay cartas disponibles en este momento" << endl;
+            return;
+        }
+
         mostrarCarta(carta);
-        
+
         cout << "\nPresiona Enter para continuar...";
         cin.ignore();
         cin.get();
-        
+
         // Procesar según el tipo de acción
         if (carta.accion == "COBRAR") {
             bancoOtorgarDinero(banco, jugador, carta.valor, carta.descripcion);
@@ -360,14 +681,21 @@ private:
      */
     void procesarCartaCofre(Jugador& jugador) {
         cout << "\n🎴 ¡Sacaste una carta de COFRE COMUNITARIO!" << endl;
-        
+
         Carta carta = sistemaCartas.sacarCartaCofre();
+
+        // Verificar si la carta es válida
+        if (carta.accion.empty()) {
+            cout << "⚠️ No hay cartas disponibles en este momento" << endl;
+            return;
+        }
+
         mostrarCarta(carta);
-        
+
         cout << "\nPresiona Enter para continuar...";
         cin.ignore();
         cin.get();
-        
+
         // Procesar según el tipo de acción
         if (carta.accion == "COBRAR") {
             bancoOtorgarDinero(banco, jugador, carta.valor, carta.descripcion);
@@ -502,9 +830,77 @@ private:
             turnoActual++;
             return;  // Turno termina si estaba en cárcel
         }
-        
+
+        // ===== MENÚ DE OPCIONES ANTES DE TIRAR =====
+        bool continuarTurno = false;
+        while (!continuarTurno) {
+            cout << "\n┌─────────────────────────────────────┐" << endl;
+            cout << "│   ¿QUÉ QUIERES HACER?              │" << endl;
+            cout << "├─────────────────────────────────────┤" << endl;
+            cout << "│ 1. 🎲 Lanzar dados (continuar)     │" << endl;
+            cout << "│ 2. 🏗️  Construir casas              │" << endl;
+            cout << "│ 3. 🏠 Ver mis propiedades           │" << endl;
+            cout << "└─────────────────────────────────────┘" << endl;
+            cout << "Opción: ";
+
+            int opcion;
+            cin >> opcion;
+
+            if (opcion == 1) {
+                continuarTurno = true;
+            }
+            else if (opcion == 2) {
+                menuConstruccion(jugadorActual);
+            }
+            else if (opcion == 3) {
+                cout << "\n🏠 === MIS PROPIEDADES ===" << endl;
+                cout << "💰 Dinero: $" << jugadorActual.dinero << endl;
+                cout << "🏘️  Total propiedades: " << jugadorActual.propiedades.size() << endl;
+
+                if (jugadorActual.propiedades.empty()) {
+                    cout << "❌ No tienes propiedades aún" << endl;
+                } else {
+                    cout << "\nLista de propiedades:" << endl;
+                    for (const string& nombreProp : jugadorActual.propiedades) {
+                        Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
+                        if (casilla != nullptr) {
+                            Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
+                            Ferrocarril* ferro = dynamic_cast<Ferrocarril*>(casilla);
+                            Servicio* serv = dynamic_cast<Servicio*>(casilla);
+
+                            if (prop != nullptr) {
+                                cout << "  🏠 " << prop->getNombre()
+                                     << " | Color: " << prop->getColor()
+                                     << " | Casas: " << prop->getNumCasas()
+                                     << " | Alquiler: $" << prop->obtenerAlquiler() << endl;
+                            }
+                            else if (ferro != nullptr) {
+                                cout << "  🚂 " << ferro->getNombre() << endl;
+                            }
+                            else if (serv != nullptr) {
+                                cout << "  ⚡ " << serv->getNombre() << endl;
+                            }
+                        }
+                    }
+
+                    // Mostrar monopolios
+                    vector<string> monopolios = obtenerMonopolios(jugadorActual);
+                    if (!monopolios.empty()) {
+                        cout << "\n🎨 MONOPOLIOS COMPLETOS:" << endl;
+                        for (const string& color : monopolios) {
+                            cout << "  ✅ " << color << endl;
+                        }
+                    }
+                }
+                cout << "=========================" << endl;
+            }
+            else {
+                cout << "❌ Opción inválida" << endl;
+            }
+        }
+
         // ===== LANZAR DADOS =====
-        cout << "\n🎲 Presiona Enter para lanzar dados...";
+        cout << "\n🎲 Lanzando dados...";
         cin.ignore();
         cin.get();
         

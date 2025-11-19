@@ -27,7 +27,7 @@ void mostrarMenuPrincipal() {
     cout << "3. Ver información del proyecto" << endl;
     cout << "4. Salir" << endl;
     cout << string(50, '=') << endl;
-    cout << "Seleccione una opción: ";
+    cout << "Seleccione una opcion: ";
 }
 
 /**
@@ -42,7 +42,7 @@ void mostrarMenuPruebas() {
     cout << "2. Probar Sistema de Cartas (Colas)" << endl;
     cout << "3. Probar TAD Jugador" << endl;
     cout << "4. Probar carga de Tablero (Lista Circular)" << endl;
-    cout << "5. Volver al menú principal" << endl;
+    cout << "5. Volver al menu principal" << endl;
     cout << string(50, '=') << endl;
     cout << "Seleccione una opción: ";
 }

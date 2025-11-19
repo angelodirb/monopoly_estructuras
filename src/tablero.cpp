@@ -38,8 +38,34 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
             archivo >> costoCasa;
             archivo.ignore();
 
-            // Color por defecto vacío (el archivo no incluye color)
-            Propiedad* p = new Propiedad(nombreCasilla, precio, "", rentas);
+            // Asignar color según el nombre de la propiedad
+            string color = "";
+            if (nombreCasilla == "MEDITERRANEAN AVENUE" || nombreCasilla == "BALTIC AVENUE") {
+                color = "MARRON";
+            }
+            else if (nombreCasilla == "ORIENTAL AVENUE" || nombreCasilla == "VERMONT AVENUE" || nombreCasilla == "CONNECTICUT AVENUE") {
+                color = "CELESTE";
+            }
+            else if (nombreCasilla == "ST. CHARLES PLACE" || nombreCasilla == "STATES AVENUE" || nombreCasilla == "VIRGINIA AVENUE") {
+                color = "ROSA";
+            }
+            else if (nombreCasilla == "ST. JAMES PLACE" || nombreCasilla == "TENNESSEE AVENUE" || nombreCasilla == "NEW YORK AVENUE") {
+                color = "NARANJA";
+            }
+            else if (nombreCasilla == "KENTUCKY AVENUE" || nombreCasilla == "INDIANA AVENUE" || nombreCasilla == "ILLINOIS AVENUE") {
+                color = "ROJO";
+            }
+            else if (nombreCasilla == "ATLANTIC AVENUE" || nombreCasilla == "VENTNOR AVENUE" || nombreCasilla == "MARVIN GARDENS") {
+                color = "AMARILLO";
+            }
+            else if (nombreCasilla == "PACIFIC AVENUE" || nombreCasilla == "NORTH CAROLINA AVENUE" || nombreCasilla == "PENNSYLVANIA AVENUE") {
+                color = "VERDE";
+            }
+            else if (nombreCasilla == "PARK PLACE" || nombreCasilla == "BOARDWALK") {
+                color = "AZUL";
+            }
+
+            Propiedad* p = new Propiedad(nombreCasilla, precio, color, rentas);
             anxLista(tablero, p);
         }
         else if (tipo == "FERROCARRIL") {
@@ -110,8 +136,34 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
             archivo >> costoCasa;
             archivo.ignore();
 
-            // Color por defecto vacío (el archivo no incluye color)
-            Propiedad* p = new Propiedad(nombreCasilla, precio, "", rentas);
+            // Asignar color según el nombre de la propiedad
+            string color = "";
+            if (nombreCasilla == "MEDITERRANEAN AVENUE" || nombreCasilla == "BALTIC AVENUE") {
+                color = "MARRON";
+            }
+            else if (nombreCasilla == "ORIENTAL AVENUE" || nombreCasilla == "VERMONT AVENUE" || nombreCasilla == "CONNECTICUT AVENUE") {
+                color = "CELESTE";
+            }
+            else if (nombreCasilla == "ST. CHARLES PLACE" || nombreCasilla == "STATES AVENUE" || nombreCasilla == "VIRGINIA AVENUE") {
+                color = "ROSA";
+            }
+            else if (nombreCasilla == "ST. JAMES PLACE" || nombreCasilla == "TENNESSEE AVENUE" || nombreCasilla == "NEW YORK AVENUE") {
+                color = "NARANJA";
+            }
+            else if (nombreCasilla == "KENTUCKY AVENUE" || nombreCasilla == "INDIANA AVENUE" || nombreCasilla == "ILLINOIS AVENUE") {
+                color = "ROJO";
+            }
+            else if (nombreCasilla == "ATLANTIC AVENUE" || nombreCasilla == "VENTNOR AVENUE" || nombreCasilla == "MARVIN GARDENS") {
+                color = "AMARILLO";
+            }
+            else if (nombreCasilla == "PACIFIC AVENUE" || nombreCasilla == "NORTH CAROLINA AVENUE" || nombreCasilla == "PENNSYLVANIA AVENUE") {
+                color = "VERDE";
+            }
+            else if (nombreCasilla == "PARK PLACE" || nombreCasilla == "BOARDWALK") {
+                color = "AZUL";
+            }
+
+            Propiedad* p = new Propiedad(nombreCasilla, precio, color, rentas);
             anxLista(tablero, p);
 
             registro.registrarPropiedad(nombreCasilla, p);
