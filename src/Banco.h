@@ -36,8 +36,8 @@ struct Banco {
     vector<Transaccion> historial;
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Se crea un banco con dinero inicial
+     * Precondicion: Ninguna
+     * Postcondicion: Se crea un banco con dinero inicial
      */
     Banco() : dineroEnCirculacion(0), dineroRetenido(0) {}
 };
@@ -47,13 +47,13 @@ struct Banco {
 // **********************************
 
 /**
- * Precondición: numJugadores >= 2 y <= 6, jugadores no vacío
- * Postcondición: Se distribuye dinero inicial ($1500) a cada jugador
+ * Precondicion: numJugadores >= 2 y <= 6, jugadores no vacio
+ * Postcondicion: Se distribuye dinero inicial ($1500) a cada jugador
  */
 void bancoDistribuirDineroInicial(Banco& banco, vector<Jugador>& jugadores, 
                                    int dineroInicial = 1500) {
     if (jugadores.empty()) {
-        cout << "❌ Error: No hay jugadores para distribuir dinero" << endl;
+        cout << " Error: No hay jugadores para distribuir dinero" << endl;
         return;
     }
     
@@ -62,26 +62,26 @@ void bancoDistribuirDineroInicial(Banco& banco, vector<Jugador>& jugadores,
         banco.dineroEnCirculacion += dineroInicial;
     }
     
-    cout << "🏦 BANCO: Distribuidos $" << dineroInicial << " a " 
+    cout << " BANCO: Distribuidos $" << dineroInicial << " a " 
          << jugadores.size() << " jugadores" << endl;
-    cout << "💰 Dinero en circulación: $" << banco.dineroEnCirculacion << endl;
+    cout << " Dinero en circulacion: $" << banco.dineroEnCirculacion << endl;
 }
 
 /**
- * Precondición: cantidad > 0, jugador válido, banco tiene fondos
- * Postcondición: El banco otorga dinero al jugador
+ * Precondicion: cantidad > 0, jugador valido, banco tiene fondos
+ * Postcondicion: El banco otorga dinero al jugador
  */
 void bancoOtorgarDinero(Banco& banco, Jugador& jugador, int cantidad, 
                         const string& concepto = "") {
     if (cantidad <= 0) {
-        cout << "❌ El banco no puede otorgar cantidad negativa o cero" << endl;
+        cout << " El banco no puede otorgar cantidad negativa o cero" << endl;
         return;
     }
     
     jugador.dinero += cantidad;
     banco.dineroEnCirculacion += cantidad;
     
-    cout << "🏦 BANCO otorga $" << cantidad << " a " << jugador.nombre;
+    cout << " BANCO otorga $" << cantidad << " a " << jugador.nombre;
     if (!concepto.empty()) cout << " por: " << concepto;
     cout << endl;
     
@@ -92,27 +92,27 @@ void bancoOtorgarDinero(Banco& banco, Jugador& jugador, int cantidad,
 }
 
 /**
- * Precondición: cantidad > 0, jugador válido
- * Postcondición: El banco cobra dinero al jugador, retorna true si exitoso
+ * Precondicion: cantidad > 0, jugador valido
+ * Postcondicion: El banco cobra dinero al jugador, retorna true si exitoso
  */
 bool bancoCobrarDinero(Banco& banco, Jugador& jugador, int cantidad, 
                        const string& concepto = "") {
     if (cantidad <= 0) {
-        cout << "❌ El banco no puede cobrar cantidad negativa o cero" << endl;
+        cout << " El banco no puede cobrar cantidad negativa o cero" << endl;
         return false;
     }
     
     if (jugador.dinero < cantidad) {
-        cout << "🏦 " << jugador.nombre << " no tiene fondos suficientes para pagar $" 
+        cout << jugador.nombre << " no tiene fondos suficientes para pagar $" 
              << cantidad << " al BANCO" << endl;
-        cout << "💰 Saldo: $" << jugador.dinero << " (Necesita: $" << cantidad << ")" << endl;
+        cout << "Saldo: $" << jugador.dinero << " (Necesita: $" << cantidad << ")" << endl;
         return false;
     }
     
     jugador.dinero -= cantidad;
     banco.dineroEnCirculacion -= cantidad;
     
-    cout << "🏦 BANCO cobra $" << cantidad << " a " << jugador.nombre;
+    cout << " BANCO cobra $" << cantidad << " a " << jugador.nombre;
     if (!concepto.empty()) cout << " por: " << concepto;
     cout << endl;
     
@@ -124,18 +124,18 @@ bool bancoCobrarDinero(Banco& banco, Jugador& jugador, int cantidad,
 }
 
 /**
- * Precondición: Jugadores válidos, cantidad > 0
- * Postcondición: Transfiere dinero entre jugadores
+ * Precondicion: Jugadores validos, cantidad > 0
+ * Postcondicion: Transfiere dinero entre jugadores
  */
 bool bancoTransferencia(Banco& banco, Jugador& pagador, Jugador& receptor, 
                         int cantidad, const string& concepto = "") {
     if (cantidad <= 0) {
-        cout << "❌ No se puede transferir cantidad negativa o cero" << endl;
+        cout << " No se puede transferir cantidad negativa o cero" << endl;
         return false;
     }
     
     if (pagador.dinero < cantidad) {
-        cout << "🏦 " << pagador.nombre << " no puede pagar $" << cantidad 
+        cout << pagador.nombre << " no puede pagar $" << cantidad 
              << " a " << receptor.nombre << endl;
         return false;
     }
@@ -143,7 +143,7 @@ bool bancoTransferencia(Banco& banco, Jugador& pagador, Jugador& receptor,
     pagador.dinero -= cantidad;
     receptor.dinero += cantidad;
     
-    cout << "🏦 TRANSFERENCIA: " << pagador.nombre << " → " << receptor.nombre 
+    cout << "TRANSFERENCIA: " << pagador.nombre << " → " << receptor.nombre 
          << " $" << cantidad;
     if (!concepto.empty()) cout << " (" << concepto << ")";
     cout << endl;
@@ -156,8 +156,8 @@ bool bancoTransferencia(Banco& banco, Jugador& pagador, Jugador& receptor,
 }
 
 /**
- * Precondición: Jugador válido, está pasando por SALIDA
- * Postcondición: El banco paga $200 al jugador
+ * Precondicion: Jugador valido, esta pasando por SALIDA
+ * Postcondicion: El banco paga $200 al jugador
  */
 void bancoPagarSalida(Banco& banco, Jugador& jugador) {
     const int DINERO_SALIDA = 200;
@@ -165,16 +165,16 @@ void bancoPagarSalida(Banco& banco, Jugador& jugador) {
 }
 
 /**
- * Precondición: Jugador válido, intenta salir de cárcel pagando
- * Postcondición: Cobra multa si tiene fondos, retorna true si exitoso
+ * Precondicion: Jugador valido, intenta salir de carcel pagando
+ * Postcondicion: Cobra multa si tiene fondos, retorna true si exitoso
  */
 bool bancoMultaCarcel(Banco& banco, Jugador& jugador) {
     const int MULTA_CARCEL = 50;
     
-    if (bancoCobrarDinero(banco, jugador, MULTA_CARCEL, "Multa de cárcel")) {
+    if (bancoCobrarDinero(banco, jugador, MULTA_CARCEL, "Multa de carcel")) {
         jugador.enCarcel = false;
         jugador.turnosCarcel = 0;
-        cout << "🔓 " << jugador.nombre << " sale de la CÁRCEL" << endl;
+        cout << "🔓 " << jugador.nombre << " sale de la CARCEL" << endl;
         return true;
     }
     
@@ -182,20 +182,20 @@ bool bancoMultaCarcel(Banco& banco, Jugador& jugador) {
 }
 
 /**
- * Precondición: Parámetros válidos
- * Postcondición: Cobra reparaciones por casas y hoteles
+ * Precondicion: Parametros validos
+ * Postcondicion: Cobra reparaciones por casas y hoteles
  */
 bool bancoReparaciones(Banco& banco, Jugador& jugador, 
                        int costoPorCasa, int costoPorHotel, 
                        int casasActuales, int hotelesActuales) {
     if (costoPorCasa < 0 || costoPorHotel < 0 || casasActuales < 0 || hotelesActuales < 0) {
-        cout << "❌ Parámetros de reparaciones inválidos" << endl;
+        cout << "Parametros de reparaciones invalidos" << endl;
         return false;
     }
     
     int costoTotal = (casasActuales * costoPorCasa) + (hotelesActuales * costoPorHotel);
     
-    cout << "🔨 REPARACIONES para " << jugador.nombre << ":" << endl;
+    cout << "REPARACIONES para " << jugador.nombre << ":" << endl;
     cout << "  Casas: " << casasActuales << " × $" << costoPorCasa << " = $" 
          << (casasActuales * costoPorCasa) << endl;
     cout << "  Hoteles: " << hotelesActuales << " × $" << costoPorHotel << " = $" 
@@ -206,20 +206,20 @@ bool bancoReparaciones(Banco& banco, Jugador& jugador,
 }
 
 /**
- * Precondición: Jugador válido, lista de jugadores válida
- * Postcondición: El jugador paga a todos los demás
+ * Precondicion: Jugador valido, lista de jugadores valida
+ * Postcondicion: El jugador paga a todos los demas
  */
 bool bancoPagarATodos(Banco& banco, Jugador& pagador, 
                       vector<Jugador>& jugadores, int cantidadPorJugador) {
     int totalAPagar = cantidadPorJugador * (jugadores.size() - 1);
     
     if (pagador.dinero < totalAPagar) {
-        cout << "🏦 " << pagador.nombre << " no puede pagar $" << cantidadPorJugador 
+        cout << pagador.nombre << " no puede pagar $" << cantidadPorJugador 
              << " a cada jugador (necesita $" << totalAPagar << ")" << endl;
         return false;
     }
     
-    cout << "🏦 " << pagador.nombre << " paga $" << cantidadPorJugador << " a todos:" << endl;
+    cout << pagador.nombre << " paga $" << cantidadPorJugador << " a todos:" << endl;
     
     for (Jugador& j : jugadores) {
         if (j.nombre != pagador.nombre && !j.estaQuebrado) {
@@ -230,30 +230,30 @@ bool bancoPagarATodos(Banco& banco, Jugador& pagador,
     return true;
 }
 /**
- * Precondición: Jugador válido, lista de jugadores válida
- * Postcondición: Todos pagan al jugador especificado
+ * Precondicion: Jugador valido, lista de jugadores valida
+ * Postcondicion: Todos pagan al jugador especificado
  */
 void bancoCobrarDeTodos(Banco& banco, Jugador& receptor, 
                         vector<Jugador>& jugadores, int cantidadPorJugador) {
-    cout << "🏦 " << receptor.nombre << " cobra $" << cantidadPorJugador << " de todos:" << endl;
+    cout << receptor.nombre << " cobra $" << cantidadPorJugador << " de todos:" << endl;
     
     for (Jugador& j : jugadores) {
         if (j.nombre != receptor.nombre && !j.estaQuebrado) {
             if (j.dinero >= cantidadPorJugador) {
                 bancoTransferencia(banco, j, receptor, cantidadPorJugador, "Cobro grupal");
             } else {
-                cout << "  ⚠️ " << j.nombre << " no tiene fondos suficientes" << endl;
+                cout << j.nombre << " no tiene fondos suficientes" << endl;
             }
         }
     }
 }
 
 /**
- * Precondición: Jugador válido
- * Postcondición: Declara la quiebra del jugador
+ * Precondicion: Jugador valido
+ * Postcondicion: Declara la quiebra del jugador
  */
 void bancoQuiebra(Banco& banco, Jugador& jugador) {
-    cout << "🏦 QUIEBRA: " << jugador.nombre << " pierde todo su patrimonio" << endl;
+    cout << "QUIEBRA: " << jugador.nombre << " pierde todo su patrimonio" << endl;
     cout << "  Dinero perdido: $" << jugador.dinero << endl;
     cout << "  Propiedades perdidas: " << jugador.propiedades.size() << endl;
     
@@ -262,21 +262,21 @@ void bancoQuiebra(Banco& banco, Jugador& jugador) {
     jugador.propiedades.clear();
     jugador.estaQuebrado = true;
     
-    cout << "💀 " << jugador.nombre << " está EN QUIEBRA" << endl;
+    cout << jugador.nombre << " esta EN QUIEBRA" << endl;
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Muestra resumen financiero de todos los jugadores
+ * Precondicion: Ninguna
+ * Postcondicion: Muestra resumen financiero de todos los jugadores
  */
 void bancoResumenFinanciero(const Banco& banco, const vector<Jugador>& jugadores) {
-    cout << "\n🏦 === RESUMEN FINANCIERO BANCO ===" << endl;
+    cout << "\n === RESUMEN FINANCIERO BANCO ===" << endl;
     
     int totalDineroEnJuego = 0;
     int jugadoresActivos = 0;
     
     for (const Jugador& j : jugadores) {
-        cout << "💰 " << j.nombre << ": $" << j.dinero;
+        cout << j.nombre << ": $" << j.dinero;
         
         if (j.estaQuebrado) {
             cout << " [QUEBRADO]";
@@ -288,20 +288,20 @@ void bancoResumenFinanciero(const Banco& banco, const vector<Jugador>& jugadores
         cout << " | Propiedades: " << j.propiedades.size() << endl;
     }
     
-    cout << "\n📊 ESTADÍSTICAS:" << endl;
+    cout << "\n ESTADISTICAS:" << endl;
     cout << "  Jugadores activos: " << jugadoresActivos << "/" << jugadores.size() << endl;
-    cout << "  Dinero en circulación: $" << banco.dineroEnCirculacion << endl;
+    cout << "  Dinero en circulacion: $" << banco.dineroEnCirculacion << endl;
     cout << "  Dinero retenido: $" << banco.dineroRetenido << endl;
     cout << "  Promedio por jugador: $" << (jugadoresActivos > 0 ? totalDineroEnJuego / jugadoresActivos : 0) << endl;
     cout << "=================================" << endl;
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Muestra historial de últimas transacciones
+ * Precondicion: Ninguna
+ * Postcondicion: Muestra historial de ultimas transacciones
  */
 void bancoMostrarHistorial(const Banco& banco, int ultimasN = 10) {
-    cout << "\n🏦 === HISTORIAL DE TRANSACCIONES ===" << endl;
+    cout << "\n === HISTORIAL DE TRANSACCIONES ===" << endl;
     
     int inicio = max(0, (int)banco.historial.size() - ultimasN);
     
