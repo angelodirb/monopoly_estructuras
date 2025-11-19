@@ -32,70 +32,65 @@ public:
      * Precondición: El archivo nombreArchivo debe existir y ser accesible
      * Postcondición: Las cartas del tipo correspondiente se cargan en la cola
      */
-    bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
-        std::ifstream archivo(nombreArchivo);
-        if (!archivo.is_open()) {
-            std::cerr << "❌ Error: No se pudo abrir " << nombreArchivo << std::endl;
-            return false;
-        }
-        
-        std::vector<Carta> cartasTemp;
-        std::string linea;
-        Carta temp;
-        int contador = 0;
-        
-        // Leer archivo línea por línea
-        while (getline(archivo, linea)) {
-            if (linea != "===") {
-                switch (contador) {
-                    case 0: // Descripción
-                        temp.descripcion = linea;
-                        contador++;
-                        break;
-                    case 1: // Tipo
-                        temp.tipo = linea;
-                        contador++;
-                        break;
-                    case 2: // Acción
-                        temp.accion = linea;
-                        contador++;
-                        break;
-                    case 3: // Valor
-                        temp.valor = std::stoi(linea);
-                        temp.valorExtra = 0;
-                        contador++;
-                        break;
-                    case 4: // Valor extra (opcional)
-                        temp.valorExtra = std::stoi(linea);
-                        contador++;
-                        break;
-                }
-            } else {
-                // Guardar carta si es del tipo correcto
-                if (temp.tipo == tipo) {
-                    cartasTemp.push_back(temp);
-                }
-                contador = 0;
-            }
-        }
-        
-        archivo.close();
-        
-        // Mezclar cartas aleatoriamente
-        std::random_device rd;
-        std::mt19937 g(rd());
-        std::shuffle(cartasTemp.begin(), cartasTemp.end(), g);
-        
-        // Cargar en la cola
-        for (const Carta& carta : cartasTemp) {
-            cola = anxCola(cola, carta);
-        }
-        
-        cartasOriginales = cartasTemp.size();
-        std::cout << "✅ Cargadas " << cartasOriginales << " cartas de " << tipo << std::endl;
-        return true;
+bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
+    std::cout << "📂 Intentando abrir: " << nombreArchivo << std::endl;
+    
+    std::ifstream archivo(nombreArchivo);
+    if (!archivo.is_open()) {
+        std::cerr << "❌ Error: No se pudo abrir " << nombreArchivo << std::endl;
+        return false;
     }
     
+    std::cout << "✅ Archivo abierto. Leyendo cartas de tipo: " << tipo << std::endl;
+    
+    std::vector<Carta> cartasTemp;
+    std::string linea;
+    int cartasLeidas = 0;
+    
+    while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+        
+        Carta temp;
+        temp.descripcion = linea;
+        
+        if (!getline(archivo, linea)) break;
+        temp.tipo = linea;
+        
+        if (!getline(archivo, linea)) break;
+        temp.accion = linea;
+        
+        if (!getline(archivo, linea)) break;
+        temp.valor = std::stoi(linea);
+        temp.valorExtra = 0;
+        
+        if (getline(archivo, linea) && linea != "===") {
+            temp.valorExtra = std::stoi(linea);
+            getline(archivo, linea);
+        }
+        
+        if (temp.tipo == tipo) {
+            cartasTemp.push_back(temp);
+            cartasLeidas++;
+            std::cout << "  📝 Carta " << cartasLeidas << ": " << temp.descripcion.substr(0, 30) << "..." << std::endl;
+        }
+    }
+    
+    archivo.close();
+    
+    std::cout << "🔄 Mezclando " << cartasTemp.size() << " cartas..." << std::endl;
+    
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(cartasTemp.begin(), cartasTemp.end(), g);
+    
+    for (const Carta& carta : cartasTemp) {
+        cola = anxCola(cola, carta);
+    }
+    
+    cartasOriginales = cartasTemp.size();
+    std::cout << "✅ Cargadas " << cartasOriginales << " cartas de " << tipo << std::endl;
+    return true;
+}   
     /**
      * Precondición: La cola no debe estar vacía
      * Postcondición: Retorna la carta del frente y la envía al final (excepto "SALIR_CARCEL")
