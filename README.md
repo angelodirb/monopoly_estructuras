@@ -5,8 +5,8 @@
 ===============================================
 
 INTEGRANTES:
-[Tu nombre]
-[Nombre de tu compañero]
+Miguel Rodríguez
+Santiago Vasco
 
 INSTRUCCIONES DE COMPILACIÓN:
 ----------------------------------------------
