@@ -17,7 +17,7 @@ struct Jugador {
     bool enCarcel;
     int turnosCarcel;
     bool estaQuebrado;
-    bool tieneCartaSalirCarcel;  // TRUE si tiene carta para salir de cárcel gratis
+    bool tieneCartaSalirCarcel;  // TRUE si tiene carta para salir de carcel gratis
     
     /**
      * Precondición: Ninguna
@@ -45,7 +45,7 @@ struct Jugador {
  */
 Jugador crearJugador(const std::string& nombre) {
     Jugador j(nombre);
-    std::cout << "👤 Jugador creado: " << nombre << " con $" << j.dinero << std::endl;
+    std::cout << "[JUGADOR] Jugador creado: " << nombre << " con $" << j.dinero << std::endl;
     return j;
 }
 
@@ -64,7 +64,7 @@ void moverJugador(Jugador& jugador, int casillas) {
     // Verificar si pasó por SALIDA (casilla 0)
     if (posicionAnterior > jugador.posicion || 
         (posicionAnterior + casillas) >= 40) {
-        std::cout << "🎯 " << jugador.nombre << " pasó por SALIDA!" << std::endl;
+        std::cout << ">>> " << jugador.nombre << " pasó por SALIDA!" << std::endl;
     }
 }
 
@@ -74,12 +74,12 @@ void moverJugador(Jugador& jugador, int casillas) {
  */
 void agregarDinero(Jugador& jugador, int cantidad) {
     if (cantidad <= 0) {
-        std::cout << "❌ No se puede agregar cantidad negativa o cero" << std::endl;
+        std::cout << "[ERROR] No se puede agregar cantidad negativa o cero" << std::endl;
         return;
     }
     
     jugador.dinero += cantidad;
-    std::cout << "💰 " << jugador.nombre << " recibe $" << cantidad 
+    std::cout << "[$] " << jugador.nombre << " recibe $" << cantidad 
               << ". Nuevo saldo: $" << jugador.dinero << std::endl;
 }
 
@@ -89,7 +89,7 @@ void agregarDinero(Jugador& jugador, int cantidad) {
  */
 bool retirarDinero(Jugador& jugador, int cantidad) {
     if (cantidad <= 0) {
-        std::cout << "❌ No se puede retirar cantidad negativa o cero" << std::endl;
+        std::cout << "[ERROR] No se puede retirar cantidad negativa o cero" << std::endl;
         return false;
     }
     
@@ -112,13 +112,13 @@ bool retirarDinero(Jugador& jugador, int cantidad) {
  */
 bool pagarA(Jugador& pagador, Jugador& receptor, int cantidad) {
     if (cantidad <= 0) {
-        std::cout << "❌ No se puede transferir cantidad negativa o cero" << std::endl;
+        std::cout << "[ERROR] No se puede transferir cantidad negativa o cero" << std::endl;
         return false;
     }
     
     if (retirarDinero(pagador, cantidad)) {
         agregarDinero(receptor, cantidad);
-        std::cout << "🔄 Transferencia: " << pagador.nombre << " → " << receptor.nombre 
+        std::cout << "[MEZCLAR] Transferencia: " << pagador.nombre << " → " << receptor.nombre 
                   << " $" << cantidad << std::endl;
         return true;
     }
@@ -132,15 +132,15 @@ bool pagarA(Jugador& pagador, Jugador& receptor, int cantidad) {
  */
 bool comprarPropiedad(Jugador& jugador, const std::string& nombrePropiedad, int precio) {
     if (nombrePropiedad.empty() || precio <= 0) {
-        std::cout << "❌ Datos de propiedad inválidos" << std::endl;
+        std::cout << "[ERROR] Datos de propiedad inválidos" << std::endl;
         return false;
     }
     
     if (retirarDinero(jugador, precio)) {
         jugador.propiedades.push_back(nombrePropiedad);
-        std::cout << "🏠 " << jugador.nombre << " compró " << nombrePropiedad 
+        std::cout << "[PROP] " << jugador.nombre << " compró " << nombrePropiedad 
                   << " por $" << precio << std::endl;
-        std::cout << "📋 Propiedades actuales: " << jugador.propiedades.size() << std::endl;
+        std::cout << "[INFO] Propiedades actuales: " << jugador.propiedades.size() << std::endl;
         return true;
     }
     
@@ -149,10 +149,10 @@ bool comprarPropiedad(Jugador& jugador, const std::string& nombrePropiedad, int 
 
 /**
  * Precondición: jugador válido
- * Postcondición: Envía al jugador a la cárcel
+ * Postcondición: Envía al jugador a la carcel
  */
 void enviarACarcel(Jugador& jugador) {
-    jugador.posicion = 10; // Casilla de la cárcel
+    jugador.posicion = 10; // Casilla de la carcel
     jugador.enCarcel = true;
     jugador.turnosCarcel = 0;
     
@@ -160,12 +160,12 @@ void enviarACarcel(Jugador& jugador) {
 }
 
 /**
- * Precondición: jugador válido y en la cárcel
- * Postcondición: Libera al jugador de la cárcel
+ * Precondición: jugador válido y en la carcel
+ * Postcondición: Libera al jugador de la carcel
  */
 void liberarDeCarcel(Jugador& jugador) {
     if (!jugador.enCarcel) {
-        std::cout << "⚠️ " << jugador.nombre << " no está en la cárcel" << std::endl;
+        std::cout << "[AVISO] " << jugador.nombre << " no está en la carcel" << std::endl;
         return;
     }
     
@@ -176,53 +176,53 @@ void liberarDeCarcel(Jugador& jugador) {
 
 /**
  * Precondición: jugador válido
- * Postcondición: El jugador obtiene una carta de "Salir de Cárcel"
+ * Postcondición: El jugador obtiene una carta de "Salir de Carcel"
  */
 void darCartaSalirCarcel(Jugador& jugador) {
     jugador.tieneCartaSalirCarcel = true;
-    std::cout << "🎴 " << jugador.nombre << " obtuvo carta 'Salir de Cárcel Gratis'!" << std::endl;
+    std::cout << "[CARTA] " << jugador.nombre << " obtuvo carta 'Salir de Carcel Gratis'!" << std::endl;
 }
 
 /**
- * Precondición: jugador válido y debe tener carta de salir de cárcel
- * Postcondición: Usa la carta para salir de cárcel, la carta se consume (FALSE)
+ * Precondición: jugador válido y debe tener carta de salir de carcel
+ * Postcondición: Usa la carta para salir de carcel, la carta se consume (FALSE)
  */
 bool usarCartaSalirCarcel(Jugador& jugador) {
     if (!jugador.tieneCartaSalirCarcel) {
-        std::cout << "❌ " << jugador.nombre << " no tiene carta para salir de cárcel" << std::endl;
+        std::cout << "[ERROR] " << jugador.nombre << " no tiene carta para salir de carcel" << std::endl;
         return false;
     }
     
     if (!jugador.enCarcel) {
-        std::cout << "⚠️ " << jugador.nombre << " no está en la cárcel" << std::endl;
+        std::cout << "[AVISO] " << jugador.nombre << " no está en la carcel" << std::endl;
         return false;
     }
     
-    // Usar la carta: sale de cárcel gratis
+    // Usar la carta: sale de carcel gratis
     liberarDeCarcel(jugador);
     jugador.tieneCartaSalirCarcel = false;  // Se consume la carta
     
-    std::cout << "🎴 " << jugador.nombre << " usó su carta 'Salir de Cárcel' y queda libre!" << std::endl;
+    std::cout << "[CARTA] " << jugador.nombre << " usó su carta 'Salir de Carcel' y queda libre!" << std::endl;
     return true;
 }
 
 /**
- * Precondición: jugador válido y en cárcel
- * Postcondición: Intenta salir de cárcel por diferentes métodos
+ * Precondición: jugador válido y en carcel
+ * Postcondición: Intenta salir de carcel por diferentes métodos
  */
 bool intentarSalirDeCarcel(Jugador& jugador) {
     if (!jugador.enCarcel) {
-        std::cout << "⚠️ " << jugador.nombre << " no está en la cárcel" << std::endl;
+        std::cout << "[AVISO] " << jugador.nombre << " no está en la carcel" << std::endl;
         return false;
     }
     
     std::cout << "\n🔒 " << jugador.nombre << " está en la CÁRCEL" << std::endl;
-    std::cout << "Turnos en cárcel: " << jugador.turnosCarcel << "/3" << std::endl;
+    std::cout << "Turnos en carcel: " << jugador.turnosCarcel << "/3" << std::endl;
     
     // Verificar si tiene carta para salir gratis
     if (jugador.tieneCartaSalirCarcel) {
-        std::cout << "🎴 ¡Tienes carta 'Salir de Cárcel'!" << std::endl;
-        std::cout << "¿Usar carta para salir gratis? (s/n): ";
+        std::cout << "[CARTA] [!]Tienes carta 'Salir de Carcel'!" << std::endl;
+        std::cout << "[ ?]Usar carta para salir gratis? (s/n): ";
         
         // En implementación real, aquí sería input del usuario
         // Por ahora usamos automáticamente si está disponible
@@ -241,7 +241,7 @@ bool intentarSalirDeCarcel(Jugador& jugador) {
     std::cout << "💸 Opciones: Pagar $50 de multa o esperar " 
               << (3 - jugador.turnosCarcel) << " turno(s) más" << std::endl;
     
-    return false; // Sigue en cárcel
+    return false; // Sigue en carcel
 }
 
 /**
@@ -250,9 +250,9 @@ bool intentarSalirDeCarcel(Jugador& jugador) {
  */
 void mostrarEstadoJugador(const Jugador& jugador) {
     std::cout << "\n=== ESTADO DE " << jugador.nombre << " ===" << std::endl;
-    std::cout << "💰 Dinero: $" << jugador.dinero << std::endl;
+    std::cout << "[$] Dinero: $" << jugador.dinero << std::endl;
     std::cout << "📍 Posición: " << jugador.posicion << std::endl;
-    std::cout << "🏠 Propiedades: " << jugador.propiedades.size() << std::endl;
+    std::cout << "[PROP] Propiedades: " << jugador.propiedades.size() << std::endl;
     
     for (size_t i = 0; i < jugador.propiedades.size(); i++) {
         std::cout << "  " << (i+1) << ". " << jugador.propiedades[i] << std::endl;
@@ -267,9 +267,9 @@ void mostrarEstadoJugador(const Jugador& jugador) {
     }
     
     if (jugador.tieneCartaSalirCarcel) {
-        std::cout << "🎴 Carta 'Salir de Cárcel': ✅ DISPONIBLE" << std::endl;
+        std::cout << "[CARTA] Carta 'Salir de Carcel': [OK] DISPONIBLE" << std::endl;
     } else {
-        std::cout << "🎴 Carta 'Salir de Cárcel': ❌ No disponible" << std::endl;
+        std::cout << "[CARTA] Carta 'Salir de Carcel': [ERROR] No disponible" << std::endl;
     }
     
     std::cout << "================================" << std::endl;
@@ -285,7 +285,7 @@ bool estaEnQuiebra(const Jugador& jugador) {
 
 /**
  * Precondición: jugador válido
- * Postcondición: Retorna true si el jugador puede salir de cárcel de alguna manera
+ * Postcondición: Retorna true si el jugador puede salir de carcel de alguna manera
  */
 bool puedeUsarCartaSalirCarcel(const Jugador& jugador) {
     return jugador.tieneCartaSalirCarcel && jugador.enCarcel;

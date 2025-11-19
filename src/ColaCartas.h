@@ -34,15 +34,15 @@ public:
      * Postcondición: Las cartas del tipo correspondiente se cargan en la cola
      */
 bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
-    std::cout << "📂 Intentando abrir: " << nombreArchivo << std::endl;
+    std::cout << "[ARCHIVO] Intentando abrir: " << nombreArchivo << std::endl;
     
     std::ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
-        std::cerr << "❌ Error: No se pudo abrir " << nombreArchivo << std::endl;
+        std::cerr << "[ERROR] Error: No se pudo abrir " << nombreArchivo << std::endl;
         return false;
     }
     
-    std::cout << "✅ Archivo abierto. Leyendo cartas de tipo: " << tipo << std::endl;
+    std::cout << "[OK] Archivo abierto. Leyendo cartas de tipo: " << tipo << std::endl;
     
     std::vector<Carta> cartasTemp;
     std::string linea;
@@ -72,14 +72,14 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
         if (temp.tipo == tipo) {
             cartasTemp.push_back(temp);
             cartasLeidas++;
-            std::cout << "  📝 Carta " << cartasLeidas << ": " << temp.descripcion.substr(0, 30) << "..." << std::endl;
+            std::cout << "  [NOTA] Carta " << cartasLeidas << ": " << temp.descripcion.substr(0, 30) << "..." << std::endl;
         }
     }
     
     archivo.close();
 
     if (cartasTemp.empty()) {
-        std::cout << "⚠️ No se encontraron cartas de tipo " << tipo << std::endl;
+        std::cout << "[AVISO] No se encontraron cartas de tipo " << tipo << std::endl;
         return false;
     }
 
@@ -93,7 +93,7 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     }
 
     cartasOriginales = cartasTemp.size();
-    std::cout << "✅ Sistema cargó " << cartasOriginales << " cartas de " << tipo << " en la cola" << std::endl;
+    std::cout << "[OK] Sistema cargó " << cartasOriginales << " cartas de " << tipo << " en la cola" << std::endl;
     return true;
 }   
     /**
@@ -102,7 +102,7 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
      */
     Carta sacarCarta() {
         if (vaciaCola(cola)) {
-            std::cerr << "❌ Error: No hay cartas en la cola de " << tipo << std::endl;
+            std::cerr << "[ERROR] Error: No hay cartas en la cola de " << tipo << std::endl;
             return Carta(); // Carta vacía
         }
         
@@ -112,13 +112,13 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
         // Quitar del frente
         cola = elimCola(cola);
         
-        // Regresarla al final si NO es carta de "salir de cárcel"
+        // Regresarla al final si NO es carta de "salir de carcel"
         // (esas se guardan hasta que se usen)
         if (carta.accion != "SALIR_CARCEL") {
             cola = anxCola(cola, carta);
-            std::cout << "🎴 Carta de " << tipo << " regresada al final de la cola" << std::endl;
+            std::cout << "[CARTA] Carta de " << tipo << " regresada al final de la cola" << std::endl;
         } else {
-            std::cout << "🎴 Carta 'Salir de Cárcel' guardada por el jugador" << std::endl;
+            std::cout << "[CARTA] Carta 'Salir de Carcel' guardada por el jugador" << std::endl;
         }
         
         return carta;
@@ -130,7 +130,7 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
      */
     void devolverCarta(const Carta& carta) {
         cola = anxCola(cola, carta);
-        std::cout << "🎴 Carta devuelta a la cola de " << tipo << ": " << carta.descripcion << std::endl;
+        std::cout << "[CARTA] Carta devuelta a la cola de " << tipo << ": " << carta.descripcion << std::endl;
     }
     
     /**
@@ -147,15 +147,16 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
      */
     int cantidadCartas() const {
         if (vaciaCola(cola)) return 0;
-        
-        Cola<Carta> colaTemp = cola;
+
+        // Recorrer la cola sin eliminar nodos
+        Nodo<Carta>* actual = cola;
         int count = 0;
-        
-        while (!vaciaCola(colaTemp)) {
+
+        while (actual != NULL) {
             count++;
-            colaTemp = elimCola(colaTemp);
+            actual = actual->sig;
         }
-        
+
         return count;
     }
     
@@ -173,7 +174,7 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
      */
     void mezclarCartas() {
         if (vaciaCola(cola)) {
-            std::cout << "⚠️ No hay cartas para mezclar en " << tipo << std::endl;
+            std::cout << "[AVISO] No hay cartas para mezclar en " << tipo << std::endl;
             return;
         }
         
@@ -194,12 +195,12 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
             cola = anxCola(cola, carta);
         }
 
-        std::cout << "🔄 Cartas de " << tipo << " mezcladas nuevamente" << std::endl;
+        std::cout << "[MEZCLAR] Cartas de " << tipo << " mezcladas nuevamente" << std::endl;
     }
     
     /**
      * Precondición: Ninguna
-     * Postcondición: Muestra información del estado de la cola
+     * Postcondición: Muestra informacion del estado de la cola
      */
     void mostrarInfo() const {
         std::cout << "\n=== COLA DE " << tipo << " ===" << std::endl;
@@ -211,25 +212,26 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     
     /**
      * Precondición: n debe ser > 0
-     * Postcondición: Muestra las próximas n cartas sin modificar la cola
+     * Postcondición: Muestra las proximas n cartas sin modificar la cola
      */
     void mostrarProximasCartas(int n = 3) const {
         if (n <= 0) {
-            std::cout << "⚠️ Número de cartas debe ser positivo" << std::endl;
+            std::cout << "[AVISO] Número de cartas debe ser positivo" << std::endl;
             return;
         }
-        
+
         std::cout << "\n=== PRÓXIMAS " << n << " CARTAS DE " << tipo << " ===" << std::endl;
-        
-        Cola<Carta> colaTemp = cola;
-        
-        for (int i = 0; i < n && !vaciaCola(colaTemp); i++) {
-            Carta carta = infoCola(colaTemp);
+
+        // Recorrer la cola sin eliminar nodos
+        Nodo<Carta>* actual = cola;
+
+        for (int i = 0; i < n && actual != NULL; i++) {
+            Carta carta = actual->dato;
             std::cout << (i + 1) << ". " << carta.descripcion << std::endl;
             std::cout << "   Acción: " << carta.accion << ", Valor: " << carta.valor << std::endl;
-            colaTemp = elimCola(colaTemp);
+            actual = actual->sig;
         }
-        
+
         std::cout << "=================================" << std::endl;
     }
     
@@ -240,7 +242,7 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     void limpiarCola() {
         cola = crearCola<Carta>();
         cartasOriginales = 0;
-        std::cout << "🗑️ Cola de " << tipo << " limpiada" << std::endl;
+        std::cout << "[LIMPIAR] Cola de " << tipo << " limpiada" << std::endl;
     }
 };
 
@@ -265,16 +267,16 @@ public:
      * Postcondición: Ambas colas se inicializan con sus cartas respectivas
      */
     bool inicializar(const std::string& archivoCartas) {
-        std::cout << "\n🎴 Inicializando sistema de cartas..." << std::endl;
+        std::cout << "\n[CARTA] Inicializando sistema de cartas..." << std::endl;
         
         bool suerteOK = colaSuerte.cargarCartasDesdeArchivo(archivoCartas);
         bool cofreOK = colaCofre.cargarCartasDesdeArchivo(archivoCartas);
         
         if (suerteOK && cofreOK) {
-            std::cout << "✅ Sistema de cartas listo\n" << std::endl;
+            std::cout << "[OK] Sistema de cartas listo\n" << std::endl;
             return true;
         } else {
-            std::cout << "❌ Error al inicializar sistema de cartas" << std::endl;
+            std::cout << "[ERROR] Error al inicializar sistema de cartas" << std::endl;
             return false;
         }
     }
@@ -305,7 +307,7 @@ public:
         } else if (carta.tipo == "COFRE") {
             colaCofre.devolverCarta(carta);
         } else {
-            std::cout << "⚠️ Tipo de carta desconocido: " << carta.tipo << std::endl;
+            std::cout << "[AVISO] Tipo de carta desconocido: " << carta.tipo << std::endl;
         }
     }
     
@@ -316,7 +318,7 @@ public:
     void mezclarTodasLasCartas() {
         colaSuerte.mezclarCartas();
         colaCofre.mezclarCartas();
-        std::cout << "🔄 Todas las cartas mezcladas" << std::endl;
+        std::cout << "[MEZCLAR] Todas las cartas mezcladas" << std::endl;
     }
     
     /**
@@ -340,7 +342,7 @@ public:
     
     /**
      * Precondición: Ninguna
-     * Postcondición: Muestra las próximas cartas de ambas colas
+     * Postcondición: Muestra las proximas cartas de ambas colas
      */
     void mostrarProximasCartas(int n = 3) const {
         colaSuerte.mostrarProximasCartas(n);

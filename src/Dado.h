@@ -34,7 +34,7 @@ void lanzarDado(Dado& dado) {
     dado.valor1 = (rand() % 6) + 1;
     dado.valor2 = (rand() % 6) + 1;
     
-    cout << "🎲 Resultado de los dados: [" << dado.valor1 << "] + [" 
+    cout << "[DADOS] Resultado de los dados: [" << dado.valor1 << "] + [" 
          << dado.valor2 << "]" << endl;
 }
 
@@ -72,7 +72,7 @@ int obtenerValor2(const Dado& dado) {
 
 /**
  * Precondición: Ninguna
- * Postcondición: Muestra información del último lanzamiento
+ * Postcondición: Muestra informacion del último lanzamiento
  */
 void mostrarDado(const Dado& dado) {
     cout << "\n=== INFORMACIÓN DEL DADO ===" << endl;
@@ -81,7 +81,7 @@ void mostrarDado(const Dado& dado) {
     cout << "Suma total: " << obtenerSuma(dado) << endl;
     
     if (esDoble(dado)) {
-        cout << "⭐ ¡DOBLE! Lanzarás de nuevo" << endl;
+        cout << "⭐ [!]DOBLE! Lanzarás de nuevo" << endl;
     } else {
         cout << "Movimiento normal" << endl;
     }

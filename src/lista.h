@@ -27,7 +27,7 @@ Lista<T> crearLista()
 template <typename T>
 Lista<T> anxLista(Lista<T> lst, T e)
 {
-    Lista<T> nuevo = (Lista<T>)malloc(sizeof(Nodo<T>));
+    Lista<T> nuevo = new Nodo<T>();
     nuevo->dato = e;
     nuevo->sig = NULL;
     nuevo->ant = NULL;
@@ -86,7 +86,7 @@ Lista<T> insLista(Lista<T> lst, const T e, int pos)
     if(pos < 1 || pos > longLista(lst))
         throw std::out_of_range("insLista: No existe esa posicion");
 
-    Lista<T> nuevo = (Lista<T>)malloc(sizeof(Nodo<T>));
+    Lista<T> nuevo = new Nodo<T>();
     nuevo->dato = e;
     nuevo->sig = NULL;
     nuevo->ant = NULL;
@@ -124,7 +124,7 @@ Lista<T> elimLista(Lista<T> lst, int pos)
         lst = lst->sig;
         lst->sig = NULL;
         tmp->sig = NULL;
-        free(tmp);
+        delete tmp;
     }
     else
     {
@@ -136,7 +136,7 @@ Lista<T> elimLista(Lista<T> lst, int pos)
         tmp->sig->ant = tmp;
         tmp2->sig = NULL;
         tmp2->ant = NULL;
-        free(tmp2);
+        delete tmp2;
     }
     return lst;
 }

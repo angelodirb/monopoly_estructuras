@@ -9,7 +9,7 @@
 using namespace std;
 
 // ───────────────────────────────────────────────
-// Cargar tablero (función original)
+// Cargar tablero (funcion original)
 // ───────────────────────────────────────────────
 ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
     ifstream archivo(nombreArchivo);
@@ -202,7 +202,7 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
 
     archivo.close();
 
-    cout << "✅ Tablero cargado exitosamente\n";
+    cout << "[OK] Tablero cargado exitosamente\n";
     cout << "   Casillas en tablero: " << size(tablero) << endl;
     cout << "   Propiedades en registro: " << registro.getTotalPropiedades() << endl;
 
@@ -310,7 +310,7 @@ bool registrarPropiedadesDelTablero(RegistroPropiedades& registro, const ListaCi
         actual = actual->siguiente;
     } while (actual != getCabeza(tablero));
     
-    std::cout << "✅ " << registradas << " propiedades registradas automáticamente" << std::endl;
+    std::cout << "[OK] " << registradas << " propiedades registradas automáticamente" << std::endl;
     registro.mostrarEstadisticas();
     
     return registradas > 0;

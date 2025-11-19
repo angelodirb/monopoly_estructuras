@@ -120,12 +120,12 @@ void ejecutarCarta(Carta c, int& dineroJugador, int& posicionJugador,
 	else if(c.accion == "SALIR_CARCEL")
 	{
 		tieneCartaSalirCarcel = true;
-		std::cout << "Guardas esta carta para salir de la cárcel" << std::endl;
+		std::cout << "Guardas esta carta para salir de la carcel" << std::endl;
 	}
 	else if(c.accion == "IR_CARCEL")
 	{
-		posicionJugador = 10; // Casilla de la cárcel
-		std::cout << "Vas directamente a la cárcel" << std::endl;
+		posicionJugador = 10; // Casilla de la carcel
+		std::cout << "Vas directamente a la carcel" << std::endl;
 	}
 	else if(c.accion == "REPARACIONES")
 	{

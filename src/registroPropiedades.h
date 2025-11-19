@@ -27,7 +27,7 @@ public:
      */
     RegistroPropiedades(int capacidad = 53) : totalPropiedades(0) {
         tabla = crearTablaHash<const char*, Casilla*>(capacidad);
-        std::cout << "🏠 Registro de propiedades creado (capacidad: " << capacidad << ")" << std::endl;
+        std::cout << "[PROP] Registro de propiedades creado (capacidad: " << capacidad << ")" << std::endl;
     }
     
     /**
@@ -69,7 +69,7 @@ public:
         if (resultado != nullptr) {
             std::cout << "🔍 Propiedad encontrada: " << nombre << std::endl;
         } else {
-            std::cout << "❌ Propiedad no encontrada: " << nombre << std::endl;
+            std::cout << "[ERROR] Propiedad no encontrada: " << nombre << std::endl;
         }
         
         return resultado;
@@ -112,7 +112,7 @@ public:
     
     /**
      * Precondición: Ninguna
-     * Postcondición: Muestra estadísticas detalladas del registro
+     * Postcondición: Muestra estadisticas detalladas del registro
      */
     void mostrarEstadisticas() const {
         std::cout << "\n=== REGISTRO DE PROPIEDADES ===" << std::endl;
@@ -186,7 +186,7 @@ public:
     
     /**
      * Precondición: casilla debe ser válida y ser una propiedad
-     * Postcondición: Retorna información detallada de la propiedad
+     * Postcondición: Retorna informacion detallada de la propiedad
      */
     void mostrarDetallesPropiedad(const std::string& nombre) const {
         Casilla* casilla = buscarPropiedad(nombre);
@@ -208,10 +208,10 @@ public:
             prop->mostrarInfo();
         } else if (ferro != nullptr) {
             std::cout << "Tipo: Ferrocarril" << std::endl;
-            ferro->activar(); // Mostrar información básica
+            ferro->activar(); // Mostrar informacion básica
         } else if (serv != nullptr) {
             std::cout << "Tipo: Servicio" << std::endl;
-            serv->activar(); // Mostrar información básica
+            serv->activar(); // Mostrar informacion básica
         } else {
             std::cout << "Tipo: Casilla especial" << std::endl;
             casilla->activar();
@@ -230,7 +230,7 @@ public:
 
     bool integridadOK = true;
 
-    // ❌ tamañoTablaHash no existe en tu TAD → Se comenta
+    // [ERROR] tamañoTablaHash no existe en tu TAD → Se comenta
     // int elementos = tamañoTablaHash(tabla);
     int elementos = totalPropiedades; // ✔ Esto garantiza coincidencia
 
