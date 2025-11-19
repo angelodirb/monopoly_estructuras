@@ -9,6 +9,7 @@
 #include "cartas.h"
 #include "ColaCartas.h"
 #include "pila.h"
+#include "lista.h"
 #include "EstadoJuego.h"
 #include <vector>
 #include <iostream>
@@ -139,13 +140,8 @@ private:
         // Guardar en pila
         pilaEstados = anxPila(pilaEstados, estado);
 
-        // Contar estados en la pila
-        int contador = 0;
-        Pila<EstadoJuego> temp = pilaEstados;
-        while (!vaciaPila(temp)) {
-            contador++;
-            temp = elimPila(temp);
-        }
+        // Contar estados en la pila usando longLista en lugar de eliminar
+        int contador = longLista(pilaEstados);
 
         // Si excede el límite, eliminar el estado más antiguo
         // (esto requeriría una pila con límite, por simplicidad dejamos crecer)
@@ -978,14 +974,14 @@ private:
         // ===== MENU DE OPCIONES ANTES DE TIRAR =====
         bool continuarTurno = false;
         while (!continuarTurno) {
-            cout << "\n┌─────────────────────────────────────┐" << endl;
-            cout << "│   ?QUE QUIERES HACER ?              │" << endl;
-            cout << "├─────────────────────────────────────┤" << endl;
-            cout << "│ 1. [DADOS] Lanzar dados (continuar)     │" << endl;
-            cout << "│ 2. [CONSTRUIR]  Construir casas              │" << endl;
-            cout << "│ 3. [PROP] Ver mis propiedades           │" << endl;
-            cout << "│ 4. [UNDO] Deshacer última acción        │" << endl;
-            cout << "└─────────────────────────────────────┘" << endl;
+            cout << "\n---------------------------------------" << endl;
+            cout << "   ?QUE QUIERES HACER ?              " << endl;
+            cout << "-----------------------------------------" << endl;
+            cout << " 1. [DADOS] Lanzar dados (continuar)     " << endl;
+            cout << " 2. [CONSTRUIR]  Construir casas              " << endl;
+            cout << " 3. [PROP] Ver mis propiedades           " << endl;
+            cout << " 4. [UNDO] Deshacer última acción        " << endl;
+            cout << "-------------------------------------------" << endl;
 
             // Mostrar si hay estados guardados
             if (hayEstadosGuardados()) {

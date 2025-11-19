@@ -57,7 +57,7 @@ void probarTablaHash() {
     RegistroPropiedades registro(53);
     
     // Cargar tablero para prueba
-    ListaCircular tablero = cargarTableroDesdeArchivo("Casillas.txt");
+    ListaCircular tablero = cargarTableroDesdeArchivo("src/Casillas.txt");
     
     if (!vaciaLista(tablero)) {
         cout << "\n--- Registrando propiedades del tablero ---" << endl;

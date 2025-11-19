@@ -267,9 +267,9 @@ void mostrarEstadoJugador(const Jugador& jugador) {
     }
     
     if (jugador.tieneCartaSalirCarcel) {
-        std::cout << "[CARTA] Carta 'Salir de Carcel': [OK] DISPONIBLE" << std::endl;
+        std::cout << "[CARTA] Carta 'Salir de Carcel': ✓ Disponible" << std::endl;
     } else {
-        std::cout << "[CARTA] Carta 'Salir de Carcel': [ERROR] No disponible" << std::endl;
+        std::cout << "[CARTA] Carta 'Salir de Carcel': ✗ No disponible" << std::endl;
     }
     
     std::cout << "================================" << std::endl;

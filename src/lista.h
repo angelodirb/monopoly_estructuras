@@ -122,7 +122,9 @@ Lista<T> elimLista(Lista<T> lst, int pos)
     {
         Lista<T> tmp = lst;
         lst = lst->sig;
-        lst->sig = NULL;
+        if (lst != NULL) {
+            lst->ant = NULL;
+        }
         tmp->sig = NULL;
         delete tmp;
     }
