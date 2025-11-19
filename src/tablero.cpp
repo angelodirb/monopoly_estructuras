@@ -30,19 +30,16 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
 
         if (tipo == "PROPIEDAD") {
             int precio;
-            string color;
             int rentas[6];
             int costoCasa;
 
             archivo >> precio;
-            archivo.ignore();
-            getline(archivo, color);
-
             for (int i = 0; i < 6; i++) archivo >> rentas[i];
             archivo >> costoCasa;
             archivo.ignore();
 
-            Propiedad* p = new Propiedad(nombreCasilla, precio, color, rentas);
+            // Color por defecto vacío (el archivo no incluye color)
+            Propiedad* p = new Propiedad(nombreCasilla, precio, "", rentas);
             anxLista(tablero, p);
         }
         else if (tipo == "FERROCARRIL") {
@@ -105,19 +102,16 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
 
         if (tipo == "PROPIEDAD") {
             int precio;
-            string color;
             int rentas[6];
             int costoCasa;
 
             archivo >> precio;
-            archivo.ignore();
-            getline(archivo, color);
-
             for (int i = 0; i < 6; i++) archivo >> rentas[i];
             archivo >> costoCasa;
             archivo.ignore();
 
-            Propiedad* p = new Propiedad(nombreCasilla, precio, color, rentas);
+            // Color por defecto vacío (el archivo no incluye color)
+            Propiedad* p = new Propiedad(nombreCasilla, precio, "", rentas);
             anxLista(tablero, p);
 
             registro.registrarPropiedad(nombreCasilla, p);

@@ -144,10 +144,7 @@ Lista<T> elimLista(Lista<T> lst, int pos)
 template <typename T>
 bool vaciaLista(Lista<T> lst)
 {
-    if(longLista(lst) != 0)
-        return 1;
-    else
-    return 0;
+    return (lst == NULL);  // Simple y correcto
 }
 
 

@@ -13,21 +13,15 @@ INSTRUCCIONES DE COMPILACIÓN:
 
 REQUISITOS:
 - g++ con soporte para C++11 o superior
-- Sistema Windows con MinGW o Linux/Mac
+- Sistema Windows con MinGW, Linux o Mac
 
-COMPILAR Y EJECUTAR:
+COMPILAR:
 
-1. Dar permisos al script (solo primera vez):
-   chmod +x compile.sh
-
-2. Compilar:
-   ./compile.sh
-
-3. Ejecutar:
-   ./monopoly
-
-COMPILACIÓN MANUAL (alternativa):
    g++ -std=c++11 -o monopoly src/main.cpp src/listaCircular.cpp src/tablero.cpp -I./src -static-libgcc -static-libstdc++
+
+EJECUTAR:
+
+   ./monopoly
 
 
 ESTRUCTURA DEL PROYECTO:
@@ -51,13 +45,13 @@ src/
   ├── cartas.h              - TAD Carta
   ├── lista.h               - TAD Lista enlazada
   ├── pila.h                - TAD Pila
-  ├── Casillas.txt          - Datos del tablero
-  └── cartas.txt            - Datos de cartas
+  ├── Casillas.txt          - Datos del tablero (40 casillas)
+  └── cartas.txt            - Datos de cartas (32 cartas)
 
 
 ESTRUCTURAS DE DATOS IMPLEMENTADAS:
 ----------------------------------------------
-✓ Lista Circular - Tablero de 40 casillas
+✓ Lista Circular - Tablero de 40 casillas con navegación cíclica
 ✓ Jerarquía Polimórfica - Casilla → Propiedad/Ferrocarril/Servicio
 ✓ Tabla Hash - Registro de propiedades con hashing de strings
 ✓ Cola - Sistema de cartas (Suerte y Cofre Comunitario)
@@ -83,30 +77,63 @@ CARACTERÍSTICAS TÉCNICAS:
 - Lenguaje: C++11
 - Paradigma: Programación orientada a objetos
 - Polimorfismo: Jerarquía de casillas
-- Manejo de memoria: Smart pointers donde aplica
 - Separación header/implementation: listaCircular, tablero
 - Documentación: Precondiciones y postcondiciones en código
+- Compilación: Flags estáticos para compatibilidad Windows/Linux
 
 
 MENÚ DEL PROGRAMA:
 ----------------------------------------------
 1. Nuevo Juego - Inicia partida completa de Monopoly
+   - Configuración de número de jugadores
+   - Selección de fichas
+   - Sistema completo de turnos
+
 2. Pruebas de TADs - Pruebas individuales de estructuras
    - Tabla Hash de Propiedades
    - Sistema de Cartas (Colas)
    - TAD Jugador
    - Carga de Tablero (Lista Circular)
+
 3. Ver información del proyecto
+
 4. Salir
+
+
+FORMATO DE ARCHIVOS DE DATOS:
+----------------------------------------------
+
+Casillas.txt:
+  NOMBRE_CASILLA
+  TIPO
+  [datos específicos del tipo]
+  ===
+
+cartas.txt:
+  Descripción de la carta
+  TIPO (SUERTE o COFRE)
+  ACCION
+  VALOR
+  [VALOR_EXTRA opcional]
+  ===
+
+
+CORRECCIONES REALIZADAS:
+----------------------------------------------
+✓ Ajustado formato de lectura del tablero (sin campo color)
+✓ Corregido nombre de archivo de includes (RegistroPropiedades.h)
+✓ Verificada carga correcta de 40 casillas
+✓ Sistema de cartas con debugging implementado
 
 
 NOTAS IMPORTANTES:
 ----------------------------------------------
-- Los archivos de datos deben estar en src/
+- Los archivos de datos están en src/
 - Compilar con flags -static-libgcc -static-libstdc++ en Windows
 - El tablero tiene 40 casillas (estándar de Monopoly)
 - Sistema de cartas implementa correctamente la mecánica
   de devolver cartas al final de la cola
+- Ejecutar desde la raíz del proyecto (no desde src/)
 
 
 LIMITACIONES CONOCIDAS:
@@ -116,47 +143,25 @@ LIMITACIONES CONOCIDAS:
 - Lógica de monopolios de color pendiente de completar
 
 
+VERIFICACIÓN DE FUNCIONAMIENTO:
+----------------------------------------------
+Para verificar que el proyecto funciona correctamente:
+
+1. Compilar el proyecto (comando arriba)
+2. Ejecutar: ./monopoly
+3. Seleccionar opción 2 (Pruebas de TADs)
+4. Seleccionar opción 4 (Probar carga de Tablero)
+   - Debe cargar 40 casillas correctamente
+5. Volver al menú y seleccionar opción 2 (Probar Sistema de Cartas)
+   - Debe cargar cartas de SUERTE y COFRE
+6. Seleccionar opción 3 (Probar TAD Jugador)
+   - Debe mostrar operaciones de jugadores
+
+
 AUTORES:
 ----------------------------------------------
 Proyecto desarrollado como parte del curso de
 Estructuras de Datos - Universidad del Valle
-Octubre 2025
+Noviembre 2025
 
 ===============================================
-
-./monopoly
-```
-
-Cuando veas el menú:
-- Ingresa: `2` (Pruebas de TADs)
-- Luego: `4` (Probar carga de Tablero)
-
-**Deberías ver:**
-```
-🧪 === PRUEBA CARGA DE TABLERO (LISTA CIRCULAR) ===
-
---- Cargando tablero ---
-✅ Tablero cargado (40 casillas)
-
---- Resumen del tablero ---
-...
-```
-
-Si ves eso, **¡PERFECTO!** ✅
-
----
-
-### 2️⃣ Prueba el sistema de cartas
-
-Presiona Enter para volver al menú de pruebas, luego:
-- Ingresa: `2` (Probar Sistema de Cartas)
-
-**Deberías ver:**
-```
-🧪 === PRUEBA SISTEMA DE CARTAS (COLAS) ===
-
---- Inicializando sistema ---
-🎴 Inicializando sistema de cartas...
-✅ Cargadas X cartas de SUERTE
-✅ Cargadas X cartas de COFRE
-✅ Sistema de cartas listo

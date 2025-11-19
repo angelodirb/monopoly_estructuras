@@ -5,7 +5,7 @@
 
 #include "Juego.h"
 #include "ColaCartas.h"
-#include "RegistroPropiedades.h"
+#include "registroPropiedades.h"
 #include "tablero.h"
 
 using namespace std;

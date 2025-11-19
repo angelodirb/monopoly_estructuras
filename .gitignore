@@ -1,0 +1,23 @@
+# Ejecutables
+monopoly
+monopoly.exe
+*.out
+*.exe
+
+# Archivos de objeto
+*.o
+*.obj
+
+# Archivos de prueba temporales
+test_*.txt
+test_*.sh
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Sistema
+.DS_Store
+Thumbs.db
