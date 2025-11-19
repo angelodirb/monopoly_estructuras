@@ -33,7 +33,7 @@ void anxLista(ListaCircular& lista, Casilla* nueva) {
 
 void insLista(ListaCircular& lista, Casilla* nueva, int pos) {
     if (pos < 1 || pos > lista.cantidad + 1) {
-        cout << "Posición inválida." << endl;
+        cout << "Posicion invalida." << endl;
         return;
     }
 
@@ -61,7 +61,7 @@ void insLista(ListaCircular& lista, Casilla* nueva, int pos) {
 
 void elimLista(ListaCircular& lista, int pos) {
     if (pos < 1 || pos > lista.cantidad) {
-        cout << "Posición inválida." << endl;
+        cout << "Posicion invalida." << endl;
         return;
     }
 
@@ -90,7 +90,7 @@ void elimLista(ListaCircular& lista, int pos) {
 
 void mostrarLista(const ListaCircular& lista) {
     if (!lista.cabeza) {
-        cout << "(Lista vacía)" << endl;
+        cout << "(Lista vacia)" << endl;
         return;
     }
     Casilla* temp = lista.cabeza;

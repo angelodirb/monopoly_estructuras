@@ -15,9 +15,11 @@ REQUISITOS:
 - g++ con soporte para C++11 o superior
 - Sistema Windows con MinGW, Linux o Mac
 
-COMPILAR:
+COMPILAR (Solo se requiere compilar una vez (a menos que se cambie algo en el codigo)):
 
    g++ -std=c++11 -o monopoly src/main.cpp src/listaCircular.cpp src/tablero.cpp -I./src -static-libgcc -static-libstdc++
+
+   ./compile.sh
 
 EJECUTAR:
 

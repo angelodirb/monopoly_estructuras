@@ -93,8 +93,8 @@ void mostrarEstado(const EstadoJuego& estado) {
     for (size_t i = 0; i < estado.jugadores.size(); i++) {
         const Jugador& j = estado.jugadores[i];
         cout << "  - " << j.nombre << ": $" << j.dinero
-             << " | Pos: " << j.posicion
-             << " | Props: " << j.propiedades.size();
+             << "  Pos: " << j.posicion
+             << "  Props: " << j.propiedades.size();
 
         if (j.enCarcel) {
             cout << " | [CARCEL]";

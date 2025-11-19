@@ -67,7 +67,7 @@ public:
         Casilla* resultado = infoTablaHash(tabla, nombre.c_str());
         
         if (resultado != nullptr) {
-            std::cout << "🔍 Propiedad encontrada: " << nombre << std::endl;
+            std::cout << " Propiedad encontrada: " << nombre << std::endl;
         } else {
             std::cout << "[ERROR] Propiedad no encontrada: " << nombre << std::endl;
         }

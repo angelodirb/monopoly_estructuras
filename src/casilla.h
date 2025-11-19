@@ -16,7 +16,7 @@ public:
 
     string getNombre() const { return nombre; }
 
-    // Método virtual para comportamientos polimórficos
+    // Metodo virtual para comportamientos polimorficos
     virtual void activar() {
         cout << "Has caido en " << nombre << "." << endl;
     }

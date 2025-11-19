@@ -81,7 +81,7 @@ void mostrarDado(const Dado& dado) {
     cout << "Suma total: " << obtenerSuma(dado) << endl;
     
     if (esDoble(dado)) {
-        cout << "!DOBLE! Lanzaras de nuevo" << endl;
+        cout << "[!]DOBLE! Lanzaras de nuevo" << endl;
     } else {
         cout << "Movimiento normal" << endl;
     }

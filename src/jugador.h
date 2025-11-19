@@ -23,7 +23,7 @@ struct Jugador {
      * Precondicion: Ninguna
      * Postcondicion: Se crea un jugador con valores por defecto
      */
-    Jugador() : nombre(""), dinero(1500), posicion(0), enCarcel(false), 
+    Jugador() : nombre(""), dinero(0), posicion(0), enCarcel(false), 
                turnosCarcel(0), estaQuebrado(false), tieneCartaSalirCarcel(false) {}
     
     /**
@@ -31,7 +31,7 @@ struct Jugador {
      * Postcondicion: Se crea un jugador con el nombre especificado
      */
     Jugador(const std::string& nombreJugador) 
-        : nombre(nombreJugador), dinero(1500), posicion(0), enCarcel(false),
+        : nombre(nombreJugador), dinero(0), posicion(0), enCarcel(false),
           turnosCarcel(0), estaQuebrado(false), tieneCartaSalirCarcel(false) {}
 };
 
@@ -39,7 +39,7 @@ struct Jugador {
 // Funciones del TAD Jugador
 // **********************************
 
-/**
+/**"
  * Precondicion: nombre no debe estar vacio
  * Postcondicion: Se crea un nuevo jugador con dinero inicial de $1500
  */
@@ -57,7 +57,7 @@ void moverJugador(Jugador& jugador, int casillas) {
     int posicionAnterior = jugador.posicion;
     jugador.posicion = (jugador.posicion + casillas) % 40; // Tablero de 40 casillas
     
-    std::cout << "🚶 " << jugador.nombre << " se mueve de casilla " 
+    std::cout << jugador.nombre << " se mueve de casilla " 
               << posicionAnterior << " a " << jugador.posicion 
               << " (+" << casillas << ")" << std::endl;
     
@@ -251,7 +251,7 @@ bool intentarSalirDeCarcel(Jugador& jugador) {
 void mostrarEstadoJugador(const Jugador& jugador) {
     std::cout << "\n=== ESTADO DE " << jugador.nombre << " ===" << std::endl;
     std::cout << "[$] Dinero: $" << jugador.dinero << std::endl;
-    std::cout << " Posicion: " << jugador.posicion << std::endl;
+    std::cout << "[POS] Posicion: " << jugador.posicion << std::endl;
     std::cout << "[PROP] Propiedades: " << jugador.propiedades.size() << std::endl;
     
     for (size_t i = 0; i < jugador.propiedades.size(); i++) {
@@ -259,17 +259,17 @@ void mostrarEstadoJugador(const Jugador& jugador) {
     }
     
     if (jugador.enCarcel) {
-        std::cout << "Estado: EN CARCEL (turno " << jugador.turnosCarcel << ")" << std::endl;
+        std::cout << " Estado: EN CARCEL (turno " << jugador.turnosCarcel << ")" << std::endl;
     }
     
     if (jugador.estaQuebrado) {
-        std::cout << "Estado: QUEBRADO" << std::endl;
+        std::cout << " Estado: QUEBRADO" << std::endl;
     }
     
     if (jugador.tieneCartaSalirCarcel) {
-        std::cout << "[CARTA] Carta 'Salir de Carcel': [OK] DISPONIBLE" << std::endl;
+        std::cout << "[CARTA] Carta 'Salir de Carcel':  Disponible" << std::endl;
     } else {
-        std::cout << "[CARTA] Carta 'Salir de Carcel': [ERROR] No disponible" << std::endl;
+        std::cout << "[CARTA] Carta 'Salir de Carcel':  No disponible" << std::endl;
     }
     
     std::cout << "================================" << std::endl;

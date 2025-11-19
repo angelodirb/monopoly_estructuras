@@ -259,7 +259,7 @@ void mostrarEstadisticasTablero(const ListaCircular& tablero) {
         actual = actual->siguiente;
     } while (actual != getCabeza(tablero));
     
-    cout << "\n=== ESTADISTICAS DEL TABLERO ===" << endl;
+    cout << "\n=== ESTADÍSTICAS DEL TABLERO ===" << endl;
     cout << "Total casillas: " << size(tablero) << endl;
     cout << "Propiedades: " << propiedades << endl;
     cout << "Ferrocarriles: " << ferrocarriles << endl;

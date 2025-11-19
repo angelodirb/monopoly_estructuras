@@ -51,9 +51,9 @@ struct Banco {
  * Postcondicion: Se distribuye dinero inicial ($1500) a cada jugador
  */
 void bancoDistribuirDineroInicial(Banco& banco, vector<Jugador>& jugadores, 
-                                   int dineroInicial = 1500) {
+                                   int dineroInicial = 0) {
     if (jugadores.empty()) {
-        cout << " Error: No hay jugadores para distribuir dinero" << endl;
+        cout << "Error: No hay jugadores para distribuir dinero" << endl;
         return;
     }
     
@@ -62,9 +62,9 @@ void bancoDistribuirDineroInicial(Banco& banco, vector<Jugador>& jugadores,
         banco.dineroEnCirculacion += dineroInicial;
     }
     
-    cout << " BANCO: Distribuidos $" << dineroInicial << " a " 
+    cout << "BANCO: Distribuidos $" << dineroInicial << " a " 
          << jugadores.size() << " jugadores" << endl;
-    cout << " Dinero en circulacion: $" << banco.dineroEnCirculacion << endl;
+    cout << "Dinero en circulacion: $" << banco.dineroEnCirculacion << endl;
 }
 
 /**
@@ -74,14 +74,14 @@ void bancoDistribuirDineroInicial(Banco& banco, vector<Jugador>& jugadores,
 void bancoOtorgarDinero(Banco& banco, Jugador& jugador, int cantidad, 
                         const string& concepto = "") {
     if (cantidad <= 0) {
-        cout << " El banco no puede otorgar cantidad negativa o cero" << endl;
+        cout << "El banco no puede otorgar cantidad negativa o cero" << endl;
         return;
     }
     
     jugador.dinero += cantidad;
     banco.dineroEnCirculacion += cantidad;
     
-    cout << " BANCO otorga $" << cantidad << " a " << jugador.nombre;
+    cout << "BANCO otorga $" << cantidad << " a " << jugador.nombre;
     if (!concepto.empty()) cout << " por: " << concepto;
     cout << endl;
     
@@ -98,7 +98,7 @@ void bancoOtorgarDinero(Banco& banco, Jugador& jugador, int cantidad,
 bool bancoCobrarDinero(Banco& banco, Jugador& jugador, int cantidad, 
                        const string& concepto = "") {
     if (cantidad <= 0) {
-        cout << " El banco no puede cobrar cantidad negativa o cero" << endl;
+        cout << "El banco no puede cobrar cantidad negativa o cero" << endl;
         return false;
     }
     
@@ -112,7 +112,7 @@ bool bancoCobrarDinero(Banco& banco, Jugador& jugador, int cantidad,
     jugador.dinero -= cantidad;
     banco.dineroEnCirculacion -= cantidad;
     
-    cout << " BANCO cobra $" << cantidad << " a " << jugador.nombre;
+    cout << "BANCO cobra $" << cantidad << " a " << jugador.nombre;
     if (!concepto.empty()) cout << " por: " << concepto;
     cout << endl;
     
@@ -130,7 +130,7 @@ bool bancoCobrarDinero(Banco& banco, Jugador& jugador, int cantidad,
 bool bancoTransferencia(Banco& banco, Jugador& pagador, Jugador& receptor, 
                         int cantidad, const string& concepto = "") {
     if (cantidad <= 0) {
-        cout << " No se puede transferir cantidad negativa o cero" << endl;
+        cout << "No se puede transferir cantidad negativa o cero" << endl;
         return false;
     }
     
@@ -143,7 +143,7 @@ bool bancoTransferencia(Banco& banco, Jugador& pagador, Jugador& receptor,
     pagador.dinero -= cantidad;
     receptor.dinero += cantidad;
     
-    cout << "TRANSFERENCIA: " << pagador.nombre << " → " << receptor.nombre 
+    cout << "TRANSFERENCIA: " << pagador.nombre << receptor.nombre 
          << " $" << cantidad;
     if (!concepto.empty()) cout << " (" << concepto << ")";
     cout << endl;
@@ -174,7 +174,7 @@ bool bancoMultaCarcel(Banco& banco, Jugador& jugador) {
     if (bancoCobrarDinero(banco, jugador, MULTA_CARCEL, "Multa de carcel")) {
         jugador.enCarcel = false;
         jugador.turnosCarcel = 0;
-        cout << "🔓 " << jugador.nombre << " sale de la CARCEL" << endl;
+        cout << jugador.nombre << " sale de la CARCEL" << endl;
         return true;
     }
     

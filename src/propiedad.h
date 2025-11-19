@@ -25,13 +25,13 @@ public:
             duenio = jugador;
             cout << jugador << " compro " << nombre << " por $" << precio << endl;
         } else {
-            cout << "Esta propiedad ya tiene dueño: " << duenio << endl;
+            cout << "Esta propiedad ya tiene dueno: " << duenio << endl;
         }
     }
 
     void activar() override {
         if (duenio.empty()) {
-            cout << "Propiedad sin dueño: " << nombre << " (Precio $" << precio << ", Color " << color << ")" << endl;
+            cout << "Propiedad sin dueno: " << nombre << " (Precio $" << precio << ", Color " << color << ")" << endl;
         } else {
             int renta = obtenerAlquiler();
             cout << "Has caido en la propiedad de " << duenio << ": " << nombre
@@ -41,7 +41,7 @@ public:
 
      void construirCasa() {
         if (duenio.empty()) {
-            cout << "No puedes construir en una propiedad sin dueño." << endl;
+            cout << "No puedes construir en una propiedad sin dueno." << endl;
             return;
         }
 
@@ -62,10 +62,10 @@ public:
 
     void mostrarInfo() const {
         cout << "Propiedad: " << nombre << " | Color: " << color
-             << " | Precio: $" << precio
-             << " | Dueño: " << (duenio.empty() ? "Sin dueño" : duenio)
-             << " | Casas: " << (numCasas < 5 ? to_string(numCasas) : "Hotel")
-             << " | Alquiler actual: $" << obtenerAlquiler() << endl;
+             << "  Precio: $" << precio
+             << "  Dueno: " << (duenio.empty() ? "Sin dueno" : duenio)
+             << "  Casas: " << (numCasas < 5 ? to_string(numCasas) : "Hotel")
+             << "  Alquiler actual: $" << obtenerAlquiler() << endl;
     }
 
      string getColor() const {
@@ -82,7 +82,7 @@ public:
     
     /**
      * Precondicion: Ninguna
-     * Postcondicion: Retorna el dueño de la propiedad
+     * Postcondicion: Retorna el dueno de la propiedad
      */
     string getDuenio() const {
         return duenio;
@@ -90,7 +90,7 @@ public:
     
     /**
      * Precondicion: Ninguna
-     * Postcondicion: Retorna el numero de casas construidas
+     * Postcondicion: Retorna el nuçmero de casas construidas
      */
     int getNumCasas() const {
         return numCasas;
@@ -112,7 +112,7 @@ public:
     
     /**
      * Precondicion: nombre de jugador valido
-     * Postcondicion: Establece el dueño de la propiedad
+     * Postcondicion: Establece el dueno de la propiedad
      */
     void setDuenio(const string& nuevoDuenio) {
         duenio = nuevoDuenio;

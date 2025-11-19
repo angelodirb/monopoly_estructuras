@@ -16,10 +16,6 @@ if [ $? -eq 0 ]; then
     echo "Para ejecutar el juego:"
     echo "  ./monopoly"
     echo ""
-    echo "Para ejecutar pruebas individuales:"
-    echo "  ./monopoly → Opción 2 → Opción 4 (Tablero - 40 casillas)"
-    echo "  ./monopoly → Opción 2 → Opción 2 (Sistema de Cartas)"
-    echo "  ./monopoly → Opción 2 → Opción 3 (TAD Jugador)"
     echo ""
 else
     echo ""

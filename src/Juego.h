@@ -9,6 +9,7 @@
 #include "cartas.h"
 #include "ColaCartas.h"
 #include "pila.h"
+#include "lista.h"
 #include "EstadoJuego.h"
 #include <vector>
 #include <iostream>
@@ -139,13 +140,8 @@ private:
         // Guardar en pila
         pilaEstados = anxPila(pilaEstados, estado);
 
-        // Contar estados en la pila
-        int contador = 0;
-        Pila<EstadoJuego> temp = pilaEstados;
-        while (!vaciaPila(temp)) {
-            contador++;
-            temp = elimPila(temp);
-        }
+        // Contar estados en la pila usando longLista en lugar de eliminar
+        int contador = longLista(pilaEstados);
 
         // Si excede el limite, eliminar el estado mas antiguo
         // (esto requeriria una pila con limite, por simplicidad dejamos crecer)
@@ -284,7 +280,7 @@ private:
         
         string nombreCasilla = casilla->getNombre();
         
-        cout << "\n" << jugador.nombre << " cae en: " << nombreCasilla << endl;
+        cout << jugador.nombre << " cae en: " << nombreCasilla << endl;
         
         // ===== CASILLAS ESPECIALES =====
         
@@ -297,7 +293,7 @@ private:
             }
         }
         else if (nombreCasilla == "PARQUEADERO GRATUITO") {
-            cout << "🅿️ Parqueadero gratuito - Descansa sin pagar" << endl;
+            cout << "Parqueadero gratuito - Descansa sin pagar" << endl;
         }
         else if (nombreCasilla == "IR A LA CARCEL") {
             cout << "[AVISO] !IR A LA CARCEL! No pases por SALIDA" << endl;
@@ -444,7 +440,7 @@ private:
 
         // ===== SERVICIO =====
         else if (serv != nullptr) {
-            cout << "SERVICIO: " << casilla->getNombre() << endl;
+            cout << " SERVICIO: " << casilla->getNombre() << endl;
             serv->activar();
 
             string duenio = serv->getDuenio();
@@ -472,7 +468,7 @@ private:
             else if (duenio != jugador.nombre) {
                 int multiplicador = 4;  // 4x el valor de los dados (simplificado)
                 int alquiler = obtenerSuma(dado) * multiplicador;
-                cout << "\nEste servicio pertenece a " << duenio << endl;
+                cout << "\n Este servicio pertenece a " << duenio << endl;
                 cout << "[$] Debes pagar alquiler: $" << alquiler << " (dados × " << multiplicador << ")" << endl;
 
                 // Buscar al dueno
@@ -590,14 +586,14 @@ private:
 
         cout << "\n[CONSTRUIR] === MENU DE CONSTRUCCION ===" << endl;
         cout << "[$] Dinero disponible: $" << jugador.dinero << endl;
-        cout << "\nMonopolios disponibles:" << endl;
+        cout << "\n Monopolios disponibles:" << endl;
 
         // Mostrar propiedades con monopolio
         vector<Propiedad*> propiedadesConstruibles;
         int contador = 1;
 
         for (const string& color : monopolios) {
-            cout << "\nColor " << color << ":" << endl;
+            cout << "\n Color " << color << ":" << endl;
 
             for (const string& nombreProp : jugador.propiedades) {
                 Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
@@ -704,7 +700,7 @@ private:
             int posicionAnterior = jugador.posicion;
             jugador.posicion = carta.valor;
             
-            cout << "Te mueves a la casilla " << carta.valor << endl;
+            cout << " Te mueves a la casilla " << carta.valor << endl;
             
             // Verificar si paso por SALIDA
             if (carta.valor == 0 || posicionAnterior > carta.valor) {
@@ -719,7 +715,7 @@ private:
             int posicionAnterior = jugador.posicion;
             jugador.posicion = (jugador.posicion - carta.valor + 40) % 40;
             
-            cout << "Retrocedes " << carta.valor << " casillas (de " 
+            cout << " Retrocedes " << carta.valor << " casillas (de " 
                  << posicionAnterior << " a " << jugador.posicion << ")" << endl;
             
             procesarCasilla(jugador);
@@ -757,11 +753,11 @@ private:
                              totalCasas, totalHoteles);
         }
         else if (carta.accion == "PAGAR_JUGADORES") {
-            cout << "Debes pagar $" << carta.valor << " a CADA jugador" << endl;
+            cout << " Debes pagar $" << carta.valor << " a CADA jugador" << endl;
             bancoPagarATodos(banco, jugador, jugadores, carta.valor);
         }
         else if (carta.accion == "MOVER_FERROCARRIL") {
-            cout << "Avanzas al ferrocarril mas cercano..." << endl;
+            cout << " Avanzas al ferrocarril mas cercano..." << endl;
             int ferrocarriles[] = {5, 15, 25, 35};  // Posiciones de ferrocarriles
             
             int distanciaMin = 40;
@@ -787,7 +783,7 @@ private:
             procesarCasilla(jugador);
         }
         else if (carta.accion == "MOVER_SERVICIO") {
-            cout << "Avanzas al servicio mas cercano..." << endl;
+            cout << " Avanzas al servicio mas cercano..." << endl;
             int servicios[] = {12, 28};  // Electric Company y Water Works
             
             int distanciaMin = 40;
@@ -853,7 +849,7 @@ private:
             int posicionAnterior = jugador.posicion;
             jugador.posicion = carta.valor;
             
-            cout << "🚶 Te mueves a la casilla " << carta.valor << " (SALIDA)" << endl;
+            cout << " Te mueves a la casilla " << carta.valor << " (SALIDA)" << endl;
             
             // Si es SALIDA (casilla 0), siempre cobra $200
             bancoPagarSalida(banco, jugador);
@@ -909,7 +905,7 @@ private:
             return;
         }
         
-        cout << "\n" << jugador.nombre << " esta en la CARCEL" << endl;
+        cout << "\n " << jugador.nombre << " esta en la CARCEL" << endl;
         cout << "Turnos: " << jugador.turnosCarcel << "/3" << endl;
         
         // Opcion 1: Usar carta
@@ -934,12 +930,12 @@ private:
         
         // Opcion 3: Esperar turno
         jugador.turnosCarcel++;
-        cout << "Esperas en carcel (turno " << jugador.turnosCarcel << "/3)" << endl;
+        cout << " Esperas en carcel (turno " << jugador.turnosCarcel << "/3)" << endl;
         
         if (jugador.turnosCarcel >= 3) {
             jugador.enCarcel = false;
             jugador.turnosCarcel = 0;
-            cout << "3 turnos completados - Sales automaticamente" << endl;
+            cout << " 3 turnos completados - Sales automaticamente" << endl;
         }
     }
     
@@ -978,18 +974,18 @@ private:
         // ===== MENU DE OPCIONES ANTES DE TIRAR =====
         bool continuarTurno = false;
         while (!continuarTurno) {
-            cout << "\n" << endl;
+            cout << "\n---------------------------------------" << endl;
             cout << "   ?QUE QUIERES HACER ?              " << endl;
-            cout << "=====================================" << endl;
+            cout << "-----------------------------------------" << endl;
             cout << " 1. [DADOS] Lanzar dados (continuar)     " << endl;
             cout << " 2. [CONSTRUIR]  Construir casas              " << endl;
             cout << " 3. [PROP] Ver mis propiedades           " << endl;
             cout << " 4. [UNDO] Deshacer ultima accion        " << endl;
-            cout << "=====================================" << endl;
+            cout << "-------------------------------------------" << endl;
 
             // Mostrar si hay estados guardados
             if (hayEstadosGuardados()) {
-                cout << "Estados guardados disponibles para deshacer" << endl;
+                cout << " Estados guardados disponibles para deshacer" << endl;
             }
 
             cout << "Opcion: ";
@@ -1010,7 +1006,7 @@ private:
             else if (opcion == 3) {
                 cout << "\n[PROP] === MIS PROPIEDADES ===" << endl;
                 cout << "[$] Dinero: $" << jugadorActual.dinero << endl;
-                cout << "Total propiedades: " << jugadorActual.propiedades.size() << endl;
+                cout << "  Total propiedades: " << jugadorActual.propiedades.size() << endl;
 
                 if (jugadorActual.propiedades.empty()) {
                     cout << "[ERROR] No tienes propiedades aun" << endl;
@@ -1025,9 +1021,9 @@ private:
 
                             if (prop != nullptr) {
                                 cout << "  [PROP] " << prop->getNombre()
-                                     << " | Color: " << prop->getColor()
-                                     << " | Casas: " << prop->getNumCasas()
-                                     << " | Alquiler: $" << prop->obtenerAlquiler() << endl;
+                                     << "  Color: " << prop->getColor()
+                                     << "  Casas: " << prop->getNumCasas()
+                                     << "  Alquiler: $" << prop->obtenerAlquiler() << endl;
                             }
                             else if (ferro != nullptr) {
                                 cout << ferro->getNombre() << endl;
@@ -1041,7 +1037,7 @@ private:
                     // Mostrar monopolios
                     vector<string> monopolios = obtenerMonopolios(jugadorActual);
                     if (!monopolios.empty()) {
-                        cout << "\nMONOPOLIOS COMPLETOS:" << endl;
+                        cout << "\n MONOPOLIOS COMPLETOS:" << endl;
                         for (const string& color : monopolios) {
                             cout << "  [OK] " << color << endl;
                         }
@@ -1064,7 +1060,7 @@ private:
         }
 
         // ===== LANZAR DADOS =====
-        cout << "\n[DADOS] Lanzando dados...";
+        cout << "\n[DADOS] Lanzando dados... (Presiona Enter para lanzarlos)";
         cin.ignore();
         cin.get();
         
@@ -1166,7 +1162,7 @@ void finalizarJuego() {
     cout << string(60, '=') << endl;
     
     for (size_t i = 0; i < ranking.size(); i++) {
-        string medalla = (i == 0)  ? "1" : (i == 1)  ? "2" : (i == 2)  ? "3" : "  ";
+        string medalla = (i == 0)  ? "1ST" : (i == 1)  ? "2ND" : (i == 2)  ? "3RD" : "  ";
         cout << medalla << " " << (i + 1) << ". " << ranking[i].first 
              << " - $" << ranking[i].second << endl;
     }
@@ -1202,7 +1198,7 @@ void finalizarJuego() {
         cout << "\n[INFO] ESTADO DE JUGADORES:" << endl;
         for (size_t i = 0; i < jugadores.size(); i++) {
             const Jugador& j = jugadores[i];
-            cout << (i == turnoActual  ? "" : "   ");
+            cout << (i == turnoActual  ? " " : "   ");
             cout << j.nombre << " - $" << j.dinero << " - Pos:" << j.posicion;
             if (j.enCarcel) cout << " [CARCEL]";
             if (j.estaQuebrado) cout << " [QUEBRADO]";
