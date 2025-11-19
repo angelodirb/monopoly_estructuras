@@ -8,7 +8,7 @@
 using namespace std;
 
 // **********************************
-// TAD DADO - Generador de números aleatorios
+// TAD DADO - Generador de numeros aleatorios
 // **********************************
 
 struct Dado {
@@ -16,8 +16,8 @@ struct Dado {
     int valor2;
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Se crea un dado con valores iniciales 0
+     * Precondicion: Ninguna
+     * Postcondicion: Se crea un dado con valores iniciales 0
      */
     Dado() : valor1(0), valor2(0) {}
 };
@@ -27,8 +27,8 @@ struct Dado {
 // **********************************
 
 /**
- * Precondición: Ninguna
- * Postcondición: Se generan dos valores aleatorios 1-6 en el dado
+ * Precondicion: Ninguna
+ * Postcondicion: Se generan dos valores aleatorios 1-6 en el dado
  */
 void lanzarDado(Dado& dado) {
     dado.valor1 = (rand() % 6) + 1;
@@ -39,49 +39,49 @@ void lanzarDado(Dado& dado) {
 }
 
 /**
- * Precondición: El dado debe haber sido lanzado
- * Postcondición: Retorna la suma de ambos dados
+ * Precondicion: El dado debe haber sido lanzado
+ * Postcondicion: Retorna la suma de ambos dados
  */
 int obtenerSuma(const Dado& dado) {
     return dado.valor1 + dado.valor2;
 }
 
 /**
- * Precondición: El dado debe haber sido lanzado
- * Postcondición: Retorna true si ambos dados tienen el mismo valor
+ * Precondicion: El dado debe haber sido lanzado
+ * Postcondicion: Retorna true si ambos dados tienen el mismo valor
  */
 bool esDoble(const Dado& dado) {
     return dado.valor1 == dado.valor2;
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Retorna el valor del primer dado
+ * Precondicion: Ninguna
+ * Postcondicion: Retorna el valor del primer dado
  */
 int obtenerValor1(const Dado& dado) {
     return dado.valor1;
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Retorna el valor del segundo dado
+ * Precondicion: Ninguna
+ * Postcondicion: Retorna el valor del segundo dado
  */
 int obtenerValor2(const Dado& dado) {
     return dado.valor2;
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Muestra informacion del último lanzamiento
+ * Precondicion: Ninguna
+ * Postcondicion: Muestra informacion del ultimo lanzamiento
  */
 void mostrarDado(const Dado& dado) {
-    cout << "\n=== INFORMACIÓN DEL DADO ===" << endl;
+    cout << "\n=== INFORMACION DEL DADO ===" << endl;
     cout << "Valor dado 1: " << dado.valor1 << endl;
     cout << "Valor dado 2: " << dado.valor2 << endl;
     cout << "Suma total: " << obtenerSuma(dado) << endl;
     
     if (esDoble(dado)) {
-        cout << "⭐ [!]DOBLE! Lanzarás de nuevo" << endl;
+        cout << "!DOBLE! Lanzaras de nuevo" << endl;
     } else {
         cout << "Movimiento normal" << endl;
     }
@@ -90,8 +90,8 @@ void mostrarDado(const Dado& dado) {
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Reinicia los valores del dado a 0
+ * Precondicion: Ninguna
+ * Postcondicion: Reinicia los valores del dado a 0
  */
 void reiniciarDado(Dado& dado) {
     dado.valor1 = 0;
@@ -99,8 +99,8 @@ void reiniciarDado(Dado& dado) {
 }
 
 /**
- * Precondición: El dado debe haber sido lanzado
- * Postcondición: Retorna descripción de la tirada en string
+ * Precondicion: El dado debe haber sido lanzado
+ * Postcondicion: Retorna descripcion de la tirada en string
  */
 string obtenerDescripcionLanzamiento(const Dado& dado) {
     string desc = "Tirada: [" + to_string(dado.valor1) + "] + [" + 
