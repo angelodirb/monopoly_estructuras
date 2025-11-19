@@ -9,7 +9,6 @@
 #include "cartas.h"
 #include "ColaCartas.h"
 #include "pila.h"
-#include "lista.h"
 #include "EstadoJuego.h"
 #include <vector>
 #include <iostream>
@@ -39,7 +38,7 @@ private:
 
     // ===== PILA DE ESTADOS PARA UNDO/DESHACER =====
     Pila<EstadoJuego> pilaEstados;
-    const int MAX_ESTADOS = 20;  // Límite para no saturar memoria
+    const int MAX_ESTADOS = 20;  // Limite para no saturar memoria
 
     // Control de carcel
     int turnosEnCarcelActual;
@@ -47,8 +46,8 @@ private:
     // ===== FUNCIONES PRIVADAS =====
 
     /**
-     * Precondición: Juego inicializado con jugadores y tablero
-     * Postcondición: Captura el estado actual completo del juego
+     * Precondicion: Juego inicializado con jugadores y tablero
+     * Postcondicion: Captura el estado actual completo del juego
      */
     EstadoJuego capturarEstadoActual(const string& descripcion) {
         EstadoJuego estado;
@@ -65,7 +64,7 @@ private:
                 EstadoPropiedad ep(prop->getNombre(), prop->getDuenio(), prop->getNumCasas());
                 estado.propiedades.push_back(ep);
             } else {
-                // También guardar ferrocarriles y servicios
+                // Tambien guardar ferrocarriles y servicios
                 Ferrocarril* ferro = dynamic_cast<Ferrocarril*>(actual);
                 Servicio* serv = dynamic_cast<Servicio*>(actual);
 
@@ -90,8 +89,8 @@ private:
     }
 
     /**
-     * Precondición: Estado válido capturado previamente
-     * Postcondición: Restaura el juego al estado guardado
+     * Precondicion: Estado valido capturado previamente
+     * Postcondicion: Restaura el juego al estado guardado
      */
     void restaurarEstado(const EstadoJuego& estado) {
         cout << "\n[UNDO] Restaurando estado: " << estado.descripcionAccion << endl;
@@ -130,8 +129,8 @@ private:
     }
 
     /**
-     * Precondición: Ninguna
-     * Postcondición: Guarda el estado actual en la pila, limitando el tamaño
+     * Precondicion: Ninguna
+     * Postcondicion: Guarda el estado actual en la pila, limitando el tamaño
      */
     void guardarEstado(const string& descripcion) {
         // Capturar estado actual
@@ -140,26 +139,31 @@ private:
         // Guardar en pila
         pilaEstados = anxPila(pilaEstados, estado);
 
-        // Contar estados en la pila usando longLista en lugar de eliminar
-        int contador = longLista(pilaEstados);
+        // Contar estados en la pila
+        int contador = 0;
+        Pila<EstadoJuego> temp = pilaEstados;
+        while (!vaciaPila(temp)) {
+            contador++;
+            temp = elimPila(temp);
+        }
 
-        // Si excede el límite, eliminar el estado más antiguo
-        // (esto requeriría una pila con límite, por simplicidad dejamos crecer)
+        // Si excede el limite, eliminar el estado mas antiguo
+        // (esto requeriria una pila con limite, por simplicidad dejamos crecer)
 
         cout << "[PILA] Estado guardado: " << descripcion << " (Total estados: " << contador << ")" << endl;
     }
 
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna true si hay estados guardados para deshacer
+     * Precondicion: Ninguna
+     * Postcondicion: Retorna true si hay estados guardados para deshacer
      */
     bool hayEstadosGuardados() const {
         return !vaciaPila(pilaEstados);
     }
 
     /**
-     * Precondición: Hay al menos un estado en la pila
-     * Postcondición: Deshace la última acción restaurando el estado previo
+     * Precondicion: Hay al menos un estado en la pila
+     * Postcondicion: Deshace la ultima accion restaurando el estado previo
      */
     bool deshacerUltimaAccion() {
         if (vaciaPila(pilaEstados)) {
@@ -167,7 +171,7 @@ private:
             return false;
         }
 
-        // Obtener el último estado
+        // Obtener el ultimo estado
         EstadoJuego estadoPrevio = infoPila(pilaEstados);
 
         // Restaurar el estado
@@ -176,7 +180,7 @@ private:
         // Eliminar de la pila
         pilaEstados = elimPila(pilaEstados);
 
-        cout << "[OK] Acción deshecha exitosamente" << endl;
+        cout << "[OK] Accion deshecha exitosamente" << endl;
         return true;
     }
 
@@ -280,7 +284,7 @@ private:
         
         string nombreCasilla = casilla->getNombre();
         
-        cout << "\n📍 " << jugador.nombre << " cae en: " << nombreCasilla << endl;
+        cout << "\n" << jugador.nombre << " cae en: " << nombreCasilla << endl;
         
         // ===== CASILLAS ESPECIALES =====
         
@@ -352,7 +356,7 @@ private:
             // Tiene dueno - Cobrar alquiler
             else if (duenio != jugador.nombre) {
                 int alquiler = prop->obtenerAlquiler();
-                cout << "\n💸 Esta propiedad pertenece a " << duenio << endl;
+                cout << "\n Esta propiedad pertenece a " << duenio << endl;
                 cout << "[$] Debes pagar alquiler: $" << alquiler << endl;
 
                 // Buscar al dueno en la lista de jugadores
@@ -383,7 +387,7 @@ private:
 
         // ===== FERROCARRIL =====
         else if (ferro != nullptr) {
-            cout << "🚂 FERROCARRIL: " << casilla->getNombre() << endl;
+            cout << "FERROCARRIL: " << casilla->getNombre() << endl;
             ferro->activar();
 
             string duenio = ferro->getDuenio();
@@ -410,7 +414,7 @@ private:
             // Tiene dueno - Cobrar alquiler (basico por ahora)
             else if (duenio != jugador.nombre) {
                 int alquiler = 25;  // Alquiler base de ferrocarril
-                cout << "\n💸 Este ferrocarril pertenece a " << duenio << endl;
+                cout << "\n Este ferrocarril pertenece a " << duenio << endl;
                 cout << "[$] Debes pagar alquiler: $" << alquiler << endl;
 
                 // Buscar al dueno
@@ -440,7 +444,7 @@ private:
 
         // ===== SERVICIO =====
         else if (serv != nullptr) {
-            cout << "⚡ SERVICIO: " << casilla->getNombre() << endl;
+            cout << "SERVICIO: " << casilla->getNombre() << endl;
             serv->activar();
 
             string duenio = serv->getDuenio();
@@ -468,7 +472,7 @@ private:
             else if (duenio != jugador.nombre) {
                 int multiplicador = 4;  // 4x el valor de los dados (simplificado)
                 int alquiler = obtenerSuma(dado) * multiplicador;
-                cout << "\n💸 Este servicio pertenece a " << duenio << endl;
+                cout << "\nEste servicio pertenece a " << duenio << endl;
                 cout << "[$] Debes pagar alquiler: $" << alquiler << " (dados × " << multiplicador << ")" << endl;
 
                 // Buscar al dueno
@@ -586,14 +590,14 @@ private:
 
         cout << "\n[CONSTRUIR] === MENU DE CONSTRUCCION ===" << endl;
         cout << "[$] Dinero disponible: $" << jugador.dinero << endl;
-        cout << "\n🎨 Monopolios disponibles:" << endl;
+        cout << "\nMonopolios disponibles:" << endl;
 
         // Mostrar propiedades con monopolio
         vector<Propiedad*> propiedadesConstruibles;
         int contador = 1;
 
         for (const string& color : monopolios) {
-            cout << "\n📍 Color " << color << ":" << endl;
+            cout << "\nColor " << color << ":" << endl;
 
             for (const string& nombreProp : jugador.propiedades) {
                 Casilla* casilla = buscarPropiedadEnTablero(nombreProp);
@@ -601,8 +605,8 @@ private:
                     Propiedad* prop = dynamic_cast<Propiedad*>(casilla);
                     if (prop != nullptr && prop->getColor() == color) {
                         cout << "  " << contador << ". " << prop->getNombre()
-                             << " | Casas: " << prop->getNumCasas()
-                             << " | Costo construccion: $50" << endl;
+                             << "  Casas: " << prop->getNumCasas()
+                             << "  Costo construccion: $50" << endl;
                         propiedadesConstruibles.push_back(prop);
                         contador++;
                     }
@@ -700,7 +704,7 @@ private:
             int posicionAnterior = jugador.posicion;
             jugador.posicion = carta.valor;
             
-            cout << "🚶 Te mueves a la casilla " << carta.valor << endl;
+            cout << "Te mueves a la casilla " << carta.valor << endl;
             
             // Verificar si paso por SALIDA
             if (carta.valor == 0 || posicionAnterior > carta.valor) {
@@ -715,7 +719,7 @@ private:
             int posicionAnterior = jugador.posicion;
             jugador.posicion = (jugador.posicion - carta.valor + 40) % 40;
             
-            cout << "↩️ Retrocedes " << carta.valor << " casillas (de " 
+            cout << "Retrocedes " << carta.valor << " casillas (de " 
                  << posicionAnterior << " a " << jugador.posicion << ")" << endl;
             
             procesarCasilla(jugador);
@@ -753,11 +757,11 @@ private:
                              totalCasas, totalHoteles);
         }
         else if (carta.accion == "PAGAR_JUGADORES") {
-            cout << "💸 Debes pagar $" << carta.valor << " a CADA jugador" << endl;
+            cout << "Debes pagar $" << carta.valor << " a CADA jugador" << endl;
             bancoPagarATodos(banco, jugador, jugadores, carta.valor);
         }
         else if (carta.accion == "MOVER_FERROCARRIL") {
-            cout << "🚂 Avanzas al ferrocarril mas cercano..." << endl;
+            cout << "Avanzas al ferrocarril mas cercano..." << endl;
             int ferrocarriles[] = {5, 15, 25, 35};  // Posiciones de ferrocarriles
             
             int distanciaMin = 40;
@@ -783,7 +787,7 @@ private:
             procesarCasilla(jugador);
         }
         else if (carta.accion == "MOVER_SERVICIO") {
-            cout << "⚡ Avanzas al servicio mas cercano..." << endl;
+            cout << "Avanzas al servicio mas cercano..." << endl;
             int servicios[] = {12, 28};  // Electric Company y Water Works
             
             int distanciaMin = 40;
@@ -905,7 +909,7 @@ private:
             return;
         }
         
-        cout << "\n🔒 " << jugador.nombre << " esta en la CARCEL" << endl;
+        cout << "\n" << jugador.nombre << " esta en la CARCEL" << endl;
         cout << "Turnos: " << jugador.turnosCarcel << "/3" << endl;
         
         // Opcion 1: Usar carta
@@ -930,12 +934,12 @@ private:
         
         // Opcion 3: Esperar turno
         jugador.turnosCarcel++;
-        cout << "⏰ Esperas en carcel (turno " << jugador.turnosCarcel << "/3)" << endl;
+        cout << "Esperas en carcel (turno " << jugador.turnosCarcel << "/3)" << endl;
         
         if (jugador.turnosCarcel >= 3) {
             jugador.enCarcel = false;
             jugador.turnosCarcel = 0;
-            cout << "⏰ 3 turnos completados - Sales automaticamente" << endl;
+            cout << "3 turnos completados - Sales automaticamente" << endl;
         }
     }
     
@@ -952,7 +956,7 @@ private:
         Jugador& jugadorActual = jugadores[turnoActual];
         
         if (jugadorActual.estaQuebrado) {
-            cout << "\n⏭️ " << jugadorActual.nombre << " esta quebrado - Turno saltado" << endl;
+            cout << "\n " << jugadorActual.nombre << " esta quebrado - Turno saltado" << endl;
             turnoActual++;
             return;
         }
@@ -974,18 +978,18 @@ private:
         // ===== MENU DE OPCIONES ANTES DE TIRAR =====
         bool continuarTurno = false;
         while (!continuarTurno) {
-            cout << "\n---------------------------------------" << endl;
+            cout << "\n" << endl;
             cout << "   ?QUE QUIERES HACER ?              " << endl;
-            cout << "-----------------------------------------" << endl;
+            cout << "=====================================" << endl;
             cout << " 1. [DADOS] Lanzar dados (continuar)     " << endl;
             cout << " 2. [CONSTRUIR]  Construir casas              " << endl;
             cout << " 3. [PROP] Ver mis propiedades           " << endl;
-            cout << " 4. [UNDO] Deshacer última acción        " << endl;
-            cout << "-------------------------------------------" << endl;
+            cout << " 4. [UNDO] Deshacer ultima accion        " << endl;
+            cout << "=====================================" << endl;
 
             // Mostrar si hay estados guardados
             if (hayEstadosGuardados()) {
-                cout << "💾 Estados guardados disponibles para deshacer" << endl;
+                cout << "Estados guardados disponibles para deshacer" << endl;
             }
 
             cout << "Opcion: ";
@@ -1006,7 +1010,7 @@ private:
             else if (opcion == 3) {
                 cout << "\n[PROP] === MIS PROPIEDADES ===" << endl;
                 cout << "[$] Dinero: $" << jugadorActual.dinero << endl;
-                cout << "🏘️  Total propiedades: " << jugadorActual.propiedades.size() << endl;
+                cout << "Total propiedades: " << jugadorActual.propiedades.size() << endl;
 
                 if (jugadorActual.propiedades.empty()) {
                     cout << "[ERROR] No tienes propiedades aun" << endl;
@@ -1026,10 +1030,10 @@ private:
                                      << " | Alquiler: $" << prop->obtenerAlquiler() << endl;
                             }
                             else if (ferro != nullptr) {
-                                cout << "  🚂 " << ferro->getNombre() << endl;
+                                cout << ferro->getNombre() << endl;
                             }
                             else if (serv != nullptr) {
-                                cout << "  ⚡ " << serv->getNombre() << endl;
+                                cout << serv->getNombre() << endl;
                             }
                         }
                     }
@@ -1037,7 +1041,7 @@ private:
                     // Mostrar monopolios
                     vector<string> monopolios = obtenerMonopolios(jugadorActual);
                     if (!monopolios.empty()) {
-                        cout << "\n🎨 MONOPOLIOS COMPLETOS:" << endl;
+                        cout << "\nMONOPOLIOS COMPLETOS:" << endl;
                         for (const string& color : monopolios) {
                             cout << "  [OK] " << color << endl;
                         }
@@ -1046,12 +1050,12 @@ private:
                 cout << "=========================" << endl;
             }
             else if (opcion == 4) {
-                // Deshacer última acción
+                // Deshacer ultima accion
                 if (deshacerUltimaAccion()) {
-                    cout << "\n[OK] !Acción deshecha! Volviendo al menú..." << endl;
+                    cout << "\n[OK] !Accion deshecha! Volviendo al menu..." << endl;
                     mostrarEstadoJugador(jugadorActual);
                 } else {
-                    cout << "[ERROR] No se pudo deshacer la acción" << endl;
+                    cout << "[ERROR] No se pudo deshacer la accion" << endl;
                 }
             }
             else {
@@ -1101,7 +1105,7 @@ private:
         }
         
         if (rondaActual > 50) {
-            cout << "\n⏰ Se alcanzo el limite de 50 rondas!" << endl;
+            cout << "\n Se alcanzo el limite de 50 rondas!" << endl;
             return true;
         }
         
@@ -1162,7 +1166,7 @@ void finalizarJuego() {
     cout << string(60, '=') << endl;
     
     for (size_t i = 0; i < ranking.size(); i++) {
-        string medalla = (i == 0)  ? "🥇" : (i == 1)  ? "🥈" : (i == 2)  ? "🥉" : "  ";
+        string medalla = (i == 0)  ? "1" : (i == 1)  ? "2" : (i == 2)  ? "3" : "  ";
         cout << medalla << " " << (i + 1) << ". " << ranking[i].first 
              << " - $" << ranking[i].second << endl;
     }
@@ -1198,7 +1202,7 @@ void finalizarJuego() {
         cout << "\n[INFO] ESTADO DE JUGADORES:" << endl;
         for (size_t i = 0; i < jugadores.size(); i++) {
             const Jugador& j = jugadores[i];
-            cout << (i == turnoActual  ? "👉 " : "   ");
+            cout << (i == turnoActual  ? "" : "   ");
             cout << j.nombre << " - $" << j.dinero << " - Pos:" << j.posicion;
             if (j.enCarcel) cout << " [CARCEL]";
             if (j.estaQuebrado) cout << " [QUEBRADO]";
@@ -1227,7 +1231,7 @@ public:
         srand(time(0));
         banco = Banco();
         sistemaCartas = SistemaCartas();
-        pilaEstados = crearPila<EstadoJuego>();  // Inicializar pila vacía
+        pilaEstados = crearPila<EstadoJuego>();  // Inicializar pila vacia
     }
     
     /**
