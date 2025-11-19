@@ -23,7 +23,7 @@ public:
     void comprar(string jugador) {
         if (duenio == "") {
             duenio = jugador;
-            cout << jugador << " compró " << nombre << " por $" << precio << endl;
+            cout << jugador << " compro " << nombre << " por $" << precio << endl;
         } else {
             cout << "Esta propiedad ya tiene dueño: " << duenio << endl;
         }
@@ -34,7 +34,7 @@ public:
             cout << "Propiedad sin dueño: " << nombre << " (Precio $" << precio << ", Color " << color << ")" << endl;
         } else {
             int renta = obtenerAlquiler();
-            cout << "Has caído en la propiedad de " << duenio << ": " << nombre
+            cout << "Has caido en la propiedad de " << duenio << ": " << nombre
                  << " (" << color << ") - Debes pagar $" << renta << endl;
         }
     }
@@ -48,11 +48,11 @@ public:
         if (numCasas < 5) {
             numCasas++;
             if (numCasas < 5)
-                cout << duenio << " construyó una casa en " << nombre << ". Total casas: " << numCasas << endl;
+                cout << duenio << " construyo una casa en " << nombre << ". Total casas: " << numCasas << endl;
             else
-                cout << duenio << " construyó un HOTEL en " << nombre << "!" << endl;
+                cout << duenio << " construyo un HOTEL en " << nombre << "!" << endl;
         } else {
-            cout << "Ya tienes el máximo (hotel) en esta propiedad." << endl;
+            cout << "Ya tienes el maximo (hotel) en esta propiedad." << endl;
         }
     }
 
@@ -73,35 +73,35 @@ public:
     }
 
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna el precio base de la propiedad
+     * Precondicion: Ninguna
+     * Postcondicion: Retorna el precio base de la propiedad
      */
     int getPrecio() const {
         return precio;
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna el dueño de la propiedad
+     * Precondicion: Ninguna
+     * Postcondicion: Retorna el dueño de la propiedad
      */
     string getDuenio() const {
         return duenio;
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna el número de casas construidas
+     * Precondicion: Ninguna
+     * Postcondicion: Retorna el numero de casas construidas
      */
     int getNumCasas() const {
         return numCasas;
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna el valor de las mejoras (casas/hoteles)
+     * Precondicion: Ninguna
+     * Postcondicion: Retorna el valor de las mejoras (casas/hoteles)
      */
     int getValorMejoras() const {
-        // Aproximación: cada casa vale 50% del costo de construcción
+        // Aproximacion: cada casa vale 50% del costo de construccion
         // Hotel vale el doble
         if (numCasas < 5) {
             return numCasas * 50;  // $50 por casa
@@ -111,16 +111,16 @@ public:
     }
     
     /**
-     * Precondición: nombre de jugador válido
-     * Postcondición: Establece el dueño de la propiedad
+     * Precondicion: nombre de jugador valido
+     * Postcondicion: Establece el dueño de la propiedad
      */
     void setDuenio(const string& nuevoDuenio) {
         duenio = nuevoDuenio;
     }
 
     /**
-     * Precondición: numCasas >= 0 && numCasas <= 5
-     * Postcondición: Establece el número de casas/hotel en la propiedad
+     * Precondicion: numCasas >= 0 && numCasas <= 5
+     * Postcondicion: Establece el numero de casas/hotel en la propiedad
      */
     void setNumCasas(int nuevasCasas) {
         if (nuevasCasas >= 0 && nuevasCasas <= 5) {

@@ -18,7 +18,7 @@ public:
 
     // Método virtual para comportamientos polimórficos
     virtual void activar() {
-        cout << "Has caído en " << nombre << "." << endl;
+        cout << "Has caido en " << nombre << "." << endl;
     }
 };
 

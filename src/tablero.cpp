@@ -38,7 +38,7 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
             archivo >> costoCasa;
             archivo.ignore();
 
-            // Asignar color según el nombre de la propiedad
+            // Asignar color segun el nombre de la propiedad
             string color = "";
             if (nombreCasilla == "MEDITERRANEAN AVENUE" || nombreCasilla == "BALTIC AVENUE") {
                 color = "MARRON";
@@ -136,7 +136,7 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
             archivo >> costoCasa;
             archivo.ignore();
 
-            // Asignar color según el nombre de la propiedad
+            // Asignar color segun el nombre de la propiedad
             string color = "";
             if (nombreCasilla == "MEDITERRANEAN AVENUE" || nombreCasilla == "BALTIC AVENUE") {
                 color = "MARRON";
@@ -210,11 +210,11 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
 }
 
 // ───────────────────────────────────────────────
-// Funciones de visualización
+// Funciones de visualizacion
 // ───────────────────────────────────────────────
 void mostrarResumenTablero(const ListaCircular& tablero) {
     if (vaciaLista(tablero)) {
-        cout << "El tablero está vacío" << endl;
+        cout << "El tablero esta vacio" << endl;
         return;
     }
     
@@ -235,7 +235,7 @@ void mostrarResumenTablero(const ListaCircular& tablero) {
 
 void mostrarEstadisticasTablero(const ListaCircular& tablero) {
     if (vaciaLista(tablero)) {
-        cout << "El tablero está vacío" << endl;
+        cout << "El tablero esta vacio" << endl;
         return;
     }
     
@@ -259,7 +259,7 @@ void mostrarEstadisticasTablero(const ListaCircular& tablero) {
         actual = actual->siguiente;
     } while (actual != getCabeza(tablero));
     
-    cout << "\n=== ESTADÍSTICAS DEL TABLERO ===" << endl;
+    cout << "\n=== ESTADISTICAS DEL TABLERO ===" << endl;
     cout << "Total casillas: " << size(tablero) << endl;
     cout << "Propiedades: " << propiedades << endl;
     cout << "Ferrocarriles: " << ferrocarriles << endl;
@@ -288,7 +288,7 @@ bool esPropiedadComprable(const std::string& nombre) {
 
 bool registrarPropiedadesDelTablero(RegistroPropiedades& registro, const ListaCircular& tablero) {
     if (vaciaLista(tablero)) {
-        std::cout << "Error: Tablero vacío" << std::endl;
+        std::cout << "Error: Tablero vacio" << std::endl;
         return false;
     }
     
@@ -310,7 +310,7 @@ bool registrarPropiedadesDelTablero(RegistroPropiedades& registro, const ListaCi
         actual = actual->siguiente;
     } while (actual != getCabeza(tablero));
     
-    std::cout << "[OK] " << registradas << " propiedades registradas automáticamente" << std::endl;
+    std::cout << "[OK] " << registradas << " propiedades registradas automaticamente" << std::endl;
     registro.mostrarEstadisticas();
     
     return registradas > 0;

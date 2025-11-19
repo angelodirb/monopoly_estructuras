@@ -22,8 +22,8 @@ private:
     
 public:
     /**
-     * Precondición: capacidad debe ser > 0
-     * Postcondición: Se crea un registro vacío con la capacidad especificada
+     * Precondicion: capacidad debe ser > 0
+     * Postcondicion: Se crea un registro vacio con la capacidad especificada
      */
     RegistroPropiedades(int capacidad = 53) : totalPropiedades(0) {
         tabla = crearTablaHash<const char*, Casilla*>(capacidad);
@@ -31,18 +31,18 @@ public:
     }
     
     /**
-     * Precondición: nombre debe ser único, propiedad debe ser válida
-     * Postcondición: La propiedad se registra en la tabla hash, retorna true si exitoso
+     * Precondicion: nombre debe ser unico, propiedad debe ser valida
+     * Postcondicion: La propiedad se registra en la tabla hash, retorna true si exitoso
      */
     bool registrarPropiedad(const std::string& nombre, Casilla* propiedad) {
         if (nombre.empty() || propiedad == nullptr) {
-            std::cout << "Error: Datos inválidos para registrar propiedad" << std::endl;
+            std::cout << "Error: Datos invalidos para registrar propiedad" << std::endl;
             return false;
         }
         
         // Verificar si ya existe
         if (existeTablaHash(tabla, nombre.c_str())) {
-            std::cout << "Propiedad '" << nombre << "' ya está registrada" << std::endl;
+            std::cout << "Propiedad '" << nombre << "' ya esta registrada" << std::endl;
             return false;
         }
         
@@ -55,8 +55,8 @@ public:
     }
     
     /**
-     * Precondición: nombre no debe estar vacío
-     * Postcondición Retorna puntero a la propiedad si existe, nullptr si no
+     * Precondicion: nombre no debe estar vacio
+     * Postcondicion Retorna puntero a la propiedad si existe, nullptr si no
      */
     Casilla* buscarPropiedad(const std::string& nombre) const {
         if (nombre.empty()) {
@@ -76,8 +76,8 @@ public:
     }
     
     /**
-     * Precondición: nombre no debe estar vacío
-     * Postcondición: Retorna true si la propiedad existe en el registro
+     * Precondicion: nombre no debe estar vacio
+     * Postcondicion: Retorna true si la propiedad existe en el registro
      * 
      */
     bool existePropiedad(const std::string& nombre) const {
@@ -86,8 +86,8 @@ public:
     }
     
     /**
-     * Precondición: nombre debe existir en el registro
-     * Postcondición: Elimina la propiedad del registro, retorna true si exitoso
+     * Precondicion: nombre debe existir en el registro
+     * Postcondicion: Elimina la propiedad del registro, retorna true si exitoso
      */
     bool eliminarPropiedad(const std::string& nombre) {
         if (!existePropiedad(nombre)) {
@@ -103,16 +103,16 @@ public:
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna el número total de propiedades registradas
+     * Precondicion: Ninguna
+     * Postcondicion: Retorna el numero total de propiedades registradas
      */
     int getTotalPropiedades() const {
         return totalPropiedades;
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Muestra estadisticas detalladas del registro
+     * Precondicion: Ninguna
+     * Postcondicion: Muestra estadisticas detalladas del registro
      */
     void mostrarEstadisticas() const {
         std::cout << "\n=== REGISTRO DE PROPIEDADES ===" << std::endl;
@@ -122,8 +122,8 @@ public:
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Lista todas las propiedades registradas por tipo
+     * Precondicion: Ninguna
+     * Postcondicion: Lista todas las propiedades registradas por tipo
      */
     void listarPropiedadesPorTipo() const {
         std::cout << "\n=== PROPIEDADES POR TIPO ===" << std::endl;
@@ -132,8 +132,8 @@ public:
         std::vector<std::string> ferrocarriles;
         std::vector<std::string> servicios;
         
-        // Recorrer tabla hash para clasificar (implementación simplificada)
-        // En implementación completa se recorrería la tabla hash interna
+        // Recorrer tabla hash para clasificar (implementacion simplificada)
+        // En implementacion completa se recorreria la tabla hash interna
         
         std::cout << "Propiedades normales: " << propiedades.size() << std::endl;
         std::cout << "Ferrocarriles: " << ferrocarriles.size() << std::endl;
@@ -143,13 +143,13 @@ public:
     }
     
     /**
-     * Precondición: color no debe estar vacío
-     * Postcondición: Retorna lista de propiedades del color especificado
+     * Precondicion: color no debe estar vacio
+     * Postcondicion: Retorna lista de propiedades del color especificado
      */
     std::vector<std::string> buscarPorColor(const std::string& color) const {
         std::vector<std::string> propiedadesColor;
         
-        // Implementación simplificada - en versión completa se recorrería la tabla hash
+        // Implementacion simplificada - en version completa se recorreria la tabla hash
         std::cout << "Buscando propiedades de color: " << color << std::endl;
         std::cout << "Encontradas: " << propiedadesColor.size() << " propiedades" << std::endl;
         
@@ -157,13 +157,13 @@ public:
     }
     
     /**
-     * Precondición: jugador no debe estar vacío
-     * Postcondición: Retorna lista de propiedades del jugador especificado
+     * Precondicion: jugador no debe estar vacio
+     * Postcondicion: Retorna lista de propiedades del jugador especificado
      */
     std::vector<std::string> buscarPorDueno(const std::string& jugador) const {
         std::vector<std::string> propiedadesJugador;
         
-        // Implementación simplificada - en versión completa se verificaría cada propiedad
+        // Implementacion simplificada - en version completa se verificaria cada propiedad
         std::cout << "Buscando propiedades de: " << jugador << std::endl;
         std::cout << "Encontradas: " << propiedadesJugador.size() << " propiedades" << std::endl;
         
@@ -171,13 +171,13 @@ public:
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna lista de propiedades sin dueño
+     * Precondicion: Ninguna
+     * Postcondicion: Retorna lista de propiedades sin dueño
      */
     std::vector<std::string> buscarPropiedadesDisponibles() const {
         std::vector<std::string> disponibles;
         
-        // Implementación simplificada - en versión completa se verificaría cada propiedad
+        // Implementacion simplificada - en version completa se verificaria cada propiedad
         std::cout << "Buscando propiedades disponibles..." << std::endl;
         std::cout << "Encontradas: " << disponibles.size() << " propiedades disponibles" << std::endl;
         
@@ -185,8 +185,8 @@ public:
     }
     
     /**
-     * Precondición: casilla debe ser válida y ser una propiedad
-     * Postcondición: Retorna informacion detallada de la propiedad
+     * Precondicion: casilla debe ser valida y ser una propiedad
+     * Postcondicion: Retorna informacion detallada de la propiedad
      */
     void mostrarDetallesPropiedad(const std::string& nombre) const {
         Casilla* casilla = buscarPropiedad(nombre);
@@ -208,10 +208,10 @@ public:
             prop->mostrarInfo();
         } else if (ferro != nullptr) {
             std::cout << "Tipo: Ferrocarril" << std::endl;
-            ferro->activar(); // Mostrar informacion básica
+            ferro->activar(); // Mostrar informacion basica
         } else if (serv != nullptr) {
             std::cout << "Tipo: Servicio" << std::endl;
-            serv->activar(); // Mostrar informacion básica
+            serv->activar(); // Mostrar informacion basica
         } else {
             std::cout << "Tipo: Casilla especial" << std::endl;
             casilla->activar();
@@ -221,8 +221,8 @@ public:
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Valida la integridad del registro
+     * Precondicion: Ninguna
+     * Postcondicion: Valida la integridad del registro
      */
     //int elementos = tamañoTablaHash(tabla);
     bool validarIntegridad() const {
@@ -247,8 +247,8 @@ public:
 }
 
     /**
-     * Precondición: Ninguna
-     * Postcondición: Libera todos los recursos del registro
+     * Precondicion: Ninguna
+     * Postcondicion: Libera todos los recursos del registro
      */
     void limpiarRegistro() {
         liberarTablaHash(tabla);
@@ -258,8 +258,8 @@ public:
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Destructor que libera recursos
+     * Precondicion: Ninguna
+     * Postcondicion: Destructor que libera recursos
      */
     ~RegistroPropiedades() {
         if (tabla != nullptr) {
@@ -273,14 +273,14 @@ public:
 // **********************************
 
 /**
- * Precondición: nombre no debe estar vacío
- * Postcondición: Retorna true si el nombre corresponde a una propiedad comprable
+ * Precondicion: nombre no debe estar vacio
+ * Postcondicion: Retorna true si el nombre corresponde a una propiedad comprable
  */
 bool esPropiedadComprable(const std::string& nombre);
 
 /**
- * Precondición: registro y tablero deben estar inicializados
- * Postcondición: Registra automáticamente todas las propiedades del tablero
+ * Precondicion: registro y tablero deben estar inicializados
+ * Postcondicion: Registra automaticamente todas las propiedades del tablero
  */
 bool registrarPropiedadesDelTablero(RegistroPropiedades& registro, const ListaCircular& tablero);
 

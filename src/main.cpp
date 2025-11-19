@@ -15,8 +15,8 @@ using namespace std;
 // **********************************
 
 /**
- * Precondición: Ninguna
- * Postcondición: Muestra el menú principal del juego
+ * Precondicion: Ninguna
+ * Postcondicion: Muestra el menu principal del juego
  */
 void mostrarMenuPrincipal() {
     cout << "\n" << string(50, '=') << endl;
@@ -31,8 +31,8 @@ void mostrarMenuPrincipal() {
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Muestra el menú de pruebas de TADs
+ * Precondicion: Ninguna
+ * Postcondicion: Muestra el menu de pruebas de TADs
  */
 void mostrarMenuPruebas() {
     cout << "\n" << string(50, '=') << endl;
@@ -48,8 +48,8 @@ void mostrarMenuPruebas() {
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Ejecuta pruebas del sistema de tabla hash
+ * Precondicion: Ninguna
+ * Postcondicion: Ejecuta pruebas del sistema de tabla hash
  */
 void probarTablaHash() {
     cout << "\n[TEST] === PRUEBA TABLA HASH DE PROPIEDADES ===" << endl;
@@ -57,7 +57,7 @@ void probarTablaHash() {
     RegistroPropiedades registro(53);
     
     // Cargar tablero para prueba
-    ListaCircular tablero = cargarTableroDesdeArchivo("src/Casillas.txt");
+    ListaCircular tablero = cargarTableroDesdeArchivo("Casillas.txt");
     
     if (!vaciaLista(tablero)) {
         cout << "\n--- Registrando propiedades del tablero ---" << endl;
@@ -83,8 +83,8 @@ void probarTablaHash() {
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Ejecuta pruebas del sistema de cartas
+ * Precondicion: Ninguna
+ * Postcondicion: Ejecuta pruebas del sistema de cartas
  */
 void probarSistemaCartas() {    
     cout << "\n[TEST] === PRUEBA SISTEMA DE CARTAS (COLAS) ===" << endl;
@@ -123,8 +123,8 @@ void probarSistemaCartas() {
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Ejecuta pruebas del TAD Jugador
+ * Precondicion: Ninguna
+ * Postcondicion: Ejecuta pruebas del TAD Jugador
  */
 void probarTADJugador() {
     cout << "\n[TEST] === PRUEBA TAD JUGADOR ===" << endl;
@@ -160,8 +160,8 @@ void probarTADJugador() {
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Ejecuta pruebas de carga de tablero
+ * Precondicion: Ninguna
+ * Postcondicion: Ejecuta pruebas de carga de tablero
  */
 void probarTablero() {
     cout << "\n[TEST] === PRUEBA CARGA DE TABLERO (LISTA CIRCULAR) ===" << endl;
@@ -192,12 +192,12 @@ void probarTablero() {
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Muestra informacion del proyecto
+ * Precondicion: Ninguna
+ * Postcondicion: Muestra informacion del proyecto
  */
 void mostrarInformacionProyecto() {
     cout << "\n" << string(60, '=') << endl;
-    cout << "[INFO] INFORMACIÓN DEL PROYECTO" << endl;
+    cout << "[INFO] INFORMACION DEL PROYECTO" << endl;
     cout << string(60, '=') << endl;
     cout << "Proyecto: Monopoly C++" << endl;
     cout << "Materia: Estructuras de Datos" << endl;
@@ -205,10 +205,10 @@ void mostrarInformacionProyecto() {
     cout << "Fecha: Octubre 2025" << endl;
     cout << "\n[DATOS] ESTRUCTURAS DE DATOS IMPLEMENTADAS:" << endl;
     cout << "  [OK] Lista Circular (Tablero)" << endl;
-    cout << "  [OK] Jerarquía Polimórfica (Casillas)" << endl;
+    cout << "  [OK] Jerarquia Polimorfica (Casillas)" << endl;
     cout << "  [OK] Tabla Hash (Registro de Propiedades)" << endl;
     cout << "  [OK] Cola (Sistema de Cartas)" << endl;
-    // Eliminada la mención a Pila/Undo
+    // Eliminada la mencion a Pila/Undo
     cout << "  [OK] TAD Jugador" << endl;
     cout << "  [OK] TAD Juego (con funciones del Banco)" << endl;
     cout << "\n>>> FUNCIONALIDADES:" << endl;
@@ -216,13 +216,13 @@ void mostrarInformacionProyecto() {
     cout << "  [OK] Manejo de cartas con colas" << endl;
     cout << "  [OK] Registro eficiente de propiedades" << endl;
     cout << "  [OK] Funciones del banco integradas" << endl;
-    cout << "  [OK] Documentación con pre/post condiciones" << endl;
+    cout << "  [OK] Documentacion con pre/post condiciones" << endl;
     cout << string(60, '=') << endl;
 }
 
 /**
- * Precondición: Ninguna
- * Postcondición: Ejecuta el loop principal del programa
+ * Precondicion: Ninguna
+ * Postcondicion: Ejecuta el loop principal del programa
  */
 int main() {
     cout << ">>> ===== MONOPOLY C++ =====" << endl;
