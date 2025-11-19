@@ -20,7 +20,7 @@ struct Dato {
 template <typename L, typename T>
 struct OA {
     int capacidad;
-    int tamaño;      // Contador de elementos
+    int tamano;      // Contador de elementos
     struct Dato<L,T> *datos;
 };
 
@@ -36,7 +36,7 @@ template <typename L, typename T>
 TablaHash<L,T> crearTablaHash(int c) {
     TablaHash<L,T> TH = (TablaHash<L,T>)malloc(sizeof(OA<L,T>));
     TH->capacidad = c;
-    TH->tamaño = 0;
+    TH->tamano = 0;
     TH->datos = (Dato<L,T> *)malloc(c * sizeof(Dato<L,T>));
     
     // Inicializar todos los slots
@@ -95,7 +95,7 @@ int buscarSlot(TablaHash<L,T> TH, L llave, bool paraInsertar = false) {
 // insTablaHash: TablaHash x L x T -> TablaHash
 template <typename L, typename T>
 TablaHash<L,T> insTablaHash(TablaHash<L,T> TH, L llave, T elemento) {
-    if (TH->tamaño >= TH->capacidad * 0.7) {
+    if (TH->tamano >= TH->capacidad * 0.7) {
         cout << "⚠️ Advertencia: Tabla hash casi llena" << endl;
     }
     
@@ -106,7 +106,7 @@ TablaHash<L,T> insTablaHash(TablaHash<L,T> TH, L llave, T elemento) {
     }
     
     if (!TH->datos[slot].ocupado) {
-        TH->tamaño++;
+        TH->tamano++;
     }
     
     TH->datos[slot].llave = llave;
@@ -143,16 +143,16 @@ TablaHash<L,T> elimTablaHash(TablaHash<L,T> TH, L llave) {
     if (slot != -1 && TH->datos[slot].ocupado && !TH->datos[slot].eliminado) {
         TH->datos[slot].ocupado = false;
         TH->datos[slot].eliminado = true;
-        TH->tamaño--;
+        TH->tamano--;
         cout << "✅ Elemento eliminado de tabla hash" << endl;
     }
     return TH;
 }
 
-// tamañoTablaHash: TablaHash -> int
+// tamanoTablaHash: TablaHash -> int
 template <typename L, typename T>
-int tamañoTablaHash(TablaHash<L,T> TH) {
-    return TH->tamaño;
+int tamanoTablaHash(TablaHash<L,T> TH) {
+    return TH->tamano;
 }
 
 // estadisticasTablaHash: TablaHash -> void
@@ -160,8 +160,8 @@ template <typename L, typename T>
 void estadisticasTablaHash(TablaHash<L,T> TH) {
     cout << "\n=== ESTADÍSTICAS TABLA HASH ===" << endl;
     cout << "Capacidad: " << TH->capacidad << endl;
-    cout << "Elementos: " << TH->tamaño << endl;
-    cout << "Factor de carga: " << (double)TH->tamaño / TH->capacidad * 100 << "%" << endl;
+    cout << "Elementos: " << TH->tamano << endl;
+    cout << "Factor de carga: " << (double)TH->tamano / TH->capacidad * 100 << "%" << endl;
     cout << "===============================" << endl;
 }
 
