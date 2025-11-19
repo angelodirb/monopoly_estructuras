@@ -11,7 +11,7 @@
 #include <iostream>
 
 // **********************************
-// TAD Cola de Cartas específico para Monopoly
+// TAD Cola de Cartas especifico para Monopoly
 // **********************************
 
 class ColaCartas {
@@ -22,16 +22,16 @@ private:
     
 public:
     /**
-     * Precondición: tipoCarta debe ser "SUERTE" o "COFRE"
-     * Postcondición: Se crea una cola vacía del tipo especificado
+     * Precondicion: tipoCarta debe ser "SUERTE" o "COFRE"
+     * Postcondicon: Se crea una cola vacia del tipo especificado
      */
     ColaCartas(const std::string& tipoCarta) : tipo(tipoCarta), cartasOriginales(0) {
         cola = crearCola<Carta>();
     }
     
     /**
-     * Precondición: El archivo nombreArchivo debe existir y ser accesible
-     * Postcondición: Las cartas del tipo correspondiente se cargan en la cola
+     * Precondicion: El archivo nombreArchivo debe existir y ser accesible
+     * Postcondicion: Las cartas del tipo correspondiente se cargan en la cola
      */
 bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     std::cout << "[ARCHIVO] Intentando abrir: " << nombreArchivo << std::endl;
@@ -93,17 +93,17 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     }
 
     cartasOriginales = cartasTemp.size();
-    std::cout << "[OK] Sistema cargó " << cartasOriginales << " cartas de " << tipo << " en la cola" << std::endl;
+    std::cout << "[OK] Sistema caro " << cartasOriginales << " cartas de " << tipo << " en la cola" << std::endl;
     return true;
 }   
     /**
-     * Precondición: La cola no debe estar vacía
-     * Postcondición: Retorna la carta del frente y la envía al final (excepto "SALIR_CARCEL")
+     * Precondicon: La cola no debe estar vacia
+     * Postcondicon: Retorna la carta del frente y la envia al final (excepto "SALIR_CARCEL")
      */
     Carta sacarCarta() {
         if (vaciaCola(cola)) {
             std::cerr << "[ERROR] Error: No hay cartas en la cola de " << tipo << std::endl;
-            return Carta(); // Carta vacía
+            return Carta(); // Carta vacia
         }
         
         // Obtener carta del frente
@@ -125,8 +125,8 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     }
     
     /**
-     * Precondición: carta debe ser válida
-     * Postcondición: Devuelve la carta al final de la cola
+     * Precondicon: carta debe ser valida
+     * Postcondicon: Devuelve la carta al final de la cola
      */
     void devolverCarta(const Carta& carta) {
         cola = anxCola(cola, carta);
@@ -134,16 +134,16 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna true si hay cartas en la cola
+     * Precondicon: Ninguna
+     * Postcondicon: Retorna true si hay cartas en la cola
      */
     bool tieneCartas() const {
         return !vaciaCola(cola);
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna el número de cartas en la cola
+     * Precondicon: Ninguna
+     * Postcondicon: Retorna el numero de cartas en la cola
      */
     int cantidadCartas() const {
         if (vaciaCola(cola)) return 0;
@@ -161,16 +161,16 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna el tipo de cola
+     * Precondicon: Ninguna
+     * Postcondicon: Retorna el tipo de cola
      */
     std::string getTipo() const {
         return tipo;
     }
     
     /**
-     * Precondición: La cola debe tener cartas
-     * Postcondición: Mezcla todas las cartas de la cola aleatoriamente
+     * Precondicon: La cola debe tener cartas
+     * Postcondicon: Mezcla todas las cartas de la cola aleatoriamente
      */
     void mezclarCartas() {
         if (vaciaCola(cola)) {
@@ -199,28 +199,28 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Muestra informacion del estado de la cola
+     * Precondicon: Ninguna
+     * Postcondicon: Muestra informacion del estado de la cola
      */
     void mostrarInfo() const {
         std::cout << "\n=== COLA DE " << tipo << " ===" << std::endl;
         std::cout << "Cartas disponibles: " << cantidadCartas() << std::endl;
         std::cout << "Cartas originales: " << cartasOriginales << std::endl;
-        std::cout << "Estado: " << (tieneCartas() ? "Activa" : "Vacía") << std::endl;
+        std::cout << "Estado: " << (tieneCartas() ? "Activa" : "Vacia") << std::endl;
         std::cout << "=====================" << std::endl;
     }
     
     /**
-     * Precondición: n debe ser > 0
-     * Postcondición: Muestra las proximas n cartas sin modificar la cola
+     * Precondicon: n debe ser > 0
+     * Postcondicon: Muestra las proximas n cartas sin modificar la cola
      */
     void mostrarProximasCartas(int n = 3) const {
         if (n <= 0) {
-            std::cout << "[AVISO] Número de cartas debe ser positivo" << std::endl;
+            std::cout << "[AVISO] Numero de cartas debe ser positivo" << std::endl;
             return;
         }
 
-        std::cout << "\n=== PRÓXIMAS " << n << " CARTAS DE " << tipo << " ===" << std::endl;
+        std::cout << "\n=== PROXIMAS " << n << " CARTAS DE " << tipo << " ===" << std::endl;
 
         // Recorrer la cola sin eliminar nodos
         Nodo<Carta>* actual = cola;
@@ -228,7 +228,7 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
         for (int i = 0; i < n && actual != NULL; i++) {
             Carta carta = actual->dato;
             std::cout << (i + 1) << ". " << carta.descripcion << std::endl;
-            std::cout << "   Acción: " << carta.accion << ", Valor: " << carta.valor << std::endl;
+            std::cout << "   Accon: " << carta.accion << ", Valor: " << carta.valor << std::endl;
             actual = actual->sig;
         }
 
@@ -236,8 +236,8 @@ bool cargarCartasDesdeArchivo(const std::string& nombreArchivo) {
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Limpia completamente la cola
+     * Precondicon: Ninguna
+     * Postcondicon: Limpia completamente la cola
      */
     void limpiarCola() {
         cola = crearCola<Carta>();
@@ -257,14 +257,14 @@ private:
     
 public:
     /**
-     * Precondición: Ninguna
-     * Postcondición: Se crea el sistema con ambas colas vacías
+     * Precondicon: Ninguna
+     * Postcondicon: Se crea el sistema con ambas colas vacias
      */
     SistemaCartas() : colaSuerte("SUERTE"), colaCofre("COFRE") {}
     
     /**
-     * Precondición: El archivo archivoCartas debe existir
-     * Postcondición: Ambas colas se inicializan con sus cartas respectivas
+     * Precondicon: El archivo archivoCartas debe existir
+     * Postcondicon: Ambas colas se inicializan con sus cartas respectivas
      */
     bool inicializar(const std::string& archivoCartas) {
         std::cout << "\n[CARTA] Inicializando sistema de cartas..." << std::endl;
@@ -282,24 +282,24 @@ public:
     }
     
     /**
-     * Precondición: La cola de suerte debe tener cartas
-     * Postcondición: Retorna una carta de suerte
+     * Precondicon: La cola de suerte debe tener cartas
+     * Postcondicon: Retorna una carta de suerte
      */
     Carta sacarCartaSuerte() {
         return colaSuerte.sacarCarta();
     }
     
     /**
-     * Precondición: La cola de cofre debe tener cartas
-     * Postcondición: Retorna una carta de cofre
+     * Precondicon: La cola de cofre debe tener cartas
+     * Postcondicon: Retorna una carta de cofre
      */
     Carta sacarCartaCofre() {
         return colaCofre.sacarCarta();
     }
     
     /**
-     * Precondición: carta debe ser válida
-     * Postcondición: Devuelve la carta a su cola correspondiente
+     * Precondicon: carta debe ser valida
+     * Postcondicon: Devuelve la carta a su cola correspondiente
      */
     void devolverCarta(const Carta& carta) {
         if (carta.tipo == "SUERTE") {
@@ -312,8 +312,8 @@ public:
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Mezcla todas las cartas de ambas colas
+     * Precondicon: Ninguna
+     * Postcondicon: Mezcla todas las cartas de ambas colas
      */
     void mezclarTodasLasCartas() {
         colaSuerte.mezclarCartas();
@@ -322,8 +322,8 @@ public:
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Muestra el estado completo del sistema de cartas
+     * Precondicon: Ninguna
+     * Postcondicon: Muestra el estado completo del sistema de cartas
      */
     void mostrarEstado() const {
         std::cout << "\n=== SISTEMA DE CARTAS ===" << std::endl;
@@ -333,16 +333,16 @@ public:
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Retorna true si ambas colas tienen cartas
+     * Precondicon: Ninguna
+     * Postcondicon: Retorna true si ambas colas tienen cartas
      */
     bool cartasDisponibles() const {
         return colaSuerte.tieneCartas() && colaCofre.tieneCartas();
     }
     
     /**
-     * Precondición: Ninguna
-     * Postcondición: Muestra las proximas cartas de ambas colas
+     * Precondicon: Ninguna
+     * Postcondicon: Muestra las proximas cartas de ambas colas
      */
     void mostrarProximasCartas(int n = 3) const {
         colaSuerte.mostrarProximasCartas(n);
