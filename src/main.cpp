@@ -86,13 +86,13 @@ void probarTablaHash() {
  * Precondición: Ninguna
  * Postcondición: Ejecuta pruebas del sistema de cartas
  */
-void probarSistemaCartas() {
+void probarSistemaCartas() {    
     cout << "\n🧪 === PRUEBA SISTEMA DE CARTAS (COLAS) ===" << endl;
     
     SistemaCartas sistema;
     
     cout << "\n--- Inicializando sistema ---" << endl;
-    if (sistema.inicializar("CartaJugador/cartas.txt")) {
+    if (sistema.inicializar("src/cartas.txt")) {
         
         cout << "\n--- Estado inicial ---" << endl;
         sistema.mostrarEstado();
@@ -167,7 +167,7 @@ void probarTablero() {
     cout << "\n🧪 === PRUEBA CARGA DE TABLERO (LISTA CIRCULAR) ===" << endl;
     
     cout << "\n--- Cargando tablero ---" << endl;
-    ListaCircular tablero = cargarTableroDesdeArchivo("Casillas.txt");
+    ListaCircular tablero = cargarTableroDesdeArchivo("src/Casillas.txt");
     
     if (!vaciaLista(tablero)) {
         cout << "\n--- Resumen del tablero ---" << endl;

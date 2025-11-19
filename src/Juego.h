@@ -55,7 +55,7 @@ private:
     void cargarCartas() {
         cout << "🎴 Cargando sistema de cartas..." << endl;
         
-        if (sistemaCartas.inicializar("CartaJugador/cartas.txt")) {
+        if (sistemaCartas.inicializar("src/cartas.txt")) {
             cout << "✅ Sistema de cartas cargado exitosamente" << endl;
             sistemaCartas.mostrarEstado();
         } else {
@@ -684,7 +684,7 @@ public:
         
         // 1. Cargar tablero
         cout << "📋 Cargando tablero..." << endl;
-        tablero = cargarTableroDesdeArchivo("Casillas.txt");
+        tablero = cargarTableroDesdeArchivo("src/Casillas.txt");  
         if (vaciaLista(tablero)) {
             cout << "❌ Error cargando tablero" << endl;
             return false;
