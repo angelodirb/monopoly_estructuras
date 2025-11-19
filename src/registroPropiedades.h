@@ -3,10 +3,10 @@
 
 #include "tablaHash.h"
 #include "listaCircular.h"
-#include "casilla/casilla.h"
-#include "casilla/propiedad.h"
-#include "casilla/ferrocarril.h"
-#include "casilla/servicios.h"
+#include "casilla.h"
+#include "propiedad.h"
+#include "ferrocarril.h"
+#include "servicios.h"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -273,6 +273,24 @@ public:
 // **********************************
 
 /**
+ * Precondición: nombre no debe estar vacío
+ * Postcondición: Retorna true si el nombre corresponde a una propiedad comprable
+ */
+bool esPropiedadComprable(const std::string& nombre) {
+    // Excluir casillas especiales
+    if (nombre == "SALIDA" || nombre == "CARCEL" || 
+        nombre == "PARQUEADERO GRATUITO" || nombre == "IR A LA CARCEL" ||
+        nombre.find("SUERTE") != std::string::npos || 
+        nombre.find("COFRE") != std::string::npos ||
+        nombre.find("COMUNIDAD") != std::string::npos ||
+        nombre.find("CHANCE") != std::string::npos) {
+        return false;
+    }
+    
+    return true;
+}
+
+/**
  * Precondición: registro y tablero deben estar inicializados
  * Postcondición: Registra automáticamente todas las propiedades del tablero
  */
@@ -306,22 +324,6 @@ bool registrarPropiedadesDelTablero(RegistroPropiedades& registro, const ListaCi
     return registradas > 0;
 }
 
-/**
- * Precondición: nombre no debe estar vacío
- * Postcondición: Retorna true si el nombre corresponde a una propiedad comprable
- */
-bool esPropiedadComprable(const std::string& nombre) {
-    // Excluir casillas especiales
-    if (nombre == "SALIDA" || nombre == "CARCEL" || 
-        nombre == "PARQUEADERO GRATUITO" || nombre == "IR A LA CARCEL" ||
-        nombre.find("SUERTE") != std::string::npos || 
-        nombre.find("COFRE") != std::string::npos ||
-        nombre.find("COMUNIDAD") != std::string::npos ||
-        nombre.find("CHANCE") != std::string::npos) {
-        return false;
-    }
-    
-    return true;
-}
+
 
 #endif // TABLA_HASH_PROPIEDADES_H_

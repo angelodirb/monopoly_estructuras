@@ -2,9 +2,8 @@
 #include <string>
 #include <vector>
 
-// Includes de los TADs del proyecto
+
 #include "Juego.h"
-// #include "EstadoJuego.h"  // eliminado
 #include "ColaCartas.h"
 #include "RegistroPropiedades.h"
 #include "tablero.h"

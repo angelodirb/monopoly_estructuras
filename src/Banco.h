@@ -1,7 +1,7 @@
 #ifndef BANCO_H_
 #define BANCO_H_
 
-#include "CartaJugador/jugador.h"
+#include "jugador.h"
 #include <string>
 #include <vector>
 #include <iostream>

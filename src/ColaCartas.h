@@ -2,7 +2,7 @@
 #define COLA_CARTAS_H_
 
 #include "cola.h"
-#include "CartaJugador/cartas.h"
+#include "cartas.h"
 #include <vector>
 #include <fstream>
 #include <algorithm>

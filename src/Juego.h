@@ -5,10 +5,8 @@
 #include "Banco.h"
 #include "Dado.h"
 #include "cola.h"
-// #include "pila.h"       <-- eliminado porque el undo/EstadoJuego no se usa
-// #include "EstadoJuego.h" <-- eliminado
-#include "CartaJugador/jugador.h"
-#include "CartaJugador/cartas.h"
+#include "jugador.h"
+#include "cartas.h"
 #include "ColaCartas.h"
 #include <vector>
 #include <iostream>
@@ -849,4 +847,3 @@ public:
 };
 
 #endif // JUEGO_H_
-    

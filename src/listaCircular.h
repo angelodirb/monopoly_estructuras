@@ -1,7 +1,7 @@
 #ifndef LISTACIRCULAR_H_
 #define LISTACIRCULAR_H_
 
-#include "casilla/casilla.h"
+#include "casilla.h"
 #include <iostream>
 
 struct ListaCircular {
