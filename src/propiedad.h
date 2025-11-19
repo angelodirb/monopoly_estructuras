@@ -117,6 +117,16 @@ public:
     void setDuenio(const string& nuevoDuenio) {
         duenio = nuevoDuenio;
     }
+
+    /**
+     * Precondición: numCasas >= 0 && numCasas <= 5
+     * Postcondición: Establece el número de casas/hotel en la propiedad
+     */
+    void setNumCasas(int nuevasCasas) {
+        if (nuevasCasas >= 0 && nuevasCasas <= 5) {
+            numCasas = nuevasCasas;
+        }
+    }
 };
 
 #endif
