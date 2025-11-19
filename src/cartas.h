@@ -49,8 +49,8 @@ void mostrarCarta(Carta c)
 	std::cout << c.descripcion << std::endl;
 	std::cout << "========================================" << std::endl;
 	
-	// Información de debug (opcional, comentar en producción)
-	std::cout << "[Acción: " << c.accion << ", Valor: " << c.valor;
+	// Informacion de debug (opcional, comentar en produccion)
+	std::cout << "[Accion: " << c.accion << ", Valor: " << c.valor;
 	if(c.valorExtra != 0)
 		std::cout << ", Valor Extra: " << c.valorExtra;
 	std::cout << "]" << std::endl;
@@ -137,12 +137,12 @@ void ejecutarCarta(Carta c, int& dineroJugador, int& posicionJugador,
 	}
 	else if(c.accion == "COBRAR_JUGADORES")
 	{
-		// Esta acción requiere implementación externa para cobrar a otros jugadores
+		// Esta accion requiere implementacion externa para cobrar a otros jugadores
 		std::cout << "Cada jugador debe pagarte $" << c.valor << std::endl;
 	}
 	else if(c.accion == "PAGAR_JUGADORES")
 	{
-		// Esta acción requiere implementación externa para pagar a otros jugadores
+		// Esta accion requiere implementacion externa para pagar a otros jugadores
 		std::cout << "Debes pagar $" << c.valor << " a cada jugador" << std::endl;
 	}
 	
