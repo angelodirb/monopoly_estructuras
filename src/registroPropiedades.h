@@ -276,53 +276,13 @@ public:
  * Precondición: nombre no debe estar vacío
  * Postcondición: Retorna true si el nombre corresponde a una propiedad comprable
  */
-bool esPropiedadComprable(const std::string& nombre) {
-    // Excluir casillas especiales
-    if (nombre == "SALIDA" || nombre == "CARCEL" || 
-        nombre == "PARQUEADERO GRATUITO" || nombre == "IR A LA CARCEL" ||
-        nombre.find("SUERTE") != std::string::npos || 
-        nombre.find("COFRE") != std::string::npos ||
-        nombre.find("COMUNIDAD") != std::string::npos ||
-        nombre.find("CHANCE") != std::string::npos) {
-        return false;
-    }
-    
-    return true;
-}
+bool esPropiedadComprable(const std::string& nombre);
 
 /**
  * Precondición: registro y tablero deben estar inicializados
  * Postcondición: Registra automáticamente todas las propiedades del tablero
  */
-bool registrarPropiedadesDelTablero(RegistroPropiedades& registro, const ListaCircular& tablero) {
-    if (vaciaLista(tablero)) {
-        std::cout << "Error: Tablero vacío" << std::endl;
-        return false;
-    }
-    
-    std::cout << "Registrando propiedades del tablero..." << std::endl;
-    
-    Casilla* actual = getCabeza(tablero);
-    int registradas = 0;
-    
-    do {
-        std::string nombre = actual->getNombre();
-        
-        // Solo registrar propiedades comprables (excluir casillas especiales)
-        if (esPropiedadComprable(nombre)) {
-            if (registro.registrarPropiedad(nombre, actual)) {
-                registradas++;
-            }
-        }
-        
-        actual = actual->siguiente;
-    } while (actual != getCabeza(tablero));
-    
-    std::cout << "✅ " << registradas << " propiedades registradas automáticamente" << std::endl;
-    registro.mostrarEstadisticas();
-    
-    return registradas > 0;
-}
+bool registrarPropiedadesDelTablero(RegistroPropiedades& registro, const ListaCircular& tablero);
 
 
 

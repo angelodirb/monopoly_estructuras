@@ -5,13 +5,12 @@
 #include "propiedad.h"
 #include "ferrocarril.h"
 #include "servicios.h"
-#include "registroPropiedades.h"  // NUEVO
+#include "registroPropiedades.h"
 using namespace std;
 
 // ───────────────────────────────────────────────
-// Cargar tablero y crear registro
+// Cargar tablero (función original)
 // ───────────────────────────────────────────────
-
 ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
     ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -78,6 +77,9 @@ ListaCircular cargarTableroDesdeArchivo(const string& nombreArchivo) {
     return tablero;
 }
 
+// ───────────────────────────────────────────────
+// Cargar tablero y crear registro
+// ───────────────────────────────────────────────
 pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& nombreArchivo) {
     ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -90,7 +92,7 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
     }
 
     ListaCircular tablero = crearLista();
-    RegistroPropiedades registro(53);   // ✔ OBJETO, no función
+    RegistroPropiedades registro(53);
 
     string linea;
 
@@ -118,7 +120,7 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
             Propiedad* p = new Propiedad(nombreCasilla, precio, color, rentas);
             anxLista(tablero, p);
 
-            registro.registrarPropiedad(nombreCasilla, p);  // ✔ CORRECTO
+            registro.registrarPropiedad(nombreCasilla, p);
         }
         else if (tipo == "FERROCARRIL") {
             int precio;
@@ -130,7 +132,7 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
             Ferrocarril* f = new Ferrocarril(nombreCasilla, precio, rentas);
             anxLista(tablero, f);
 
-            registro.registrarPropiedad(nombreCasilla, f);  // ✔ CORRECTO
+            registro.registrarPropiedad(nombreCasilla, f);
         }
         else if (tipo == "SERVICIO") {
             int precio;
@@ -140,7 +142,7 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
             Servicio* s = new Servicio(nombreCasilla, precio);
             anxLista(tablero, s);
 
-            registro.registrarPropiedad(nombreCasilla, s);  // ✔ CORRECTO
+            registro.registrarPropiedad(nombreCasilla, s);
         }
         else {
             Casilla* c = new Casilla(nombreCasilla);
@@ -156,11 +158,14 @@ pair<ListaCircular, RegistroPropiedades> cargarTableroConRegistro(const string& 
 
     cout << "✅ Tablero cargado exitosamente\n";
     cout << "   Casillas en tablero: " << size(tablero) << endl;
-    cout << "   Propiedades en registro: " << registro.getTotalPropiedades() << endl;  // ✔
+    cout << "   Propiedades en registro: " << registro.getTotalPropiedades() << endl;
 
     return make_pair(tablero, registro);
 }
 
+// ───────────────────────────────────────────────
+// Funciones de visualización
+// ───────────────────────────────────────────────
 void mostrarResumenTablero(const ListaCircular& tablero) {
     if (vaciaLista(tablero)) {
         cout << "El tablero está vacío" << endl;
@@ -215,4 +220,52 @@ void mostrarEstadisticasTablero(const ListaCircular& tablero) {
     cout << "Servicios: " << servicios << endl;
     cout << "Especiales: " << especiales << endl;
     cout << "=================================" << endl;
+}
+
+// **********************************
+// Implementaciones de funciones auxiliares de propiedades
+// **********************************
+
+bool esPropiedadComprable(const std::string& nombre) {
+    // Excluir casillas especiales
+    if (nombre == "SALIDA" || nombre == "CARCEL" || 
+        nombre == "PARQUEADERO GRATUITO" || nombre == "IR A LA CARCEL" ||
+        nombre.find("SUERTE") != std::string::npos || 
+        nombre.find("COFRE") != std::string::npos ||
+        nombre.find("COMUNIDAD") != std::string::npos ||
+        nombre.find("CHANCE") != std::string::npos) {
+        return false;
+    }
+    
+    return true;
+}
+
+bool registrarPropiedadesDelTablero(RegistroPropiedades& registro, const ListaCircular& tablero) {
+    if (vaciaLista(tablero)) {
+        std::cout << "Error: Tablero vacío" << std::endl;
+        return false;
+    }
+    
+    std::cout << "Registrando propiedades del tablero..." << std::endl;
+    
+    Casilla* actual = getCabeza(tablero);
+    int registradas = 0;
+    
+    do {
+        std::string nombre = actual->getNombre();
+        
+        // Solo registrar propiedades comprables
+        if (esPropiedadComprable(nombre)) {
+            if (registro.registrarPropiedad(nombre, actual)) {
+                registradas++;
+            }
+        }
+        
+        actual = actual->siguiente;
+    } while (actual != getCabeza(tablero));
+    
+    std::cout << "✅ " << registradas << " propiedades registradas automáticamente" << std::endl;
+    registro.mostrarEstadisticas();
+    
+    return registradas > 0;
 }

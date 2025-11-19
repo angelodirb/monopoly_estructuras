@@ -49,7 +49,7 @@ TablaHash<L,T> crearTablaHash(int c) {
 }
 
 // Función hash para strings
-int funcionHashString(const char* llave, int capacidad) {
+inline int funcionHashString(const char* llave, int capacidad) {
     int hash = 0;
     int len = strlen(llave);
     for (int i = 0; i < len; i++) {
@@ -66,7 +66,7 @@ int funcionHash(L llave, int capacidad) {
 
 // Especialización para const char*
 template<>
-int funcionHash<const char*>(const char* llave, int capacidad) {
+inline int funcionHash<const char*>(const char* llave, int capacidad) {
     return funcionHashString(llave, capacidad);
 }
 
